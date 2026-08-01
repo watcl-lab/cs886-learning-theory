@@ -4,7 +4,7 @@ import "./globals.css";
 
 const title = "CS 886: Learning Theory for Modern AI";
 const description =
-  "A theorem-first University of Waterloo graduate seminar on computational learning theory for transformers and large language models.";
+  "A University of Waterloo graduate seminar on computational learning theory for transformers and large language models.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();

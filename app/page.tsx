@@ -1,20 +1,18 @@
 import {
-  annualUpdateNote,
   courseDescription,
-  courseDesignPrinciples,
   courseFacts,
   courseSchedule,
-  courseScope,
-  courseStructure,
-  learningOutcomes,
-  meetingFormat,
+  optionalProject,
   presentationGuidance,
   presentationRequirements,
-  readingExpectations,
+  presentationWorkload,
   suggestedAssessment,
 } from "./courseData";
 
 export default function Home() {
+  const [publicationBeforeConference, publicationAfterConference = ""] =
+    optionalProject.publicationSupport.split("NeurIPS 2024");
+
   return (
     <>
       <a className="skip-link" href="#main-content">
@@ -30,9 +28,6 @@ export default function Home() {
             {courseFacts.code}: {courseFacts.title}
           </h1>
           <p className="course-subtitle">{courseFacts.subtitle}</p>
-          <p className="course-format">
-            {courseFacts.duration} · {courseFacts.weeklyOrganization} · {courseFacts.presentationsPerMeeting} presentations per meeting
-          </p>
         </header>
 
         <section aria-labelledby="overview-heading">
@@ -40,95 +35,34 @@ export default function Home() {
           {courseDescription.paragraphs.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
-          <ul>
+          <ul className="course-logistics">
             <li>
-              <strong>Duration:</strong> {courseFacts.duration}
+              <strong>Term:</strong> {courseFacts.term}
             </li>
             <li>
-              <strong>Weekly organization:</strong> {courseFacts.weeklyOrganization}
+              <strong>Meetings:</strong> {courseFacts.meetingDay}, {courseFacts.meetingDuration}
             </li>
             <li>
-              <strong>Presentations:</strong> {courseFacts.presentationsPerMeeting} paper presentations per meeting
+              <strong>Course dates:</strong> {courseFacts.firstMeeting} to {courseFacts.lastMeeting}
             </li>
             <li>
-              <strong>Reading program:</strong> {courseFacts.papers} papers and {courseFacts.presentationSlots} presentation slots
-            </li>
-            <li>
-              <strong>Primary emphasis:</strong> {courseFacts.selectionEmphasis}
+              <strong>Weekly discussion:</strong> {courseFacts.papersPerMeeting} papers
             </li>
           </ul>
-        </section>
-
-        <section aria-labelledby="scope-heading">
-          <h2 id="scope-heading">Scope of the Course</h2>
-          <p>{courseScope.introduction}</p>
-          <p>A paper is included only when it contributes a substantive theoretical object or question, such as:</p>
-          <ul>
-            {courseScope.inclusionCriteria.map((criterion) => (
-              <li key={criterion}>{criterion}</li>
-            ))}
-          </ul>
-          <p>{courseScope.progression}</p>
-        </section>
-
-        <section aria-labelledby="selection-heading">
-          <h2 id="selection-heading">Paper-Selection and Citation Policy</h2>
-          <p>{courseStructure.description}</p>
-          <ul>
-            {courseDesignPrinciples.map((principle) => (
-              <li key={principle.title}>
-                <strong>{principle.title}.</strong> {principle.description}
-              </li>
-            ))}
-          </ul>
-          <p>{courseStructure.anchorPolicy}</p>
-        </section>
-
-        <section aria-labelledby="meeting-heading">
-          <h2 id="meeting-heading">Recommended Weekly Meeting Format</h2>
-          <p>{meetingFormat.introduction}</p>
-          <div className="table-wrap" role="region" aria-label="Weekly meeting format" tabIndex={0}>
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col">Time</th>
-                  <th scope="col">Activity</th>
-                </tr>
-              </thead>
-              <tbody>
-                {meetingFormat.agenda.map((item) => (
-                  <tr key={item.time}>
-                    <td>{item.time}</td>
-                    <td>{item.activity}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <section aria-labelledby="reading-heading">
-          <h2 id="reading-heading">Reading Expectations</h2>
-          <ul>
-            {readingExpectations.steps.map((step) => (
-              <li key={step}>{step}</li>
-            ))}
-          </ul>
-          <p>{readingExpectations.introduction}</p>
-          <ol>
-            {readingExpectations.preClassSubmission.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ol>
         </section>
 
         <section aria-labelledby="topics-heading">
           <h2 id="topics-heading">Topics at a Glance</h2>
+          <p className="schedule-note">
+            <strong>Reading Week:</strong> No class on {courseFacts.skippedMeeting}. University Reading Week runs{" "}
+            <a href={courseFacts.readingWeekUrl}>{courseFacts.readingWeek}</a>.
+          </p>
           <div className="table-wrap" role="region" aria-label="Topics at a glance" tabIndex={0}>
             <table className="topics-table">
               <thead>
                 <tr>
                   <th scope="col">Week</th>
+                  <th scope="col">Date</th>
                   <th scope="col">Topic</th>
                   <th scope="col">Central question</th>
                 </tr>
@@ -137,6 +71,7 @@ export default function Home() {
                 {courseSchedule.map((week) => (
                   <tr key={week.week}>
                     <td>{week.week}</td>
+                    <td>{week.date}</td>
                     <td>
                       <a href={`#week-${week.week}`}>{week.title}</a>
                     </td>
@@ -151,11 +86,13 @@ export default function Home() {
         <hr />
 
         <section aria-labelledby="schedule-heading">
-          <h2 id="schedule-heading">Detailed 24-Week Schedule</h2>
+          <h2 id="schedule-heading">Detailed 12-Week Schedule</h2>
           {courseSchedule.map((week) => (
             <article className="week" id={`week-${week.week}`} key={week.week}>
               <h3>
-                <span className="week-number">Week {String(week.week).padStart(2, "0")}</span>
+                <span className="week-number">
+                  Week {String(week.week).padStart(2, "0")} · {week.date}
+                </span>
                 {week.title}
               </h3>
               <p className="guiding-question">
@@ -215,21 +152,89 @@ export default function Home() {
               </tbody>
             </table>
           </div>
+          <p>{presentationWorkload}</p>
+          <h3>Optional Project (Additional Marks)</h3>
+          <p>{optionalProject.description}</p>
+          <p>
+            {publicationBeforeConference}
+            <a href={optionalProject.exampleUrl}>NeurIPS 2024</a>
+            {publicationAfterConference}
+          </p>
         </section>
 
-        <section aria-labelledby="outcomes-heading">
-          <h2 id="outcomes-heading">Learning Outcomes</h2>
-          <p>By the end of the course, students should be able to:</p>
-          <ul>
-            {learningOutcomes.map((outcome) => (
-              <li key={outcome}>{outcome}</li>
-            ))}
-          </ul>
-        </section>
+        <section className="academic-policy" aria-labelledby="academic-integrity-policy-heading">
+          <h2 id="academic-integrity-policy-heading">University of Waterloo Academic Integrity Policy</h2>
+          <p>
+            The University of Waterloo Senate Undergraduate Council has also approved the following message outlining
+            University of Waterloo policy on academic integrity and associated policies.
+          </p>
 
-        <section aria-labelledby="updating-heading">
-          <h2 id="updating-heading">Annual Updating</h2>
-          <p className="annual-note">{annualUpdateNote}</p>
+          <h3>Academic Integrity</h3>
+          <p>
+            In order to maintain a culture of academic integrity, members of the University of Waterloo community are
+            expected to promote honesty, trust, fairness, respect and responsibility. Check the Office of Academic
+            Integrity&apos;s <a href="https://uwaterloo.ca/academic-integrity">website</a> for more information. All
+            members of the UW community are expected to hold to the highest standard of academic integrity in their
+            studies, teaching, and research. This site explains why academic integrity is important and how students
+            can avoid academic misconduct. It also identifies resources available on campus for students and faculty
+            to help achieve academic integrity in, and our, of the classroom.
+          </p>
+
+          <h3>Grievance</h3>
+          <p>
+            A student who believes that a decision affecting some aspect of his/her university life has been unfair or
+            unreasonable may have grounds for initiating a grievance. Read{" "}
+            <a href="https://uwaterloo.ca/secretariat/policies-procedures-guidelines/policy-70">
+              Policy 70 - Student Petitions and Grievances, Section 4
+            </a>
+            . When in doubt please be certain to contact the department&apos;s administrative assistant who will provide
+            further assistance.
+          </p>
+
+          <h3>Discipline</h3>
+          <p>
+            A student is expected to know what constitutes academic integrity, to avoid committing academic offenses,
+            and to take responsibility for his/her actions. A student who is unsure whether an action constitutes an
+            offense, or who needs help in learning how to avoid offenses (e.g., plagiarism, cheating) or about “rules”
+            for group work/collaboration should seek guidance from the course professor, academic advisor, or the
+            Undergraduate Associate Dean. For information on categories of offenses and types of penalties, students
+            should refer to{" "}
+            <a href="https://uwaterloo.ca/secretariat/policies-procedures-guidelines/policy-71">
+              Policy 71-Student Discipline
+            </a>
+            . For typical penalties check{" "}
+            <a href="https://uwaterloo.ca/secretariat/guidelines/guidelines-assessment-penalties">
+              Guidelines for the Assessment of Penalties
+            </a>
+            .
+          </p>
+
+          <h3>Avoiding Academic Offenses</h3>
+          <p>
+            Most students are unaware of the line between acceptable and unacceptable academic behaviour, especially
+            when discussing assignments with classmates and using the work of other students. For information on
+            commonly misunderstood academic offenses and how to avoid them, students should refer to the Faculty of
+            Mathematics Cheating and Student Academic Discipline Policy.
+          </p>
+
+          <h3>Appeals</h3>
+          <p>
+            A decision made or a penalty imposed under Policy 70, Student Petitions and Grievances (other than a
+            petition) or Policy 71, Student Discipline may be appealed if there is a ground. A student who believes
+            he/she has a ground for an appeal should refer to{" "}
+            <a href="https://uwaterloo.ca/secretariat/policies-procedures-guidelines/policy-72">
+              Policy 72 - Student Appeals
+            </a>
+            .
+          </p>
+
+          <h3>Note for students with disabilities</h3>
+          <p>
+            The AccessAbility Services Office (AAS), located in Needles Hall, Room 1401, collaborates with all academic
+            departments to arrange appropriate accommodations for students with disabilities without compromising the
+            academic integrity of the curriculum. If you require academic accommodations to lessen the impact of your
+            disability, please register with the AAS at the beginning of each academic term.
+          </p>
         </section>
       </main>
     </>

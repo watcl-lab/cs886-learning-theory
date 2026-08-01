@@ -90,6 +90,10 @@ h3 {
   line-height: 1.35;
 }
 
+.course-logistics {
+  margin-top: 22px;
+}
+
 section {
   margin-top: 44px;
 }
@@ -192,17 +196,29 @@ table td:first-child {
 }
 
 .topics-table {
-  min-width: 720px;
+  min-width: 840px;
 }
 
 .topics-table th:first-child,
 .topics-table td:first-child {
-  width: 72px;
+  width: 64px;
 }
 
 .topics-table th:nth-child(2),
 .topics-table td:nth-child(2) {
-  width: 36%;
+  width: 150px;
+  white-space: nowrap;
+}
+
+.topics-table th:nth-child(3),
+.topics-table td:nth-child(3) {
+  width: 30%;
+}
+
+.schedule-note {
+  margin-bottom: 20px;
+  padding-left: 12px;
+  border-left: 3px solid var(--gold);
 }
 
 .week {
@@ -265,6 +281,18 @@ table td:first-child {
 .annual-note {
   color: var(--muted);
   font-size: 0.94rem;
+}
+
+.academic-policy {
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+
+.academic-policy h3 {
+  margin-top: 28px;
+  margin-bottom: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.18rem;
 }
 
 @media (max-width: 640px) {

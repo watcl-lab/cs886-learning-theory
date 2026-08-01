@@ -9,6 +9,7 @@ export type CoursePaper = {
 
 export type CourseWeek = {
   week: number;
+  date: string;
   title: string;
   guidingQuestion: string;
   topicFocus: string;
@@ -21,112 +22,26 @@ export const courseFacts = {
   title: "Learning Theory for Modern AI",
   subtitle: "Transformers and Large Language Models",
   format: "Computational Learning Theory Research Seminar",
-  duration: "24 weekly meetings",
-  frequency: "One meeting per week",
-  weeklyOrganization: "One theoretical topic per meeting",
-  presentationsPerMeeting: 4,
-  presentationSlots: 96,
-  papers: 96,
-  selectionEmphasis: "Theorems, assumptions, proof ideas, and lower bounds",
+  term: "Fall 2026",
+  meetingDay: "Fridays",
+  meetingDuration: "one three-hour meeting per week",
+  meetingCount: 12,
+  papersPerMeeting: 4,
+  firstMeeting: "September 11, 2026",
+  lastMeeting: "December 4, 2026",
+  readingWeek: "October 10–18, 2026",
+  skippedMeeting: "October 16, 2026",
+  readingWeekUrl: "https://uwaterloo.ca/important-dates/graduate/2026-2027/reading-week",
 } as const;
 
 export const courseSummary =
-  "A theorem-first course on generalization, optimization, expressivity, in-context learning, scaling, reasoning, memorization, calibration, preference learning, and adaptation in transformers and large language models.";
+  "A course on generalization, optimization, expressivity, in-context learning, scaling, reasoning, memorization, calibration, preference learning, and adaptation in transformers and large language models.";
 
 export const courseDescription = {
   paragraphs: [
-    "Learning Theory for Modern AI: Transformers and Large Language Models is a theorem-first graduate research seminar on the computational and statistical principles underlying modern sequence models. The course studies why heavily overparameterized networks generalize, what gradient descent implicitly selects, what transformers can and cannot compute, how in-context learning emerges, and whether transformer forward passes implement recognizable learning algorithms. Later topics include scaling laws, phase transitions, chain-of-thought computation, memorization, calibration, synthetic-data collapse, preference learning, and low-dimensional adaptation.",
-    "Each weekly meeting is organized around one theoretical topic and four influential papers. Student presentations emphasize formal problem statements, theorem strength, proof mechanisms, assumptions, and the gap between tractable models and real large language models. The goal is not to survey every LLM application, but to understand what modern AI systems can learn, why they learn it, when they generalize, and which questions remain open.",
+    "Learning Theory for Modern AI: Transformers and Large Language Models is a graduate research seminar on the computational and statistical principles underlying modern sequence models. The course studies why heavily overparameterized networks generalize, what gradient descent implicitly selects, what transformers can and cannot compute, how in-context learning emerges, and whether transformer forward passes implement recognizable learning algorithms. Later topics include scaling laws, phase transitions, chain-of-thought computation, memorization, calibration, synthetic-data collapse, preference learning, and low-dimensional adaptation.",
+    "Each weekly meeting is organized around four influential papers. Student presentations emphasize formal problem statements, theorem strength, proof mechanisms, assumptions, and the gap between tractable models and real large language models.",
   ],
-} as const;
-
-export const courseScope = {
-  introduction:
-    "This is a computational learning theory course, not a general survey of large-language-model systems. The schedule excludes application-driven weeks on agents, retrieval pipelines, benchmarks, prompt engineering, efficient serving, and model releases.",
-  inclusionCriteria: [
-    "A theorem on learnability, sample complexity, stability, generalization, or optimization",
-    "An upper or lower bound on transformer expressivity or computational complexity",
-    "An analytically tractable model of in-context learning, scaling, emergence, memorization, calibration, preference learning, or adaptation",
-    "A field-defining empirical result that is indispensable for motivating a major theoretical literature",
-  ],
-  progression:
-    "The first five weeks provide the modern theory needed to study extremely overparameterized models. Weeks 6\u201324 then concentrate directly on transformers and large language models.",
-} as const;
-
-export const courseStructure = {
-  description:
-    "Each weekly meeting is organized around one theoretical topic and four influential papers, one for each presentation slot.",
-  anchorPolicy:
-    "The first paper each week is the recommended common anchor. Every student reads it in depth; each presenter additionally takes primary responsibility for one of the four papers.",
-} as const;
-
-export const courseDesignPrinciples = [
-  {
-    title: "Theory first",
-    description:
-      "Constructive existence results are distinguished from optimization and learnability results. Empirical papers appear only as high-impact anchors for a theoretical question.",
-  },
-  {
-    title: "Citation prominence",
-    description:
-      "Priority is given to papers with substantial citation uptake relative to publication year. The list uses an age-adjusted citation screen based on citation evidence available on 1 August 2026. The intended floor for papers from 2023\u20132025 is roughly 100 citations in at least one major bibliographic index; older readings are expected to have substantially more. The labels are qualitative rather than exact cross-index totals: Landmark, Highly cited, Established, and Strong recent uptake. Counts differ across Google Scholar, Semantic Scholar, ACM, OpenReview, ACL Anthology, and publisher indexes.",
-  },
-  {
-    title: "Research provenance",
-    description:
-      "The schedule emphasizes leading theoretical groups at Berkeley, Stanford, MIT, Princeton, Harvard, Columbia, NYU, University of Washington, Carnegie Mellon, Oxford, EPFL, ETH, Hebrew University, and comparable institutions. A limited number of field-defining technical reports from major research laboratories are retained when no university paper has comparable influence.",
-  },
-  {
-    title: "Recency with principled exceptions",
-    description:
-      "Most transformer- and LLM-specific papers are from 2020\u20132024. Earlier papers are retained only when they are foundational computational-learning-theory results still used throughout the modern literature.",
-  },
-] as const;
-
-export const meetingFormat = {
-  duration: "Two hours",
-  introduction: "The recommended two-hour weekly meeting is organized as follows.",
-  agenda: [
-    {
-      time: "0\u201310 minutes",
-      activity:
-        "Instructor framing: formal learning problem, notation, and the week's central question",
-    },
-    { time: "10\u201330 minutes", activity: "Presentation 1: common anchor paper" },
-    { time: "30\u201350 minutes", activity: "Presentation 2" },
-    { time: "50\u201370 minutes", activity: "Presentation 3" },
-    { time: "70\u201390 minutes", activity: "Presentation 4" },
-    {
-      time: "90\u2013108 minutes",
-      activity: "Cross-paper theorem and assumption comparison",
-    },
-    {
-      time: "108\u2013118 minutes",
-      activity:
-        "Proof audit: what is proved, what is constructed, and what is only observed empirically?",
-    },
-    {
-      time: "118\u2013120 minutes",
-      activity: "Class vote on the most important open problem",
-    },
-  ],
-} as const;
-
-export const readingExpectations = {
-  introduction:
-    "Before class, each student submits a short note stating the following four items.",
-  steps: [
-    "Every student reads the first paper each week, the recommended common anchor, in depth.",
-    "Each presenter additionally takes primary responsibility for one of the four papers.",
-  ],
-  preClassSubmission: [
-    "The formal learning problem",
-    "The strongest theorem or empirical claim",
-    "The assumption most responsible for tractability",
-    "One conjecture or counterexample suggested by the paper",
-  ],
-  anchorPolicy:
-    "The first paper each week is the recommended common anchor. Every student reads it in depth.",
 } as const;
 
 export const presentationGuidance =
@@ -156,50 +71,32 @@ export const claimDistinctions = [
 
 export const suggestedAssessment = [
   {
-    component: "Paper presentation",
-    weight: "25%",
+    component: "Paper presentations",
+    weight: "80%",
     standard:
-      "Technical accuracy, theorem statement, proof insight, and comparison with the other weekly readings",
+      "Students are expected to have a good understanding of each assigned paper and to answer questions during the presentation.",
   },
   {
-    component: "Weekly reading notes",
+    component: "Class participation",
     weight: "20%",
-    standard: "Clear identification of assumptions, claims, and unresolved questions",
-  },
-  {
-    component: "Discussion and theorem audits",
-    weight: "15%",
-    standard:
-      "Constructive criticism and ability to distinguish theorem strength from rhetoric",
-  },
-  {
-    component: "Mid-course synthesis",
-    weight: "15%",
-    standard:
-      "A structured comparison of at least two theoretical explanations of the same phenomenon",
-  },
-  {
-    component: "Final research proposal",
-    weight: "25%",
-    standard:
-      "A precise open problem with a plausible theorem, lower bound, or controlled experiment",
+    standard: "Consistent and substantive participation in weekly paper discussions.",
   },
 ] as const;
 
-export const learningOutcomes = [
-  "Distinguish expressivity, optimization, learnability, and generalization results",
-  "Analyze overparameterized learning through interpolation, implicit bias, kernels, and feature learning",
-  "State major upper and lower bounds for transformer computation",
-  "Compare Bayesian, optimization-based, and algorithm-learning theories of in-context learning",
-  "Evaluate theoretical claims about scaling, emergence, chain-of-thought, memorization, calibration, synthetic data, preferences, and fine-tuning",
-  "Identify the precise gap between a tractable theoretical model and a deployed large language model",
-  "Formulate a credible research problem in computational learning theory for modern AI",
-] as const;
+export const presentationWorkload =
+  "Presentation workload will depend on enrollment. Students should expect at least two presentations during the term (an estimated number based on previous years).";
 
-export const annualUpdateNote =
-  "Citation counts and frontier topics change. The stable core of this syllabus should remain the theorem-heavy papers above. When refreshing the course, replace a paper only when a newer work satisfies all three conditions: it addresses the same formal learning question, has clearly stronger theory or substantially broader assumptions, and has accumulated enough independent uptake to be more than a short-lived frontier result.";
+export const optionalProject = {
+  description:
+    "Optional projects may earn additional marks. The project topic should be discussed with the instructor.",
+  publicationSupport:
+    "Although not required for the course, keep in mind that I am more than happy to help you publish your final project. For example, in CS886 2024, Robert Wang published his final project at NeurIPS 2024.",
+  exampleUrl: "https://nips.cc/virtual/2024/poster/95519",
+} as const;
 
-export const courseSchedule: readonly CourseWeek[] = [
+type TheoryTopic = Omit<CourseWeek, "date">;
+
+const theoryTopics: readonly TheoryTopic[] = [
   {
     "week": 1,
     "title": "Modern Generalization in Overparameterized Models",
@@ -1161,3 +1058,169 @@ export const courseSchedule: readonly CourseWeek[] = [
     ]
   },
 ];
+
+const meetingPlan = [
+  {
+    date: "September 11, 2026",
+    title: "Generalization and Implicit Bias in Overparameterized Models",
+    guidingQuestion: "How do interpolation and the implicit bias of gradient methods shape generalization in overparameterized models?",
+    topicFocus: "Double descent, benign overfitting, margin maximization, and optimization geometry.",
+    paperTitles: [
+      "Reconciling Modern Machine-Learning Practice and the Classical Bias\u2013Variance Trade-Off",
+      "Benign Overfitting in Linear Regression",
+      "The Implicit Bias of Gradient Descent on Separable Data",
+      "Gradient Descent Maximizes the Margin of Homogeneous Neural Networks",
+    ],
+  },
+  {
+    date: "September 18, 2026",
+    title: "Kernel Regimes and Feature Learning",
+    guidingQuestion: "When do wide neural networks behave like fixed kernels, and when do they genuinely learn features?",
+    topicFocus: "Neural tangent kernels, global optimization, lazy training, and mean-field feature learning.",
+    paperTitles: [
+      "Neural Tangent Kernel: Convergence and Generalization in Neural Networks",
+      "Gradient Descent Finds Global Minima of Deep Neural Networks",
+      "On Lazy Training in Differentiable Programming",
+      "A Mean Field View of the Landscape of Two-Layer Neural Networks",
+    ],
+  },
+  {
+    date: "September 25, 2026",
+    title: "From Generalization Bounds to Transformer Expressivity",
+    guidingQuestion: "Which complexity measures explain deep-network generalization, and which sequence functions can transformers represent?",
+    topicFocus: "Norm-based bounds, limits of uniform convergence, universality, and computational constructions.",
+    paperTitles: [
+      "Spectrally-Normalized Margin Bounds for Neural Networks",
+      "Uniform Convergence May Be Unable to Explain Generalization in Deep Learning",
+      "Are Transformers Universal Approximators of Sequence-to-Sequence Functions?",
+      "Attention Is Turing Complete",
+    ],
+  },
+  {
+    date: "October 2, 2026",
+    title: "Formal Languages, Circuits, and Computational Limits",
+    guidingQuestion: "Which formal computations can attention perform, and how do depth, precision, and parallelism limit it?",
+    topicFocus: "Formal languages, threshold circuits, log-precision transformers, and self-attention complexity.",
+    paperTitles: [
+      "Theoretical Limitations of Self-Attention in Neural Sequence Models",
+      "Saturated Transformers Are Constant-Depth Threshold Circuits",
+      "The Parallelism Tradeoff: Limitations of Log-Precision Transformers",
+      "On the Computational Complexity of Self-Attention",
+    ],
+  },
+  {
+    date: "October 9, 2026",
+    title: "Inductive Bias and Trainability of Self-Attention",
+    guidingQuestion: "What statistical biases does self-attention have, and which parameterizations make transformers trainable?",
+    topicFocus: "Attention kernels, rank collapse, normalization, and initialization.",
+    paperTitles: [
+      "Infinite Attention: NNGP and NTK for Deep Attention Networks",
+      "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
+      "On Layer Normalization in the Transformer Architecture",
+      "Improving Transformer Optimization Through Better Initialization",
+    ],
+  },
+  {
+    date: "October 23, 2026",
+    title: "Extrapolation Across Context Length and Model Scale",
+    guidingQuestion: "What enables extrapolation beyond training length, and how do model scale, data, and compute govern performance?",
+    topicFocus: "Length generalization, positional encodings, scaling laws, and compute-data tradeoffs.",
+    paperTitles: [
+      "Exploring Length Generalization in Large Language Models",
+      "The Impact of Positional Encoding on Length Generalization in Transformers",
+      "Scaling Laws for Neural Language Models",
+      "Explaining Neural Scaling Laws",
+    ],
+  },
+  {
+    date: "October 30, 2026",
+    title: "Emergence, Grokking, and Competing Theories of In-Context Learning",
+    guidingQuestion: "Are abrupt capabilities genuine phase transitions, and when does in-context learning resemble Bayesian inference?",
+    topicFocus: "Emergence metrics, grokking, implicit Bayesian inference, and task diversity.",
+    paperTitles: [
+      "Emergent Abilities of Large Language Models",
+      "Progress Measures for Grokking via Mechanistic Interpretability",
+      "An Explanation of In-Context Learning as Implicit Bayesian Inference",
+      "Pretraining Task Diversity and the Emergence of Non-Bayesian In-Context Learning for Regression",
+    ],
+  },
+  {
+    date: "November 6, 2026",
+    title: "In-Context Learning as Optimization: Emergence and Training Dynamics",
+    guidingQuestion: "Which optimization algorithms emerge in context, and how do training data and dynamics create them?",
+    topicFocus: "Implicit gradient methods, distributional drivers, and convergence of trained in-context learners.",
+    paperTitles: [
+      "What Learning Algorithm Is In-Context Learning? Investigations with Linear Models",
+      "Transformers Learn In-Context by Gradient Descent",
+      "Data Distributional Properties Drive Emergent In-Context Learning in Transformers",
+      "Trained Transformers Learn Linear Models In-Context",
+    ],
+  },
+  {
+    date: "November 13, 2026",
+    title: "Learnability and Algorithm Selection In Context",
+    guidingQuestion: "How many tasks and examples are needed for in-context learning, and can one transformer select among algorithms?",
+    topicFocus: "Learnability, stability, task complexity, algorithm selection, and optimality.",
+    paperTitles: [
+      "What Can Transformers Learn In-Context? A Case Study of Simple Function Classes",
+      "The Learnability of In-Context Learning",
+      "Transformers as Statisticians: Provable In-Context Learning with In-Context Algorithm Selection",
+      "One Step of Gradient Descent Is Provably the Optimal In-Context Learner with One Layer of Linear Self-Attention",
+    ],
+  },
+  {
+    date: "November 20, 2026",
+    title: "Calibration, Hallucination, and the Limits of Reasoning",
+    guidingQuestion: "When can models recognize uncertainty, and how do intermediate tokens change the limits of serial reasoning?",
+    topicFocus: "Calibration, unavoidable hallucination, compositional error, and chain-of-thought complexity.",
+    paperTitles: [
+      "On Calibration of Modern Neural Networks",
+      "Calibrated Language Models Must Hallucinate",
+      "Faith and Fate: Limits of Transformers on Compositionality",
+      "Chain of Thought Empowers Transformers to Solve Inherently Serial Problems",
+    ],
+  },
+  {
+    date: "November 27, 2026",
+    title: "Memorization, Long Tails, and Model Collapse",
+    guidingQuestion: "When is memorization necessary for long-tail generalization, and when does recursive synthetic data cause collapse?",
+    topicFocus: "Rare examples, factual knowledge, recursive training distributions, and conditions that prevent collapse.",
+    paperTitles: [
+      "Does Learning Require Memorization? A Short Tale about a Long Tail",
+      "Large Language Models Struggle to Learn Long-Tail Knowledge",
+      "AI Models Collapse When Trained on Recursively Generated Data",
+      "Is Model Collapse Inevitable? Breaking the Curse of Recursion by Accumulating Real and Synthetic Data",
+    ],
+  },
+  {
+    date: "December 4, 2026",
+    title: "Preference Optimization, Transfer, and Fine-Tuning",
+    guidingQuestion: "How can preferences be optimized robustly, and how does pretraining shape downstream adaptation?",
+    topicFocus: "Direct preference objectives, reward overoptimization, intrinsic dimension, and feature distortion.",
+    paperTitles: [
+      "Direct Preference Optimization: Your Language Model Is Secretly a Reward Model",
+      "Provably Mitigating Overoptimization in RLHF: Your SFT Loss Is Implicitly an Adversarial Regularizer",
+      "Intrinsic Dimensionality Explains the Effectiveness of Language Model Fine-Tuning",
+      "Fine-Tuning Can Distort Pretrained Features and Underperform Out-of-Distribution",
+    ],
+  },
+] as const;
+
+const allTheoryPapers = theoryTopics.flatMap((topic) => topic.papers);
+
+function paperByTitle(title: string): CoursePaper {
+  const paper = allTheoryPapers.find((candidate) => candidate.title === title);
+  if (!paper) {
+    throw new Error(`Missing scheduled paper: ${title}`);
+  }
+  return paper;
+}
+
+export const courseSchedule: readonly CourseWeek[] = meetingPlan.map((meeting, index) => ({
+  week: index + 1,
+  date: meeting.date,
+  title: meeting.title,
+  guidingQuestion: meeting.guidingQuestion,
+  topicFocus: meeting.topicFocus,
+  papers: meeting.paperTitles.map(paperByTitle),
+}));
