@@ -2,6 +2,7 @@ export type CoursePaper = {
   authors: string;
   title: string;
   publication: string;
+  impact: string;
   presentationFocus: string;
   link: string;
 };
@@ -19,86 +20,93 @@ export const courseFacts = {
   institution: "University of Waterloo",
   title: "Learning Theory for Modern AI",
   subtitle: "Transformers and Large Language Models",
-  format: "24-Week Topic-Based Graduate Research Seminar",
+  format: "Computational Learning Theory Research Seminar",
+  duration: "24 weekly meetings",
   frequency: "One meeting per week",
-  weeklyOrganization: "One major topic per meeting",
+  weeklyOrganization: "One theoretical topic per meeting",
   presentationsPerMeeting: 4,
   presentationSlots: 96,
   papers: 96,
-  selectionEmphasis: "Recent, influential work from leading groups",
+  selectionEmphasis: "Theorems, assumptions, proof ideas, and lower bounds",
 } as const;
 
 export const courseSummary =
-  "A research-oriented course on transformer foundations, in-context learning, reasoning, scaling, data, adaptation, alignment, reliability, retrieval, and language-model agents.";
+  "A theorem-first course on generalization, optimization, expressivity, in-context learning, scaling, reasoning, memorization, calibration, preference learning, and adaptation in transformers and large language models.";
 
 export const courseDescription = {
   paragraphs: [
-    "Learning Theory for Modern AI: Transformers and Large Language Models is a topic-based graduate research seminar on how modern foundation models represent, learn, generalize, reason, and act. Each week focuses on one major research topic and four influential papers. Topics include transformer expressivity, efficient attention, positional encoding, mixture-of-experts models, pretraining objectives, scaling laws, data curation, evaluation, in-context learning, prompt optimization, chain-of-thought reasoning, verification, formal mathematics, mechanistic interpretability, retrieval, parameter-efficient finetuning, instruction tuning, preference optimization, hallucination, and language-model agents.",
-    "Students will lead paper presentations, compare competing explanations, audit assumptions and evidence, and identify concrete open problems. The objective is not merely to learn how current systems are built, but to understand what they learn, why they learn it, when they generalize, and where current theory remains inadequate.",
+    "Learning Theory for Modern AI: Transformers and Large Language Models is a theorem-first graduate research seminar on the computational and statistical principles underlying modern sequence models. The course studies why heavily overparameterized networks generalize, what gradient descent implicitly selects, what transformers can and cannot compute, how in-context learning emerges, and whether transformer forward passes implement recognizable learning algorithms. Later topics include scaling laws, phase transitions, chain-of-thought computation, memorization, calibration, synthetic-data collapse, preference learning, and low-dimensional adaptation.",
+    "Each weekly meeting is organized around one theoretical topic and four influential papers. Student presentations emphasize formal problem statements, theorem strength, proof mechanisms, assumptions, and the gap between tractable models and real large language models. The goal is not to survey every LLM application, but to understand what modern AI systems can learn, why they learn it, when they generalize, and which questions remain open.",
   ],
 } as const;
 
+export const courseScope = {
+  introduction:
+    "This is a computational learning theory course, not a general survey of large-language-model systems. The schedule excludes application-driven weeks on agents, retrieval pipelines, benchmarks, prompt engineering, efficient serving, and model releases.",
+  inclusionCriteria: [
+    "A theorem on learnability, sample complexity, stability, generalization, or optimization",
+    "An upper or lower bound on transformer expressivity or computational complexity",
+    "An analytically tractable model of in-context learning, scaling, emergence, memorization, calibration, preference learning, or adaptation",
+    "A field-defining empirical result that is indispensable for motivating a major theoretical literature",
+  ],
+  progression:
+    "The first five weeks provide the modern theory needed to study extremely overparameterized models. Weeks 6\u201324 then concentrate directly on transformers and large language models.",
+} as const;
+
 export const courseStructure = {
-  referenceCourse: "CS 886: Recent Advances on Foundation Models",
-  referenceCourseUrl: "https://cs.uwaterloo.ca/~wenhuche/teaching/cs886/",
   description:
-    "The course is organized in the same broad style as the topic-based lecture schedule used in Wenhu Chen's CS 886: Recent Advances on Foundation Models: each weekly meeting has a standard research topic and a short list of papers grouped under that topic. In this course, every topic contains exactly four papers, one for each presentation slot.",
+    "Each weekly meeting is organized around one theoretical topic and four influential papers, one for each presentation slot.",
   anchorPolicy:
-    "The first paper in each week is the recommended common anchor. All students read that paper in depth.",
+    "The first paper each week is the recommended common anchor. Every student reads it in depth; each presenter additionally takes primary responsibility for one of the four papers.",
 } as const;
 
 export const courseDesignPrinciples = [
   {
-    title: "Popularity and impact",
+    title: "Theory first",
     description:
-      "Papers were selected for substantial citation uptake, broad adoption, influence on later systems or theory, or repeated use in research courses and surveys. Exact citation counts are not printed because they vary across databases and change continuously.",
+      "Constructive existence results are distinguished from optimization and learnability results. Empirical papers appear only as high-impact anchors for a theoretical question.",
   },
   {
-    title: "Recency",
+    title: "Citation prominence",
     description:
-      "The schedule concentrates on work from 2020–2025. A small number of 2017–2019 papers are retained only when they remain indispensable foundations for the topic.",
+      "Priority is given to papers with substantial citation uptake relative to publication year. The list uses an age-adjusted citation screen based on citation evidence available on 1 August 2026. The intended floor for papers from 2023\u20132025 is roughly 100 citations in at least one major bibliographic index; older readings are expected to have substantially more. The labels are qualitative rather than exact cross-index totals: Landmark, Highly cited, Established, and Strong recent uptake. Counts differ across Google Scholar, Semantic Scholar, ACM, OpenReview, ACL Anthology, and publisher indexes.",
   },
   {
     title: "Research provenance",
     description:
-      "The authors include prominent researchers from leading universities. Field-defining papers from major research laboratories are retained when there is no academically authored substitute of comparable influence. Purely incremental or weakly established frontier papers were removed.",
+      "The schedule emphasizes leading theoretical groups at Berkeley, Stanford, MIT, Princeton, Harvard, Columbia, NYU, University of Washington, Carnegie Mellon, Oxford, EPFL, ETH, Hebrew University, and comparable institutions. A limited number of field-defining technical reports from major research laboratories are retained when no university paper has comparable influence.",
   },
   {
-    title: "Topical coherence",
+    title: "Recency with principled exceptions",
     description:
-      "The four readings in each week address a common technical theme and are intended to be compared directly during the discussion period.",
-  },
-  {
-    title: "Learning-theory spine",
-    description:
-      "Even applied weeks emphasize a precise learning question: representation, optimization, generalization, data efficiency, inference-time computation, preference learning, uncertainty, or decision-making.",
+      "Most transformer- and LLM-specific papers are from 2020\u20132024. Earlier papers are retained only when they are foundational computational-learning-theory results still used throughout the modern literature.",
   },
 ] as const;
 
 export const meetingFormat = {
   duration: "Two hours",
-  introduction:
-    "The following two-hour structure keeps four presentations manageable while preserving time for synthesis.",
+  introduction: "The recommended two-hour weekly meeting is organized as follows.",
   agenda: [
     {
-      time: "0–8 minutes",
+      time: "0\u201310 minutes",
       activity:
-        "Instructor framing: definitions, historical context, and the week's central technical question",
+        "Instructor framing: formal learning problem, notation, and the week's central question",
     },
-    { time: "8–28 minutes", activity: "Presentation 1: common anchor paper" },
-    { time: "28–48 minutes", activity: "Presentation 2" },
-    { time: "48–68 minutes", activity: "Presentation 3" },
-    { time: "68–88 minutes", activity: "Presentation 4" },
+    { time: "10\u201330 minutes", activity: "Presentation 1: common anchor paper" },
+    { time: "30\u201350 minutes", activity: "Presentation 2" },
+    { time: "50\u201370 minutes", activity: "Presentation 3" },
+    { time: "70\u201390 minutes", activity: "Presentation 4" },
     {
-      time: "88–108 minutes",
-      activity: "Cross-paper comparison led by the four presenters",
-    },
-    {
-      time: "108–118 minutes",
-      activity: "Assumption, evidence, and reproducibility audit",
+      time: "90\u2013108 minutes",
+      activity: "Cross-paper theorem and assumption comparison",
     },
     {
-      time: "118–120 minutes",
+      time: "108\u2013118 minutes",
+      activity:
+        "Proof audit: what is proved, what is constructed, and what is only observed empirically?",
+    },
+    {
+      time: "118\u2013120 minutes",
       activity: "Class vote on the most important open problem",
     },
   ],
@@ -106,34 +114,32 @@ export const meetingFormat = {
 
 export const readingExpectations = {
   introduction:
-    "Before class, each student submits a short reading note containing the following three items.",
+    "Before class, each student submits a short note stating the following four items.",
   steps: [
-    "All students read the first paper in each week, the recommended common anchor, in depth.",
-    "Each presenter takes primary responsibility for one of the four papers.",
-    "The class reads the abstracts, introductions, principal results, and limitations of all four papers.",
+    "Every student reads the first paper each week, the recommended common anchor, in depth.",
+    "Each presenter additionally takes primary responsibility for one of the four papers.",
   ],
   preClassSubmission: [
-    "The strongest claim in the common anchor paper",
-    "The most consequential assumption or experimental limitation",
-    "One question whose answer could change the student's assessment of the paper",
+    "The formal learning problem",
+    "The strongest theorem or empirical claim",
+    "The assumption most responsible for tractability",
+    "One conjecture or counterexample suggested by the paper",
   ],
   anchorPolicy:
-    "The first paper in each week is the recommended common anchor. All students read that paper in depth.",
-  integratorRole:
-    "The fourth presenter also serves as the week's integrator and ends with a two-minute answer to the question: After reading all four papers, what should the field now believe?",
+    "The first paper each week is the recommended common anchor. Every student reads it in depth.",
 } as const;
 
 export const presentationGuidance =
-  "Each presentation should be analytical rather than a sequential summary. A useful maximum is 10 substantive slides.";
+  "Each presentation should be organized around the learning-theory content rather than a chronological summary of the paper. A useful maximum is ten substantive slides: one for the question, two for the formal model, two for the main theorem, two for the proof idea, one for evidence, one for limitations, and one for an open problem.";
 
 export const presentationRequirements = [
-  "One slide stating the learning problem and why it matters",
-  "One or two slides defining the model, data, objective, and assumptions",
-  "Two slides stating the central theorem or empirical result precisely",
-  "Two slides explaining the proof idea, algorithm, or experimental design",
-  "One slide separating representation, optimization, and generalization claims",
-  "One slide identifying the strongest limitation or unresolved alternative explanation",
-  "One slide proposing a concrete follow-up theorem, experiment, or counterexample",
+  "What is the formal problem? State the data-generating process, hypothesis or architecture class, loss, training rule, and test criterion.",
+  "What kind of result is obtained? Distinguish representation, optimization, learnability, generalization, and computational-complexity claims.",
+  "What is the main theorem? State it precisely enough that the dependence on dimension, sample size, sequence length, width, depth, and conditioning is visible.",
+  "What is the proof mechanism? Is the main tool stability, concentration, kernelization, mean-field dynamics, margin maximization, circuit complexity, communication complexity, or an explicit transformer construction?",
+  "Which assumption carries the result? Examples include Gaussian tasks, linear attention, population loss, infinite width, bounded precision, realizability, or synthetic data.",
+  "How close is the theorem to a modern LLM? Identify exactly which architectural or statistical features are omitted.",
+  "What would falsify or materially strengthen the claim? End with a concrete lower bound, counterexample, experiment, or theorem.",
 ] as const;
 
 export const presentationSlideLimit = {
@@ -141,886 +147,1017 @@ export const presentationSlideLimit = {
 } as const;
 
 export const claimDistinctions = [
-  "A transformer can represent an algorithm",
-  "Gradient-based training finds such an algorithm",
-  "The learned algorithm generalizes to new examples, tasks, or lengths",
-  "A result established in a controlled model explains behavior in a deployed large language model",
+  "Representation",
+  "Optimization",
+  "Learnability",
+  "Generalization",
+  "Computational complexity",
+] as const;
+
+export const suggestedAssessment = [
+  {
+    component: "Paper presentation",
+    weight: "25%",
+    standard:
+      "Technical accuracy, theorem statement, proof insight, and comparison with the other weekly readings",
+  },
+  {
+    component: "Weekly reading notes",
+    weight: "20%",
+    standard: "Clear identification of assumptions, claims, and unresolved questions",
+  },
+  {
+    component: "Discussion and theorem audits",
+    weight: "15%",
+    standard:
+      "Constructive criticism and ability to distinguish theorem strength from rhetoric",
+  },
+  {
+    component: "Mid-course synthesis",
+    weight: "15%",
+    standard:
+      "A structured comparison of at least two theoretical explanations of the same phenomenon",
+  },
+  {
+    component: "Final research proposal",
+    weight: "25%",
+    standard:
+      "A precise open problem with a plausible theorem, lower bound, or controlled experiment",
+  },
 ] as const;
 
 export const learningOutcomes = [
-  "Distinguish expressivity, optimization, statistical generalization, and systems-efficiency claims about transformers.",
-  "Explain the main empirical and theoretical accounts of in-context learning.",
-  "Reason about positional encoding, sparse computation, retrieval, and parameter-efficient adaptation.",
-  "Critically assess claims about scaling, emergence, prompting, chain-of-thought, and test-time computation.",
-  "Compare supervised instruction tuning, RLHF, AI feedback, and direct preference optimization.",
-  "Evaluate benchmark validity, model-based judging, calibration, and hallucination-detection methods.",
-  "Identify the gap between controlled theoretical models and frontier language-model behavior.",
-  "Formulate a research question that could lead to a publishable theoretical or empirical project.",
+  "Distinguish expressivity, optimization, learnability, and generalization results",
+  "Analyze overparameterized learning through interpolation, implicit bias, kernels, and feature learning",
+  "State major upper and lower bounds for transformer computation",
+  "Compare Bayesian, optimization-based, and algorithm-learning theories of in-context learning",
+  "Evaluate theoretical claims about scaling, emergence, chain-of-thought, memorization, calibration, synthetic data, preferences, and fine-tuning",
+  "Identify the precise gap between a tractable theoretical model and a deployed large language model",
+  "Formulate a credible research problem in computational learning theory for modern AI",
 ] as const;
+
+export const annualUpdateNote =
+  "Citation counts and frontier topics change. The stable core of this syllabus should remain the theorem-heavy papers above. When refreshing the course, replace a paper only when a newer work satisfies all three conditions: it addresses the same formal learning question, has clearly stronger theory or substantially broader assumptions, and has accumulated enough independent uptake to be more than a short-lived frontier result.";
 
 export const courseSchedule: readonly CourseWeek[] = [
   {
     "week": 1,
-    "title": "Transformer Foundations",
-    "guidingQuestion": "Which architectural and pretraining ideas made transformer language models broadly transferable?",
-    "topicFocus": "The architectural and pretraining ideas that established transformers as the dominant foundation for modern language models.",
+    "title": "Modern Generalization in Overparameterized Models",
+    "guidingQuestion": "How can interpolation coexist with good test performance, and what replaces the classical bias\u2013variance picture in the overparameterized regime?",
+    "topicFocus": "Foundational computational and statistical learning theory for the parameter regimes in which modern transformers are trained.",
     "papers": [
       {
-        "authors": "Ashish Vaswani et al.",
-        "title": "Attention Is All You Need",
-        "publication": "NeurIPS 2017.",
-        "presentationFocus": "The original transformer architecture and the role of self-attention, residual connections, and positional information.",
-        "link": "https://arxiv.org/abs/1706.03762"
+        "authors": "Mikhail Belkin, Daniel Hsu, Siyuan Ma, and Soumik Mandal",
+        "title": "Reconciling Modern Machine-Learning Practice and the Classical Bias\u2013Variance Trade-Off",
+        "publication": "PNAS 2019",
+        "impact": "Landmark",
+        "presentationFocus": "The double-descent risk curve and why interpolation need not imply poor generalization.",
+        "link": "https://arxiv.org/abs/1812.11118"
       },
       {
-        "authors": "Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova.",
-        "title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
-        "publication": "NAACL 2019.",
-        "presentationFocus": "Bidirectional masked-language-model pretraining and the modern pretrain-then-finetune paradigm.",
-        "link": "https://aclanthology.org/N19-1423/"
+        "authors": "Peter L. Bartlett, Philip M. Long, Gabor Lugosi, and Alexander Tsigler",
+        "title": "Benign Overfitting in Linear Regression",
+        "publication": "PNAS 2020",
+        "impact": "Landmark",
+        "presentationFocus": "Necessary and sufficient spectral conditions under which the minimum-norm interpolator generalizes.",
+        "link": "https://arxiv.org/abs/1906.11300"
       },
       {
-        "authors": "Colin Raffel et al.",
-        "title": "Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer",
-        "publication": "JMLR 2020.",
-        "presentationFocus": "A unified text-to-text formulation, systematic transfer-learning study, and the T5 model family.",
-        "link": "https://www.jmlr.org/papers/v21/20-074.html"
+        "authors": "Preetum Nakkiran et al.",
+        "title": "Deep Double Descent: Where Bigger Models and More Data Hurt",
+        "publication": "ICLR 2020",
+        "impact": "Landmark",
+        "presentationFocus": "Model-wise, sample-wise, and epoch-wise double descent in modern learning systems.",
+        "link": "https://openreview.net/forum?id=B1g5sA4twr"
       },
       {
-        "authors": "Alec Radford et al.",
-        "title": "Language Models are Unsupervised Multitask Learners",
-        "publication": "OpenAI technical report, 2019.",
-        "presentationFocus": "The GPT-2 scaling study and the emergence of zero-shot task behavior from next-token prediction.",
-        "link": "https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf"
+        "authors": "Trevor Hastie, Andrea Montanari, Saharon Rosset, and Ryan Tibshirani",
+        "title": "Surprises in High-Dimensional Ridgeless Least Squares Interpolation",
+        "publication": "Annals of Statistics 2022",
+        "impact": "Highly cited",
+        "presentationFocus": "Exact high-dimensional risk formulas for ridgeless interpolation and their implications for modern overparameterization.",
+        "link": "https://arxiv.org/abs/1903.08560"
       }
     ]
   },
   {
     "week": 2,
-    "title": "Expressivity and Computational Limits of Transformers",
-    "guidingQuestion": "What can transformers represent or compute, and which limitations follow from depth, precision, or parallelism?",
-    "topicFocus": "Formal results separating what transformers can represent in principle from what bounded-depth, bounded-precision models can compute efficiently.",
+    "title": "Implicit Bias of Gradient Methods",
+    "guidingQuestion": "When many interpolating solutions exist, which one is selected by gradient descent and why can that choice generalize?",
+    "topicFocus": "Optimization algorithms act as implicit regularizers; this week develops the margin and geometry viewpoints used throughout modern learning theory.",
     "papers": [
       {
-        "authors": "Chulhee Yun et al.",
-        "title": "Are Transformers Universal Approximators of Sequence-to-Sequence Functions?",
-        "publication": "ICLR 2020.",
-        "presentationFocus": "A universal-approximation theorem clarifying the distinct roles of attention and feed-forward layers.",
-        "link": "https://openreview.net/forum?id=ByxRM0Ntvr"
+        "authors": "Daniel Soudry, Elad Hoffer, Mor Shpigel Nacson, Suriya Gunasekar, and Nathan Srebro",
+        "title": "The Implicit Bias of Gradient Descent on Separable Data",
+        "publication": "JMLR 2018",
+        "impact": "Landmark",
+        "presentationFocus": "Gradient descent on logistic loss converges in direction to the hard-margin support-vector-machine solution.",
+        "link": "https://www.jmlr.org/papers/v19/18-188.html"
       },
       {
-        "authors": "Michael Hahn.",
-        "title": "Theoretical Limitations of Self-Attention in Neural Sequence Models",
-        "publication": "TACL 2020.",
-        "presentationFocus": "Lower bounds for recognizing formal languages with fixed-depth self-attention.",
-        "link": "https://aclanthology.org/2020.tacl-1.11/"
+        "authors": "Suriya Gunasekar, Jason D. Lee, Daniel Soudry, and Nathan Srebro",
+        "title": "Characterizing Implicit Bias in Terms of Optimization Geometry",
+        "publication": "ICML 2018",
+        "impact": "Highly cited",
+        "presentationFocus": "How mirror descent and parameterization determine the norm or geometry implicitly minimized.",
+        "link": "https://proceedings.mlr.press/v80/gunasekar18a.html"
       },
       {
-        "authors": "Jorge Pérez, Pablo Barceló, and Javier Marinkovic.",
-        "title": "Attention is Turing-Complete",
-        "publication": "JMLR 2021.",
-        "presentationFocus": "A constructive analysis of the assumptions under which attention-based architectures achieve Turing completeness.",
-        "link": "https://www.jmlr.org/papers/v22/20-302.html"
+        "authors": "Kaifeng Lyu and Jian Li",
+        "title": "Gradient Descent Maximizes the Margin of Homogeneous Neural Networks",
+        "publication": "ICLR 2020",
+        "impact": "Highly cited",
+        "presentationFocus": "Margin maximization for homogeneous deep networks under gradient flow and gradient descent.",
+        "link": "https://openreview.net/forum?id=SJeLIgBKPS"
       },
       {
-        "authors": "William Merrill, Ashish Sabharwal, and Noah A. Smith.",
-        "title": "Saturated Transformers are Constant-Depth Threshold Circuits",
-        "publication": "TACL 2022.",
-        "presentationFocus": "A circuit-complexity upper bound for saturated transformers under floating-point computation.",
-        "link": "https://aclanthology.org/2022.tacl-1.49/"
+        "authors": "Lenaic Chizat and Francis Bach",
+        "title": "Implicit Bias of Gradient Descent for Wide Two-Layer Neural Networks Trained with the Logistic Loss",
+        "publication": "COLT 2020",
+        "impact": "Established",
+        "presentationFocus": "A function-space max-margin characterization in the infinite-width, feature-learning regime.",
+        "link": "https://proceedings.mlr.press/v125/chizat20a.html"
       }
     ]
   },
   {
     "week": 3,
-    "title": "Efficient Attention and Long-Sequence Architectures",
-    "guidingQuestion": "How can attention be made cheaper without losing the interactions that make it useful?",
-    "topicFocus": "Architectural and systems techniques for reducing the quadratic cost of standard self-attention.",
+    "title": "Neural Tangent Kernels and Overparameterized Optimization",
+    "guidingQuestion": "When and why does gradient descent find a global solution in a highly nonconvex neural-network objective?",
+    "topicFocus": "The kernel and overparameterization frameworks that launched much of the modern theory of optimization and generalization in deep learning.",
     "papers": [
       {
-        "authors": "Nikita Kitaev, Lukasz Kaiser, and Anselm Levskaya.",
-        "title": "Reformer: The Efficient Transformer",
-        "publication": "ICLR 2020.",
-        "presentationFocus": "Locality-sensitive hashing attention and reversible layers for memory-efficient sequence modeling.",
-        "link": "https://openreview.net/forum?id=rkgNKkHtvB"
+        "authors": "Arthur Jacot, Franck Gabriel, and Clement Hongler",
+        "title": "Neural Tangent Kernel: Convergence and Generalization in Neural Networks",
+        "publication": "NeurIPS 2018",
+        "impact": "Landmark",
+        "presentationFocus": "The infinite-width kernel governing gradient-flow dynamics and its consequences for training and generalization.",
+        "link": "https://arxiv.org/abs/1806.07572"
       },
       {
-        "authors": "Iz Beltagy, Matthew E. Peters, and Arman Cohan.",
-        "title": "Longformer: The Long-Document Transformer",
-        "publication": "Technical report, 2020.",
-        "presentationFocus": "Sliding-window and task-motivated global attention for long documents.",
-        "link": "https://arxiv.org/abs/2004.05150"
+        "authors": "Jaehoon Lee et al.",
+        "title": "Wide Neural Networks of Any Depth Evolve as Linear Models under Gradient Descent",
+        "publication": "NeurIPS 2019",
+        "impact": "Landmark",
+        "presentationFocus": "A precise linearization of wide-network training around initialization.",
+        "link": "https://arxiv.org/abs/1902.06720"
       },
       {
-        "authors": "Krzysztof Choromanski et al.",
-        "title": "Rethinking Attention with Performers",
-        "publication": "ICLR 2021.",
-        "presentationFocus": "Random-feature approximations that yield linear-attention algorithms with theoretical guarantees.",
-        "link": "https://openreview.net/forum?id=Ua6zuk0WRH"
+        "authors": "Simon S. Du, Jason D. Lee, Haochuan Li, Liwei Wang, and Xiyu Zhai",
+        "title": "Gradient Descent Finds Global Minima of Deep Neural Networks",
+        "publication": "ICML 2019",
+        "impact": "Landmark",
+        "presentationFocus": "Polynomial-time convergence of gradient descent for overparameterized deep networks.",
+        "link": "https://arxiv.org/abs/1811.03804"
       },
       {
-        "authors": "Tri Dao, Daniel Y. Fu, Stefano Ermon, Atri Rudra, and Christopher Ré.",
-        "title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
-        "publication": "NeurIPS 2022.",
-        "presentationFocus": "An exact attention algorithm designed around GPU memory hierarchy and IO complexity.",
-        "link": "https://arxiv.org/abs/2205.14135"
+        "authors": "Zeyuan Allen-Zhu, Yuanzhi Li, and Zhao Song",
+        "title": "A Convergence Theory for Deep Learning via Over-Parameterization",
+        "publication": "ICML 2019",
+        "impact": "Landmark",
+        "presentationFocus": "A general convergence framework for stochastic gradient methods on sufficiently wide deep networks.",
+        "link": "https://arxiv.org/abs/1811.03962"
       }
     ]
   },
   {
     "week": 4,
-    "title": "Positional Encoding and Long-Context Generalization",
-    "guidingQuestion": "How do positional representations support order, memory, and length extrapolation?",
-    "topicFocus": "How models represent order, reuse memory, and extrapolate beyond the context lengths seen during training.",
+    "title": "Feature Learning Beyond the Kernel Regime",
+    "guidingQuestion": "When does a network genuinely learn representations rather than behave like a fixed kernel?",
+    "topicFocus": "Mean-field and feature-learning limits that expose what tangent-kernel analyses miss about modern networks.",
     "papers": [
       {
-        "authors": "Zihang Dai et al.",
-        "title": "Transformer-XL: Attentive Language Models Beyond a Fixed-Length Context",
-        "publication": "ACL 2019.",
-        "presentationFocus": "Segment recurrence and relative position representations for context beyond a fixed training window.",
-        "link": "https://aclanthology.org/P19-1285/"
+        "authors": "Lenaic Chizat, Edouard Oyallon, and Francis Bach",
+        "title": "On Lazy Training in Differentiable Programming",
+        "publication": "NeurIPS 2019",
+        "impact": "Highly cited",
+        "presentationFocus": "A scaling-based separation between lazy kernel behavior and nontrivial feature learning.",
+        "link": "https://arxiv.org/abs/1812.07956"
       },
       {
-        "authors": "Jianlin Su et al.",
-        "title": "RoFormer: Enhanced Transformer with Rotary Position Embedding",
-        "publication": "Neurocomputing 2024; original preprint 2021.",
-        "presentationFocus": "Rotary position embeddings and their relative-position interpretation.",
-        "link": "https://arxiv.org/abs/2104.09864"
+        "authors": "Song Mei, Andrea Montanari, and Phan-Minh Nguyen",
+        "title": "A Mean Field View of the Landscape of Two-Layer Neural Networks",
+        "publication": "PNAS 2018",
+        "impact": "Highly cited",
+        "presentationFocus": "Distributional dynamics for infinitely wide two-layer networks and global optimization in mean field.",
+        "link": "https://arxiv.org/abs/1804.06561"
       },
       {
-        "authors": "Ofir Press, Noah A. Smith, and Mike Lewis.",
-        "title": "Train Short, Test Long: Attention with Linear Biases Enables Input Length Extrapolation",
-        "publication": "ICLR 2022.",
-        "presentationFocus": "ALiBi and the possibility of length extrapolation without learned positional embeddings.",
-        "link": "https://openreview.net/forum?id=R8sQPpGCv0"
+        "authors": "Grant M. Rotskoff and Eric Vanden-Eijnden",
+        "title": "Parameters as Interacting Particles: Long Time Convergence and Asymptotic Error Scaling of Neural Networks",
+        "publication": "NeurIPS 2018",
+        "impact": "Established",
+        "presentationFocus": "A particle-system interpretation of neural-network training and its mean-field limit.",
+        "link": "https://arxiv.org/abs/1805.00915"
       },
       {
-        "authors": "Shouyuan Chen, Sherman Wong, Liangjian Chen, and Yuandong Tian.",
-        "title": "Extending Context Window of Large Language Models via Positional Interpolation",
-        "publication": "Technical report, 2023.",
-        "presentationFocus": "A widely adopted method for extending RoPE-based language models with short continued finetuning.",
-        "link": "https://arxiv.org/abs/2306.15595"
+        "authors": "Greg Yang and Edward J. Hu",
+        "title": "Feature Learning in Infinite-Width Neural Networks",
+        "publication": "ICML 2021",
+        "impact": "Established",
+        "presentationFocus": "The maximal-update parameterization and an infinite-width limit that retains representation learning.",
+        "link": "https://arxiv.org/abs/2011.14522"
       }
     ]
   },
   {
     "week": 5,
-    "title": "Mixture-of-Experts and Sparse Scaling",
-    "guidingQuestion": "When does sparse conditional computation outperform dense scaling?",
-    "topicFocus": "Conditional computation as a route to increasing parameter count without paying dense-model cost on every token.",
+    "title": "Generalization Bounds for Deep Networks",
+    "guidingQuestion": "Which complexity measures can explain generalization in networks with many more parameters than examples?",
+    "topicFocus": "Margin, norm, PAC-Bayes, compression, and impossibility results for uniform-convergence explanations.",
     "papers": [
       {
-        "authors": "Dmitry Lepikhin et al.",
-        "title": "GShard: Scaling Giant Models with Conditional Computation and Automatic Sharding",
-        "publication": "ICLR 2021.",
-        "presentationFocus": "Sparse experts, routing, and automatic sharding at very large scale.",
-        "link": "https://openreview.net/forum?id=qrwe7XHTmYb"
+        "authors": "Peter L. Bartlett, Dylan J. Foster, and Matus Telgarsky",
+        "title": "Spectrally-Normalized Margin Bounds for Neural Networks",
+        "publication": "NeurIPS 2017",
+        "impact": "Landmark",
+        "presentationFocus": "A margin bound controlled by products and sums of spectral and Frobenius norms.",
+        "link": "https://arxiv.org/abs/1706.08498"
       },
       {
-        "authors": "William Fedus, Barret Zoph, and Noam Shazeer.",
-        "title": "Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity",
-        "publication": "JMLR 2022.",
-        "presentationFocus": "Simplified top-one expert routing and the optimization challenges of sparse models.",
-        "link": "https://www.jmlr.org/papers/v23/21-0998.html"
+        "authors": "Behnam Neyshabur, Srinadh Bhojanapalli, David McAllester, and Nathan Srebro",
+        "title": "A PAC-Bayesian Approach to Spectrally-Normalized Margin Bounds for Neural Networks",
+        "publication": "ICLR 2018",
+        "impact": "Landmark",
+        "presentationFocus": "PAC-Bayes derivation of norm- and margin-sensitive deep-network generalization bounds.",
+        "link": "https://arxiv.org/abs/1707.09564"
       },
       {
-        "authors": "Nan Du et al.",
-        "title": "GLaM: Efficient Scaling of Language Models with Mixture-of-Experts",
-        "publication": "ICML 2022.",
-        "presentationFocus": "A large sparse language model and an empirical study of quality-compute tradeoffs.",
-        "link": "https://proceedings.mlr.press/v162/du22c.html"
+        "authors": "Sanjeev Arora, Rong Ge, Behnam Neyshabur, and Yi Zhang",
+        "title": "Stronger Generalization Bounds for Deep Nets via a Compression Approach",
+        "publication": "ICML 2018",
+        "impact": "Highly cited",
+        "presentationFocus": "Compression as a route from noise stability to nonvacuous generalization guarantees.",
+        "link": "https://arxiv.org/abs/1802.05296"
       },
       {
-        "authors": "Albert Q. Jiang et al.",
-        "title": "Mixtral of Experts",
-        "publication": "Technical report, 2024.",
-        "presentationFocus": "A highly influential open-weight sparse mixture-of-experts model.",
-        "link": "https://arxiv.org/abs/2401.04088"
+        "authors": "Vaishnavh Nagarajan and J. Zico Kolter",
+        "title": "Uniform Convergence May Be Unable to Explain Generalization in Deep Learning",
+        "publication": "NeurIPS 2019",
+        "impact": "Highly cited",
+        "presentationFocus": "Lower bounds showing why standard uniform-convergence analyses can fail on interpolating networks.",
+        "link": "https://arxiv.org/abs/1902.04742"
       }
     ]
   },
   {
     "week": 6,
-    "title": "Language-Model Pretraining Objectives",
-    "guidingQuestion": "How does the pretraining objective determine what is learned and how efficiently it transfers?",
-    "topicFocus": "How masking, denoising, discrimination, and mixtures of objectives change learned representations and downstream transfer.",
+    "title": "Transformer Expressivity and Universality",
+    "guidingQuestion": "Which sequence-to-sequence maps and programs can transformers represent in principle?",
+    "topicFocus": "Constructive upper bounds, universality, program compilation, and recurrent-depth extensions of the transformer architecture.",
     "papers": [
       {
-        "authors": "Yinhan Liu et al.",
-        "title": "RoBERTa: A Robustly Optimized BERT Pretraining Approach",
-        "publication": "Technical report, 2019.",
-        "presentationFocus": "A controlled demonstration that data, training duration, and objective details matter as much as architectural novelty.",
-        "link": "https://arxiv.org/abs/1907.11692"
+        "authors": "Chulhee Yun et al.",
+        "title": "Are Transformers Universal Approximators of Sequence-to-Sequence Functions?",
+        "publication": "ICLR 2020",
+        "impact": "Highly cited",
+        "presentationFocus": "A universal-approximation theorem separating the roles of attention and feed-forward layers.",
+        "link": "https://openreview.net/forum?id=ByxRM0Ntvr"
       },
       {
-        "authors": "Kevin Clark et al.",
-        "title": "ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators",
-        "publication": "ICLR 2020.",
-        "presentationFocus": "Sample-efficient representation learning through replaced-token detection.",
-        "link": "https://openreview.net/forum?id=r1xMH1BtvB"
+        "authors": "Jorge P\u00e9rez, Pablo Barcel\u00f3, and Javier Marinkovic",
+        "title": "Attention Is Turing Complete",
+        "publication": "JMLR 2021",
+        "impact": "Established",
+        "presentationFocus": "A constructive analysis of the assumptions under which attention architectures simulate arbitrary computation.",
+        "link": "https://www.jmlr.org/papers/v22/20-302.html"
       },
       {
-        "authors": "Mike Lewis et al.",
-        "title": "BART: Denoising Sequence-to-Sequence Pre-training for Natural Language Generation, Translation, and Comprehension",
-        "publication": "ACL 2020.",
-        "presentationFocus": "A general denoising objective for sequence-to-sequence transfer.",
-        "link": "https://aclanthology.org/2020.acl-main.703/"
+        "authors": "Gail Weiss, Yoav Goldberg, and Eran Yahav",
+        "title": "Thinking Like Transformers",
+        "publication": "ICML 2021",
+        "impact": "Established",
+        "presentationFocus": "The RASP programming model and compilation of symbolic sequence algorithms into transformer circuits.",
+        "link": "https://proceedings.mlr.press/v139/weiss21a.html"
       },
       {
-        "authors": "Yi Tay et al.",
-        "title": "UL2: Unifying Language Learning Paradigms",
-        "publication": "ICLR 2023.",
-        "presentationFocus": "A mixture-of-denoisers objective that unifies causal and noncausal pretraining regimes.",
-        "link": "https://openreview.net/forum?id=6ruVLB727MC"
+        "authors": "Mostafa Dehghani, Stephan Gouws, Oriol Vinyals, Jakob Uszkoreit, and Lukasz Kaiser",
+        "title": "Universal Transformers",
+        "publication": "ICLR 2019",
+        "impact": "Landmark",
+        "presentationFocus": "Recurrent computation in depth, adaptive halting, and the link between architectural recurrence and algorithmic generalization.",
+        "link": "https://arxiv.org/abs/1807.03819"
       }
     ]
   },
   {
     "week": 7,
-    "title": "Scaling Laws, Compute-Optimal Training, and Emergence",
-    "guidingQuestion": "How should parameters, data, and compute scale, and are abrupt capabilities genuine?",
-    "topicFocus": "Empirical regularities connecting loss and capabilities to model size, data, and compute, together with debates over apparent phase transitions.",
+    "title": "Formal Languages, Automata, and Lower Bounds for Self-Attention",
+    "guidingQuestion": "Which regular, hierarchical, and bounded-memory computations can transformers represent and learn, and where do fixed-depth attention mechanisms fail?",
+    "topicFocus": "Formal-language theory, circuit upper bounds, automata simulation, shortcut solutions, and impossibility results for self-attention.",
     "papers": [
       {
-        "authors": "Jared Kaplan et al.",
-        "title": "Scaling Laws for Neural Language Models",
-        "publication": "Technical report, 2020.",
-        "presentationFocus": "The empirical power laws that shaped early large-model scaling strategy.",
-        "link": "https://arxiv.org/abs/2001.08361"
+        "authors": "Michael Hahn",
+        "title": "Theoretical Limitations of Self-Attention in Neural Sequence Models",
+        "publication": "TACL 2020",
+        "impact": "Highly cited",
+        "presentationFocus": "Lower bounds for fixed-depth self-attention on parity and hierarchical dependencies.",
+        "link": "https://aclanthology.org/2020.tacl-1.11/"
       },
       {
-        "authors": "Jordan Hoffmann et al.",
-        "title": "Training Compute-Optimal Large Language Models",
-        "publication": "NeurIPS 2022.",
-        "presentationFocus": "The Chinchilla analysis of how parameters and training tokens should scale under a fixed compute budget.",
-        "link": "https://arxiv.org/abs/2203.15556"
+        "authors": "Satwik Bhattamishra, Kabir Ahuja, and Navin Goyal",
+        "title": "On the Ability and Limitations of Transformers to Recognize Formal Languages",
+        "publication": "EMNLP 2020",
+        "impact": "Established",
+        "presentationFocus": "Constructive and empirical characterization across regular, counter, and context-free language families.",
+        "link": "https://aclanthology.org/2020.emnlp-main.576/"
       },
       {
-        "authors": "Jason Wei et al.",
-        "title": "Emergent Abilities of Large Language Models",
-        "publication": "TMLR 2022.",
-        "presentationFocus": "The empirical case for capabilities that appear abruptly with scale.",
-        "link": "https://openreview.net/forum?id=yzkSU5zdwD"
+        "authors": "Bingbin Liu, Jordan T. Ash, Surbhi Goel, Akshay Krishnamurthy, and Cyril Zhang",
+        "title": "Transformers Learn Shortcuts to Automata",
+        "publication": "ICLR 2023",
+        "impact": "Established",
+        "presentationFocus": "Log-depth and constant-depth shortcut simulations of finite-state automata, together with evidence that gradient training finds them.",
+        "link": "https://openreview.net/forum?id=De4FYqjFueZ"
       },
       {
-        "authors": "Rylan Schaeffer, Brando Miranda, and Sanmi Koyejo.",
-        "title": "Are Emergent Abilities of Large Language Models a Mirage?",
-        "publication": "NeurIPS 2023.",
-        "presentationFocus": "How discontinuous metrics can create the appearance of abrupt emergence.",
-        "link": "https://arxiv.org/abs/2304.15004"
+        "authors": "William Merrill, Ashish Sabharwal, and Noah A. Smith",
+        "title": "Saturated Transformers Are Constant-Depth Threshold Circuits",
+        "publication": "TACL 2022",
+        "impact": "Established",
+        "presentationFocus": "A circuit-complexity upper bound placing saturated transformers in constant-depth threshold circuits.",
+        "link": "https://aclanthology.org/2022.tacl-1.49/"
       }
     ]
   },
   {
     "week": 8,
-    "title": "Data Curation, Deduplication, and Mixture Design",
-    "guidingQuestion": "Which data should a model see, in what proportions, and with what preprocessing?",
-    "topicFocus": "How the composition and preprocessing of pretraining corpora affect efficiency, memorization, and downstream quality.",
+    "title": "Transformer Complexity: Precision, Parallelism, and Computational Lower Bounds",
+    "guidingQuestion": "How do numerical precision, depth, width, communication, and running time constrain transformer computation?",
+    "topicFocus": "Complexity-theoretic characterizations, conditional lower bounds, communication separations, and architecture comparisons beyond universal approximation.",
     "papers": [
       {
-        "authors": "Leo Gao et al.",
-        "title": "The Pile: An 800GB Dataset of Diverse Text for Language Modeling",
-        "publication": "Technical report, 2021.",
-        "presentationFocus": "A widely used open corpus and an influential model for documenting heterogeneous pretraining data.",
-        "link": "https://arxiv.org/abs/2101.00027"
+        "authors": "William Merrill and Ashish Sabharwal",
+        "title": "The Parallelism Tradeoff: Limitations of Log-Precision Transformers",
+        "publication": "TACL 2023",
+        "impact": "Established",
+        "presentationFocus": "Simulation by uniform threshold circuits and the computational price of extreme parallelism.",
+        "link": "https://arxiv.org/abs/2207.00729"
       },
       {
-        "authors": "Katherine Lee et al.",
-        "title": "Deduplicating Training Data Makes Language Models Better",
-        "publication": "ACL 2022.",
-        "presentationFocus": "The effects of exact and near deduplication on memorization, validation leakage, and training efficiency.",
-        "link": "https://aclanthology.org/2022.acl-long.577/"
+        "authors": "Feyza Duman Keles, Pruthuvi Mahesakya Wijewardena, and Chinmay Hegde",
+        "title": "On the Computational Complexity of Self-Attention",
+        "publication": "ALT 2023",
+        "impact": "Established",
+        "presentationFocus": "SETH-based quadratic-time lower bounds for exact and approximate self-attention, plus approximation upper bounds.",
+        "link": "https://arxiv.org/abs/2209.04881"
       },
       {
-        "authors": "Sang Michael Xie et al.",
-        "title": "DoReMi: Optimizing Data Mixtures Speeds Up Language Model Pretraining",
-        "publication": "NeurIPS 2023.",
-        "presentationFocus": "Domain reweighting through minimax optimization and proxy-model training.",
-        "link": "https://arxiv.org/abs/2305.10429"
+        "authors": "Clayton Sanford, Daniel Hsu, and Matus Telgarsky",
+        "title": "Representational Strengths and Limitations of Transformers",
+        "publication": "NeurIPS 2023",
+        "impact": "Strong recent uptake",
+        "presentationFocus": "Communication-complexity separations identifying tasks where attention is exponentially efficient or inefficient.",
+        "link": "https://arxiv.org/abs/2306.02896"
       },
       {
-        "authors": "Jeffrey Li et al.",
-        "title": "DataComp-LM: In Search of the Next Generation of Training Sets for Language Models",
-        "publication": "NeurIPS 2024, Datasets and Benchmarks Track.",
-        "presentationFocus": "A controlled testbed for evaluating data filtering, mixing, and curation strategies.",
-        "link": "https://arxiv.org/abs/2406.11794"
+        "authors": "Samy Jelassi, David Brandfonbrener, Sham M. Kakade, and Eran Malach",
+        "title": "Repeat After Me: Transformers Are Better than State Space Models at Copying",
+        "publication": "ICML 2024",
+        "impact": "Established",
+        "presentationFocus": "A provable architecture separation on copying and associative-recall tasks.",
+        "link": "https://arxiv.org/abs/2402.01032"
       }
     ]
   },
   {
     "week": 9,
-    "title": "Evaluation and Benchmarking of Large Language Models",
-    "guidingQuestion": "What do benchmarks actually measure, and when are model-based judges reliable?",
-    "topicFocus": "What current benchmarks measure, how broad evaluation should be organized, and when model-based evaluation can be trusted.",
+    "title": "Statistical and Inductive Biases of Self-Attention",
+    "guidingQuestion": "Which functions, tokens, and interactions does attention learn efficiently, and how does depth change its statistical behavior?",
+    "topicFocus": "Kernel limits, rank collapse, Lipschitz properties, sparsity, and variable creation in self-attention.",
     "papers": [
       {
-        "authors": "Dan Hendrycks et al.",
-        "title": "Measuring Massive Multitask Language Understanding",
-        "publication": "ICLR 2021.",
-        "presentationFocus": "MMLU and the use of broad knowledge-and-reasoning evaluations for language models.",
-        "link": "https://arxiv.org/abs/2009.03300"
+        "authors": "Jiri Hron, Yasaman Bahri, Jascha Sohl-Dickstein, and Roman Novak",
+        "title": "Infinite Attention: NNGP and NTK for Deep Attention Networks",
+        "publication": "ICML 2020",
+        "impact": "Established",
+        "presentationFocus": "Gaussian-process and tangent-kernel limits for multihead attention.",
+        "link": "https://proceedings.mlr.press/v119/hron20a.html"
       },
       {
-        "authors": "Aarohi Srivastava et al.",
-        "title": "Beyond the Imitation Game: Quantifying and Extrapolating the Capabilities of Language Models",
-        "publication": "TMLR 2023.",
-        "presentationFocus": "BIG-bench and collaborative evaluation of diverse and difficult capabilities.",
-        "link": "https://openreview.net/forum?id=uyTL5Bvosj"
+        "authors": "Yihe Dong, Jean-Baptiste Cordonnier, and Andreas Loukas",
+        "title": "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
+        "publication": "ICML 2021",
+        "impact": "Highly cited",
+        "presentationFocus": "A rank-collapse theorem explaining why pure self-attention requires skip connections or MLP blocks.",
+        "link": "https://proceedings.mlr.press/v139/dong21a.html"
       },
       {
-        "authors": "Percy Liang et al.",
-        "title": "Holistic Evaluation of Language Models",
-        "publication": "TMLR 2023.",
-        "presentationFocus": "HELM and multidimensional evaluation across accuracy, robustness, fairness, efficiency, and other desiderata.",
-        "link": "https://openreview.net/forum?id=iO4LZibEqW"
+        "authors": "Hyunjik Kim, George Papamakarios, and Andriy Mnih",
+        "title": "The Lipschitz Constant of Self-Attention",
+        "publication": "ICML 2021",
+        "impact": "Established",
+        "presentationFocus": "Why standard dot-product attention is not globally Lipschitz and how to construct stable alternatives.",
+        "link": "https://proceedings.mlr.press/v139/kim21i.html"
       },
       {
-        "authors": "Lianmin Zheng et al.",
-        "title": "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena",
-        "publication": "NeurIPS 2023, Datasets and Benchmarks Track.",
-        "presentationFocus": "Pairwise model evaluation, judge bias, and the foundations of large-scale human preference leaderboards.",
-        "link": "https://arxiv.org/abs/2306.05685"
+        "authors": "Benjamin Edelman, Surbhi Goel, Sham Kakade, and Cyril Zhang",
+        "title": "Inductive Biases and Variable Creation in Self-Attention Mechanisms",
+        "publication": "ICML 2022",
+        "impact": "Established",
+        "presentationFocus": "Sample-efficient learning of sparse functions and the role of attention in creating task-relevant variables.",
+        "link": "https://proceedings.mlr.press/v162/edelman22a.html"
       }
     ]
   },
   {
     "week": 10,
-    "title": "Empirical Foundations of In-Context Learning",
-    "guidingQuestion": "Under which data conditions do models begin to learn new tasks from their prompts?",
-    "topicFocus": "The experiments that established few-shot prompting as a learning phenomenon and identified the data conditions that support it.",
+    "title": "Optimization and Trainability of Transformers",
+    "guidingQuestion": "Why are some transformer parameterizations easy to train while others require warmup, normalization, or carefully scaled initialization?",
+    "topicFocus": "Theorem-driven analyses of gradients, initialization, token selection, and learned causal structure.",
     "papers": [
       {
-        "authors": "Tom B. Brown et al.",
-        "title": "Language Models are Few-Shot Learners",
-        "publication": "NeurIPS 2020.",
-        "presentationFocus": "GPT-3 and the modern empirical starting point for in-context learning.",
-        "link": "https://proceedings.neurips.cc/paper/2020/hash/1457c0d6bfcb4967418bfb8ac142f64a-Abstract.html"
+        "authors": "Ruibin Xiong et al.",
+        "title": "On Layer Normalization in the Transformer Architecture",
+        "publication": "ICML 2020",
+        "impact": "Landmark",
+        "presentationFocus": "Mean-field analysis of gradient amplification in Post-LN versus Pre-LN transformers.",
+        "link": "https://arxiv.org/abs/2002.04745"
       },
       {
-        "authors": "Sewon Min et al.",
-        "title": "Rethinking the Role of Demonstrations: What Makes In-Context Learning Work?",
-        "publication": "EMNLP 2022.",
-        "presentationFocus": "A careful study of labels, input distributions, formats, and the surprising robustness of in-context demonstrations.",
-        "link": "https://aclanthology.org/2022.emnlp-main.759/"
+        "authors": "Xiao Shi Huang, Felipe Perez, Jimmy Ba, and Maksims Volkovs",
+        "title": "Improving Transformer Optimization Through Better Initialization",
+        "publication": "ICML 2020",
+        "impact": "Established",
+        "presentationFocus": "T-Fixup and the interaction among residual paths, normalization, initialization, and warmup.",
+        "link": "https://proceedings.mlr.press/v119/huang20f.html"
       },
       {
-        "authors": "Shivam Garg, Dimitris Tsipras, Percy Liang, and Gregory Valiant.",
-        "title": "What Can Transformers Learn In-Context? A Case Study of Simple Function Classes",
-        "publication": "NeurIPS 2022.",
-        "presentationFocus": "A controlled framework for studying the function classes learned from examples in the context.",
-        "link": "https://arxiv.org/abs/2208.01066"
+        "authors": "Yuandong Tian, Yiping Wang, Beidi Chen, and Simon Du",
+        "title": "Scan and Snap: Understanding Training Dynamics and Token Composition in 1-Layer Transformer",
+        "publication": "NeurIPS 2023",
+        "impact": "Strong recent uptake",
+        "presentationFocus": "A rigorous account of how gradient training turns diffuse attention into selective token composition.",
+        "link": "https://arxiv.org/abs/2305.16380"
       },
       {
-        "authors": "Stephanie C. Y. Chan et al.",
-        "title": "Data Distributional Properties Drive Emergent In-Context Learning in Transformers",
-        "publication": "NeurIPS 2022.",
-        "presentationFocus": "Which properties of the pretraining distribution cause in-context learning to emerge.",
-        "link": "https://arxiv.org/abs/2205.05055"
+        "authors": "Eshaan Nichani, Alex Damian, and Jason D. Lee",
+        "title": "How Transformers Learn Causal Structure with Gradient Descent",
+        "publication": "ICML 2024",
+        "impact": "Strong recent uptake",
+        "presentationFocus": "A proof that gradient descent recovers latent causal structure and induction-head behavior in a simplified transformer.",
+        "link": "https://arxiv.org/abs/2402.14735"
       }
     ]
   },
   {
     "week": 11,
-    "title": "Bayesian and Meta-Learning Views of In-Context Learning",
-    "guidingQuestion": "Is in-context learning Bayesian inference, amortized inference, or meta-learning?",
-    "topicFocus": "Competing accounts of in-context learning as latent-concept inference, amortized Bayesian inference, and task-level meta-learning.",
+    "title": "Length Generalization and Positional Inductive Bias",
+    "guidingQuestion": "Why do transformers trained on short instances fail on longer ones, and which positional structures enable out-of-distribution extrapolation?",
+    "topicFocus": "Length generalization as a formal distribution-shift problem, with controlled algorithmic tasks and theory-guided analyses of positional encoding.",
     "papers": [
       {
-        "authors": "Sang Michael Xie, Aditi Raghunathan, Percy Liang, and Tengyu Ma.",
-        "title": "An Explanation of In-Context Learning as Implicit Bayesian Inference",
-        "publication": "ICLR 2022.",
-        "presentationFocus": "A latent-concept model in which next-token prediction approximates Bayesian inference over tasks.",
-        "link": "https://openreview.net/forum?id=RdJVFCHjUMI"
+        "authors": "Cem Anil, Yuhuai Wu, Anders Andreassen, Aitor Lewkowycz, Vedant Misra, Vinay Ramasesh, Ambrose Slone, Guy Gur-Ari, Ethan Dyer, and Behnam Neyshabur",
+        "title": "Exploring Length Generalization in Large Language Models",
+        "publication": "NeurIPS 2022",
+        "impact": "Established",
+        "presentationFocus": "A controlled study showing that scale alone does not produce algorithmic length extrapolation, and analyzing when scratchpads help.",
+        "link": "https://arxiv.org/abs/2207.04901"
       },
       {
-        "authors": "Samuel Müller et al.",
-        "title": "Transformers Can Do Bayesian Inference",
-        "publication": "ICLR 2022.",
-        "presentationFocus": "Training transformers to amortize Bayesian inference across tabular prediction tasks.",
-        "link": "https://openreview.net/forum?id=KSugKcbNf9"
+        "authors": "Amirhossein Kazemnejad, Inkit Padhi, Karthikeyan Natesan Ramamurthy, Payel Das, and Siva Reddy",
+        "title": "The Impact of Positional Encoding on Length Generalization in Transformers",
+        "publication": "NeurIPS 2023",
+        "impact": "Established",
+        "presentationFocus": "A systematic comparison of positional encodings and the inductive biases that govern algorithmic extrapolation.",
+        "link": "https://arxiv.org/abs/2305.19466"
       },
       {
-        "authors": "Sewon Min et al.",
-        "title": "MetaICL: Learning to Learn In Context",
-        "publication": "NAACL 2022.",
-        "presentationFocus": "Meta-training language models explicitly for generalization to new tasks through demonstrations.",
-        "link": "https://aclanthology.org/2022.naacl-main.201/"
+        "authors": "Anian Ruoss et al.",
+        "title": "Randomized Positional Encodings Boost Length Generalization of Transformers",
+        "publication": "ACL 2023",
+        "impact": "Strong recent uptake",
+        "presentationFocus": "Randomized positions as a data-augmentation mechanism for training-short, testing-long generalization.",
+        "link": "https://arxiv.org/abs/2305.16843"
       },
       {
-        "authors": "Allan Raventós, Mansheej Paul, Feng Chen, and Surya Ganguli.",
-        "title": "Pretraining Task Diversity and the Emergence of Non-Bayesian In-Context Learning for Regression",
-        "publication": "NeurIPS 2023.",
-        "presentationFocus": "How increasing task diversity changes the learned predictor from task-distribution inference toward a general learning algorithm.",
-        "link": "https://arxiv.org/abs/2306.15063"
+        "authors": "Federico Barbero, Alex Vitvitskyi, Christos Perivolaropoulos, Razvan Pascanu, and Petar Veli\u010dkovi\u0107",
+        "title": "Round and Round We Go! What Makes Rotary Positional Encodings Useful?",
+        "publication": "ICLR 2025",
+        "impact": "Strong recent uptake",
+        "presentationFocus": "Mathematical and mechanistic analysis of how RoPE frequencies encode relative position and semantic information.",
+        "link": "https://arxiv.org/abs/2410.06205"
       }
     ]
   },
   {
     "week": 12,
-    "title": "In-Context Learning as Implicit Optimization",
-    "guidingQuestion": "Does a transformer forward pass implement an optimization algorithm?",
-    "topicFocus": "The hypothesis that transformer forward passes encode models in their activations and implement recognizable optimization algorithms.",
+    "title": "Scaling Laws, Compute\u2013Data Tradeoffs, and Data Quality",
+    "guidingQuestion": "How should model size, data, and optimization compute be allocated, and when can data selection beat ordinary power-law scaling?",
+    "topicFocus": "Field-defining language-model scaling laws paired with theoretical explanations of exponents, compute-optimality, and data-pruning gains.",
     "papers": [
       {
-        "authors": "Ekin Akyürek et al.",
-        "title": "What Learning Algorithm Is In-Context Learning? Investigations with Linear Models",
-        "publication": "ICLR 2023.",
-        "presentationFocus": "Evidence that trained transformers implement identifiable regression algorithms in their activations.",
-        "link": "https://arxiv.org/abs/2211.15661"
+        "authors": "Jared Kaplan et al.",
+        "title": "Scaling Laws for Neural Language Models",
+        "publication": "Technical report 2020",
+        "impact": "Landmark",
+        "presentationFocus": "The original parameter, data, and compute scaling laws for autoregressive language modeling.",
+        "link": "https://arxiv.org/abs/2001.08361"
       },
       {
-        "authors": "Johannes von Oswald et al.",
-        "title": "Transformers Learn In-Context by Gradient Descent",
-        "publication": "ICML 2023.",
-        "presentationFocus": "Constructions and experiments connecting attention updates to gradient descent.",
-        "link": "https://arxiv.org/abs/2212.07677"
+        "authors": "Jordan Hoffmann et al.",
+        "title": "Training Compute-Optimal Large Language Models",
+        "publication": "NeurIPS 2022",
+        "impact": "Landmark",
+        "presentationFocus": "The Chinchilla compute-optimal scaling rule and the correction from parameter-heavy to data-balanced training.",
+        "link": "https://arxiv.org/abs/2203.15556"
       },
       {
-        "authors": "Damai Dai et al.",
-        "title": "Why Can GPT Learn In-Context? Language Models Secretly Perform Gradient Descent as Meta-Optimizers",
-        "publication": "Findings of ACL 2023.",
-        "presentationFocus": "A duality between attention and gradient descent, together with comparisons to explicit finetuning.",
-        "link": "https://aclanthology.org/2023.findings-acl.247/"
+        "authors": "Yasaman Bahri, Ethan Dyer, Jared Kaplan, Jaehoon Lee, and Utkarsh Sharma",
+        "title": "Explaining Neural Scaling Laws",
+        "publication": "PNAS 2024",
+        "impact": "Highly cited",
+        "presentationFocus": "Solvable learning models deriving power-law behavior from spectra, target alignment, and finite resources.",
+        "link": "https://arxiv.org/abs/2102.06701"
       },
       {
-        "authors": "Kwangjun Ahn, Xiang Cheng, Hadi Daneshmand, and Suvrit Sra.",
-        "title": "Transformers Learn to Implement Preconditioned Gradient Descent for In-Context Learning",
-        "publication": "NeurIPS 2023.",
-        "presentationFocus": "A loss-landscape analysis showing that training can select data-adaptive preconditioned gradient updates.",
-        "link": "https://arxiv.org/abs/2306.00297"
+        "authors": "Ben Sorscher, Robert Geirhos, Shashank Shekhar, Surya Ganguli, and Ari S. Morcos",
+        "title": "Beyond Neural Scaling Laws: Beating Power-Law Scaling via Data Pruning",
+        "publication": "NeurIPS 2022",
+        "impact": "Highly cited",
+        "presentationFocus": "A theory of how sufficiently accurate data-quality rankings can improve power-law scaling, with large-scale validation.",
+        "link": "https://arxiv.org/abs/2206.14486"
       }
     ]
   },
   {
     "week": 13,
-    "title": "Training and Generalization Theory for In-Context Learning",
-    "guidingQuestion": "How many tasks and examples are needed, and why does the learned in-context algorithm generalize?",
-    "topicFocus": "Provable guarantees for the algorithms transformers can execute in context, how those algorithms generalize, and how training finds them.",
+    "title": "Emergence, Grokking, and Phase Transitions",
+    "guidingQuestion": "Are abrupt capabilities genuine learning transitions, or artifacts created by metrics, thresholds, and hidden continuous progress?",
+    "topicFocus": "Empirical claims of emergence confronted with measurement theory and mechanistic accounts of delayed generalization.",
     "papers": [
       {
-        "authors": "Yingcong Li, M. Emrullah Ildiz, Dimitris Papailiopoulos, and Samet Oymak.",
-        "title": "Transformers as Algorithms: Generalization and Stability in In-Context Learning",
-        "publication": "ICML 2023.",
-        "presentationFocus": "Algorithmic stability as a route to generalization bounds for prompt-conditioned predictors.",
-        "link": "https://proceedings.mlr.press/v202/li23l.html"
+        "authors": "Jason Wei et al.",
+        "title": "Emergent Abilities of Large Language Models",
+        "publication": "TMLR 2022",
+        "impact": "Landmark",
+        "presentationFocus": "The empirical case that some abilities appear abruptly as language models scale.",
+        "link": "https://arxiv.org/abs/2206.07682"
       },
       {
-        "authors": "Yu Bai et al.",
-        "title": "Transformers as Statisticians: Provable In-Context Learning with In-Context Algorithm Selection",
-        "publication": "NeurIPS 2023, Oral.",
-        "presentationFocus": "Transformer constructions for broad statistical procedures and model selection from context.",
-        "link": "https://arxiv.org/abs/2306.04637"
+        "authors": "Rylan Schaeffer, Brando Miranda, and Sanmi Koyejo",
+        "title": "Are Emergent Abilities of Large Language Models a Mirage?",
+        "publication": "NeurIPS 2023",
+        "impact": "Landmark",
+        "presentationFocus": "How nonlinear metrics and coarse resolution can manufacture apparent discontinuities.",
+        "link": "https://arxiv.org/abs/2304.15004"
       },
       {
-        "authors": "Ruiqi Zhang, Spencer Frei, and Peter L. Bartlett.",
-        "title": "Trained Transformers Learn Linear Models In-Context",
-        "publication": "JMLR 2024.",
-        "presentationFocus": "A rigorous analysis of gradient-based training that produces a linear-regression in-context learner.",
-        "link": "https://www.jmlr.org/papers/v25/23-1042.html"
+        "authors": "Alethea Power et al.",
+        "title": "Grokking: Generalization Beyond Overfitting on Small Algorithmic Datasets",
+        "publication": "Technical report 2022",
+        "impact": "Landmark",
+        "presentationFocus": "Delayed generalization long after interpolation on algorithmic tasks.",
+        "link": "https://arxiv.org/abs/2201.02177"
       },
       {
-        "authors": "Jingfeng Wu et al.",
-        "title": "How Many Pretraining Tasks Are Needed for In-Context Learning of Linear Regression?",
-        "publication": "ICLR 2024.",
-        "presentationFocus": "Task-level sample complexity and the role of pretraining diversity.",
-        "link": "https://arxiv.org/abs/2310.08391"
+        "authors": "Neel Nanda et al.",
+        "title": "Progress Measures for Grokking via Mechanistic Interpretability",
+        "publication": "ICLR 2023",
+        "impact": "Highly cited",
+        "presentationFocus": "Continuous internal progress measures underlying an apparently sudden generalization transition.",
+        "link": "https://openreview.net/forum?id=9XFSbDPmdW"
       }
     ]
   },
   {
     "week": 14,
-    "title": "Prompt Design, Demonstration Selection, and Calibration",
-    "guidingQuestion": "Why are prompts fragile, and how can prompt selection or optimization be systematized?",
-    "topicFocus": "Why semantically equivalent prompts can produce very different predictions, and how prompts can be selected or optimized systematically.",
+    "title": "Bayesian, Meta-Learning, and Structure-Induction Theories of In-Context Learning",
+    "guidingQuestion": "Which latent-task and compositional structures make next-token prediction behave like Bayesian inference or meta-learning?",
+    "topicFocus": "Implicit Bayesian inference, amortized posterior prediction, task-diversity transitions, and information-theoretic structure induction.",
     "papers": [
       {
-        "authors": "Tony Z. Zhao, Eric Wallace, Shi Feng, Dan Klein, and Sameer Singh.",
-        "title": "Calibrate Before Use: Improving Few-Shot Performance of Language Models",
-        "publication": "ICML 2021.",
-        "presentationFocus": "Contextual calibration as a correction for prompt-induced label and answer biases.",
-        "link": "https://proceedings.mlr.press/v139/zhao21c.html"
+        "authors": "Sang Michael Xie, Aditi Raghunathan, Percy Liang, and Tengyu Ma",
+        "title": "An Explanation of In-Context Learning as Implicit Bayesian Inference",
+        "publication": "ICLR 2022",
+        "impact": "Landmark",
+        "presentationFocus": "Latent concepts and conditions under which sequence prediction approximates Bayesian task inference.",
+        "link": "https://arxiv.org/abs/2111.02080"
       },
       {
-        "authors": "Tianyu Gao, Adam Fisch, and Danqi Chen.",
-        "title": "Making Pre-trained Language Models Better Few-Shot Learners",
-        "publication": "ACL 2021.",
-        "presentationFocus": "LM-BFF, prompt generation, demonstration selection, and few-shot finetuning.",
-        "link": "https://aclanthology.org/2021.acl-long.295/"
+        "authors": "Samuel M\u00fcller et al.",
+        "title": "Transformers Can Do Bayesian Inference",
+        "publication": "ICLR 2022",
+        "impact": "Highly cited",
+        "presentationFocus": "Amortizing posterior predictive inference by training transformers on samples from prior-data distributions.",
+        "link": "https://arxiv.org/abs/2112.10510"
       },
       {
-        "authors": "Yao Lu et al.",
-        "title": "Fantastically Ordered Prompts and Where to Find Them: Overcoming Few-Shot Prompt Order Sensitivity",
-        "publication": "ACL 2022.",
-        "presentationFocus": "The large effect of demonstration ordering and methods for selecting robust orders.",
-        "link": "https://aclanthology.org/2022.acl-long.556/"
+        "authors": "Allan Ravent\u00f3s, Mansheej Paul, Feng Chen, and Surya Ganguli",
+        "title": "Pretraining Task Diversity and the Emergence of Non-Bayesian In-Context Learning for Regression",
+        "publication": "NeurIPS 2023",
+        "impact": "Established",
+        "presentationFocus": "A task-diversity phase transition from memorized Bayesian priors toward general-purpose regression algorithms.",
+        "link": "https://arxiv.org/abs/2306.15063"
       },
       {
-        "authors": "Yongchao Zhou et al.",
-        "title": "Large Language Models Are Human-Level Prompt Engineers",
-        "publication": "ICLR 2023.",
-        "presentationFocus": "Automatic Prompt Engineer and the use of language models to search over instruction space.",
-        "link": "https://arxiv.org/abs/2211.01910"
+        "authors": "Michael Hahn and Navin Goyal",
+        "title": "A Theory of Emergent In-Context Learning as Implicit Structure Induction",
+        "publication": "Technical report 2023",
+        "impact": "Strong recent uptake",
+        "presentationFocus": "Information-theoretic conditions under which compositional next-token prediction yields in-context learning and benefits from intermediate steps.",
+        "link": "https://arxiv.org/abs/2303.07971"
       }
     ]
   },
   {
     "week": 15,
-    "title": "Chain-of-Thought and Problem Decomposition",
-    "guidingQuestion": "Why do explicit intermediate steps improve reasoning?",
-    "topicFocus": "How explicit intermediate steps, sampling, curricula, and decomposition improve multistep reasoning.",
+    "title": "In-Context Learning as Implicit Optimization",
+    "guidingQuestion": "Does a transformer forward pass implement gradient descent, preconditioned optimization, or another classical learning algorithm?",
+    "topicFocus": "Algorithm identification and explicit constructions for optimization inside transformer activations.",
     "papers": [
       {
-        "authors": "Jason Wei et al.",
-        "title": "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
-        "publication": "NeurIPS 2022.",
-        "presentationFocus": "The foundational empirical result that reasoning traces unlock large gains on multistep tasks.",
-        "link": "https://arxiv.org/abs/2201.11903"
+        "authors": "Ekin Akyurek, Dale Schuurmans, Jacob Andreas, Tengyu Ma, and Denny Zhou",
+        "title": "What Learning Algorithm Is In-Context Learning? Investigations with Linear Models",
+        "publication": "ICLR 2023",
+        "impact": "Landmark",
+        "presentationFocus": "Evidence that trained transformers emulate identifiable regression algorithms rather than merely retrieve examples.",
+        "link": "https://arxiv.org/abs/2211.15661"
       },
       {
-        "authors": "Xuezhi Wang et al.",
-        "title": "Self-Consistency Improves Chain of Thought Reasoning in Language Models",
-        "publication": "ICLR 2023.",
-        "presentationFocus": "Sampling multiple reasoning paths and marginalizing by answer agreement.",
-        "link": "https://arxiv.org/abs/2203.11171"
+        "authors": "Johannes von Oswald et al.",
+        "title": "Transformers Learn In-Context by Gradient Descent",
+        "publication": "ICML 2023",
+        "impact": "Landmark",
+        "presentationFocus": "Constructive attention updates and experiments connecting transformer layers to gradient-descent iterations.",
+        "link": "https://arxiv.org/abs/2212.07677"
       },
       {
-        "authors": "Denny Zhou et al.",
-        "title": "Least-to-Most Prompting Enables Complex Reasoning in Large Language Models",
-        "publication": "ICLR 2023.",
-        "presentationFocus": "Decomposing difficult problems into a curriculum of simpler subproblems.",
-        "link": "https://arxiv.org/abs/2205.10625"
+        "authors": "Damai Dai et al.",
+        "title": "Why Can GPT Learn In-Context? Language Models Implicitly Perform Gradient Descent as Meta-Optimizers",
+        "publication": "Findings of ACL 2023",
+        "impact": "Highly cited",
+        "presentationFocus": "A meta-optimization interpretation linking attention updates to gradient descent on demonstrations.",
+        "link": "https://arxiv.org/abs/2212.10559"
       },
       {
-        "authors": "Eric Zelikman, Yuhuai Wu, Jesse Mu, and Noah D. Goodman.",
-        "title": "STaR: Bootstrapping Reasoning With Reasoning",
-        "publication": "NeurIPS 2022.",
-        "presentationFocus": "Self-training on rationales that lead to correct answers.",
-        "link": "https://arxiv.org/abs/2203.14465"
+        "authors": "Kwangjun Ahn, Xiang Cheng, Hadi Daneshmand, and Suvrit Sra",
+        "title": "Transformers Learn to Implement Preconditioned Gradient Descent for In-Context Learning",
+        "publication": "NeurIPS 2023",
+        "impact": "Established",
+        "presentationFocus": "Why the learned in-context algorithm can adapt its preconditioner to the task distribution.",
+        "link": "https://arxiv.org/abs/2306.00297"
       }
     ]
   },
   {
     "week": 16,
-    "title": "Deliberate Reasoning, Search, and Verification",
-    "guidingQuestion": "How should additional inference compute be allocated to search, critique, and verification?",
-    "topicFocus": "Inference procedures that spend additional computation exploring, revising, and verifying candidate solutions.",
+    "title": "Emergence and Training Dynamics of In-Context Learning",
+    "guidingQuestion": "Which properties of data and gradient training cause an in-context algorithm or induction head to form?",
+    "topicFocus": "A bridge between data distributions, mechanistic circuits, optimization dynamics, and formal training guarantees.",
     "papers": [
       {
-        "authors": "Karl Cobbe et al.",
-        "title": "Training Verifiers to Solve Math Word Problems",
-        "publication": "Technical report, 2021.",
-        "presentationFocus": "Generate-and-rank reasoning using learned verifiers and the GSM8K benchmark.",
-        "link": "https://arxiv.org/abs/2110.14168"
+        "authors": "Stephanie C. Y. Chan et al.",
+        "title": "Data Distributional Properties Drive Emergent In-Context Learning in Transformers",
+        "publication": "NeurIPS 2022",
+        "impact": "Highly cited",
+        "presentationFocus": "Burstiness, rare classes, and Zipfian structure as drivers of emergent in-context learning.",
+        "link": "https://arxiv.org/abs/2205.05055"
       },
       {
-        "authors": "Shunyu Yao et al.",
-        "title": "Tree of Thoughts: Deliberate Problem Solving with Large Language Models",
-        "publication": "NeurIPS 2023.",
-        "presentationFocus": "Search over coherent intermediate thoughts with lookahead and backtracking.",
-        "link": "https://arxiv.org/abs/2305.10601"
+        "authors": "Catherine Olsson et al.",
+        "title": "In-Context Learning and Induction Heads",
+        "publication": "Technical report 2022",
+        "impact": "Landmark",
+        "presentationFocus": "The influential mechanistic hypothesis connecting induction heads to the emergence of in-context learning.",
+        "link": "https://arxiv.org/abs/2209.11895"
       },
       {
-        "authors": "Niklas Muennighoff et al.",
-        "title": "s1: Simple Test-Time Scaling",
-        "publication": "EMNLP 2025.",
-        "presentationFocus": "How a small, carefully curated reasoning dataset and budget forcing can produce strong test-time scaling.",
-        "link": "https://aclanthology.org/2025.emnlp-main.1025/"
+        "authors": "Ruiqi Zhang, Spencer Frei, and Peter L. Bartlett",
+        "title": "Trained Transformers Learn Linear Models In-Context",
+        "publication": "JMLR 2024",
+        "impact": "Highly cited",
+        "presentationFocus": "A rigorous training-dynamics result showing gradient flow reaches an in-context linear predictor.",
+        "link": "https://arxiv.org/abs/2306.09927"
       },
       {
-        "authors": "Hunter Lightman et al.",
-        "title": "Let's Verify Step by Step",
-        "publication": "ICLR 2024.",
-        "presentationFocus": "Process supervision and the value of assigning credit to individual reasoning steps.",
-        "link": "https://arxiv.org/abs/2305.20050"
+        "authors": "Alberto Bietti, Vivien Cabannes, Diane Bouchacourt, Herve Jegou, and Leon Bottou",
+        "title": "Birth of a Transformer: A Memory Viewpoint",
+        "publication": "NeurIPS 2023",
+        "impact": "Established",
+        "presentationFocus": "The staged emergence of global memories and induction-head mechanisms during training.",
+        "link": "https://arxiv.org/abs/2306.00802"
       }
     ]
   },
   {
     "week": 17,
-    "title": "Mathematical and Formal Reasoning",
-    "guidingQuestion": "What training and search methods make language models effective at mathematics and formal proof?",
-    "topicFocus": "Specialized training, retrieval, search, and neuro-symbolic methods for mathematics and machine-checked proof.",
+    "title": "Learnability, Stability, and Sample Complexity of In-Context Learning",
+    "guidingQuestion": "How many pretraining tasks and prompt examples are required, and when does the learned in-context algorithm generalize?",
+    "topicFocus": "PAC-style learnability, algorithmic stability, task complexity, and empirical function-class generalization.",
     "papers": [
       {
-        "authors": "Aitor Lewkowycz et al.",
-        "title": "Solving Quantitative Reasoning Problems with Language Models",
-        "publication": "NeurIPS 2022.",
-        "presentationFocus": "The Minerva model and the effect of mathematical data and scale on quantitative reasoning.",
-        "link": "https://arxiv.org/abs/2206.14858"
+        "authors": "Shivam Garg, Dimitris Tsipras, Percy Liang, and Gregory Valiant",
+        "title": "What Can Transformers Learn In-Context? A Case Study of Simple Function Classes",
+        "publication": "NeurIPS 2022",
+        "impact": "Landmark",
+        "presentationFocus": "A controlled study of which regression and classification algorithms emerge across function classes.",
+        "link": "https://arxiv.org/abs/2208.01066"
       },
       {
-        "authors": "Kaiyu Yang et al.",
-        "title": "LeanDojo: Theorem Proving with Retrieval-Augmented Language Models",
-        "publication": "NeurIPS 2023, Datasets and Benchmarks Track.",
-        "presentationFocus": "A reproducible Lean environment, retrieval, and proof-search framework.",
-        "link": "https://arxiv.org/abs/2306.15626"
+        "authors": "Yingcong Li, M. Emrullah Ildiz, Dimitris Papailiopoulos, and Samet Oymak",
+        "title": "Transformers as Algorithms: Generalization and Stability in In-Context Learning",
+        "publication": "ICML 2023",
+        "impact": "Established",
+        "presentationFocus": "Prompt-level generalization bounds through stability of the algorithm implemented by the transformer.",
+        "link": "https://arxiv.org/abs/2301.07067"
       },
       {
-        "authors": "Zhangir Azerbayev et al.",
-        "title": "Llemma: An Open Language Model for Mathematics",
-        "publication": "ICLR 2024.",
-        "presentationFocus": "Domain-adaptive pretraining for informal and formal mathematical reasoning.",
-        "link": "https://arxiv.org/abs/2310.10631"
+        "authors": "Noam Wies, Yoav Levine, and Amnon Shashua",
+        "title": "The Learnability of In-Context Learning",
+        "publication": "NeurIPS 2023",
+        "impact": "Established",
+        "presentationFocus": "A PAC framework and finite sample-complexity bounds for identifying latent tasks in context.",
+        "link": "https://arxiv.org/abs/2303.07895"
       },
       {
-        "authors": "Trieu H. Trinh et al.",
-        "title": "Solving Olympiad Geometry without Human Demonstrations",
-        "publication": "Nature 2024.",
-        "presentationFocus": "AlphaGeometry and the combination of neural language modeling with symbolic deduction.",
-        "link": "https://www.nature.com/articles/s41586-023-06747-5"
+        "authors": "Jingfeng Wu et al.",
+        "title": "How Many Pretraining Tasks Are Needed for In-Context Learning of Linear Regression?",
+        "publication": "ICLR 2024",
+        "impact": "Strong recent uptake",
+        "presentationFocus": "A task-complexity bound and near-Bayes-optimal generalization from finitely many pretraining tasks.",
+        "link": "https://arxiv.org/abs/2310.08391"
       }
     ]
   },
   {
     "week": 18,
-    "title": "Mechanistic Interpretability and Knowledge Localization",
-    "guidingQuestion": "Can learned algorithms and factual associations be localized and causally validated?",
-    "topicFocus": "Methods for identifying circuits, tracing information flow, and testing where learned behaviors or factual associations reside.",
+    "title": "Algorithm Selection and Representation Learning in Context",
+    "guidingQuestion": "Can one transformer select among learning algorithms and exploit shared nonlinear representations across tasks?",
+    "topicFocus": "Beyond basic linear regression: model selection, learned representations, optimality, and convergence of trained in-context learners.",
     "papers": [
       {
-        "authors": "Nelson Elhage et al.",
-        "title": "A Mathematical Framework for Transformer Circuits",
-        "publication": "Technical report, 2021.",
-        "presentationFocus": "The algebraic vocabulary and decomposition tools that launched modern transformer-circuit analysis.",
-        "link": "https://transformer-circuits.pub/2021/framework/index.html"
+        "authors": "Yu Bai, Fan Chen, Huan Wang, Caiming Xiong, and Song Mei",
+        "title": "Transformers as Statisticians: Provable In-Context Learning with In-Context Algorithm Selection",
+        "publication": "NeurIPS 2023",
+        "impact": "Established",
+        "presentationFocus": "Efficient constructions for standard estimators and adaptive selection among algorithms inside the prompt.",
+        "link": "https://arxiv.org/abs/2306.04637"
       },
       {
-        "authors": "Catherine Olsson et al.",
-        "title": "In-Context Learning and Induction Heads",
-        "publication": "Technical report, 2022.",
-        "presentationFocus": "Induction heads as a mechanistic candidate for copying patterns and in-context learning.",
-        "link": "https://transformer-circuits.pub/2022/in-context-learning-and-induction-heads/index.html"
+        "authors": "Tianyu Guo et al.",
+        "title": "How Do Transformers Learn In-Context Beyond Simple Functions? A Case Study on Learning with Representations",
+        "publication": "ICLR 2024",
+        "impact": "Strong recent uptake",
+        "presentationFocus": "Layerwise decomposition into shared representation learning followed by an in-context linear learner.",
+        "link": "https://arxiv.org/abs/2310.10616"
       },
       {
-        "authors": "Kevin Wang et al.",
-        "title": "Interpretability in the Wild: A Circuit for Indirect Object Identification in GPT-2 Small",
-        "publication": "ICLR 2023.",
-        "presentationFocus": "A concrete circuit-level explanation and a model for causal validation of interpretability claims.",
-        "link": "https://openreview.net/forum?id=NpsVSN6o4ul"
+        "authors": "Arvind V. Mahankali, Tatsunori Hashimoto, and Tengyu Ma",
+        "title": "One Step of Gradient Descent Is Provably the Optimal In-Context Learner with One Layer of Linear Self-Attention",
+        "publication": "ICLR 2024",
+        "impact": "Established",
+        "presentationFocus": "Population-risk optimality of gradient or preconditioned-gradient updates under Gaussian task models.",
+        "link": "https://arxiv.org/abs/2307.03576"
       },
       {
-        "authors": "Kevin Meng et al.",
-        "title": "Locating and Editing Factual Associations in GPT",
-        "publication": "NeurIPS 2022.",
-        "presentationFocus": "Causal tracing and rank-one model editing as tests of factual knowledge localization.",
-        "link": "https://arxiv.org/abs/2202.05262"
+        "authors": "Yu Huang, Yuan Cheng, and Yingbin Liang",
+        "title": "In-Context Convergence of Transformers",
+        "publication": "ICML 2024",
+        "impact": "Strong recent uptake",
+        "presentationFocus": "Nonconvex convergence guarantees for training linear-attention in-context learners.",
+        "link": "https://arxiv.org/abs/2310.05249"
       }
     ]
   },
   {
     "week": 19,
-    "title": "Retrieval-Augmented Language Models",
-    "guidingQuestion": "When should knowledge live in parameters and when should it be retrieved?",
-    "topicFocus": "Treating retrieval as external nonparametric memory for factuality, adaptation, and scaling.",
+    "title": "Calibration, Selective Prediction, and Hallucination",
+    "guidingQuestion": "Can a language model know when it is likely to be wrong, and are some hallucinations statistically unavoidable?",
+    "topicFocus": "Calibration theory, model self-knowledge, selective prediction, and a formal lower bound for factual hallucination.",
     "papers": [
       {
-        "authors": "Kelvin Guu et al.",
-        "title": "REALM: Retrieval-Augmented Language Model Pre-Training",
-        "publication": "ICML 2020.",
-        "presentationFocus": "End-to-end latent retrieval during language-model pretraining.",
-        "link": "https://proceedings.mlr.press/v119/guu20a.html"
+        "authors": "Chuan Guo, Geoff Pleiss, Yu Sun, and Kilian Q. Weinberger",
+        "title": "On Calibration of Modern Neural Networks",
+        "publication": "ICML 2017",
+        "impact": "Landmark",
+        "presentationFocus": "The modern calibration benchmark and temperature scaling as a strong post-hoc baseline.",
+        "link": "https://proceedings.mlr.press/v70/guo17a.html"
       },
       {
-        "authors": "Patrick Lewis et al.",
-        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
-        "publication": "NeurIPS 2020.",
-        "presentationFocus": "The foundational RAG formulation combining a retriever with a sequence generator.",
-        "link": "https://arxiv.org/abs/2005.11401"
+        "authors": "Zhengbao Jiang, Jun Araki, Haibo Ding, and Graham Neubig",
+        "title": "How Can We Know When Language Models Know? On the Calibration of Language Models for Question Answering",
+        "publication": "TACL 2021",
+        "impact": "Highly cited",
+        "presentationFocus": "Calibration of generative language-model probabilities for factual question answering.",
+        "link": "https://arxiv.org/abs/2012.00955"
       },
       {
-        "authors": "Sebastian Borgeaud et al.",
-        "title": "Improving Language Models by Retrieving from Trillions of Tokens",
-        "publication": "ICML 2022.",
-        "presentationFocus": "RETRO and the tradeoff between parametric scale and a massive external datastore.",
-        "link": "https://arxiv.org/abs/2112.04426"
+        "authors": "Saurav Kadavath et al.",
+        "title": "Language Models (Mostly) Know What They Know",
+        "publication": "Technical report 2022",
+        "impact": "Landmark",
+        "presentationFocus": "Eliciting a model's probability that its own answer is correct and studying scale-dependent self-knowledge.",
+        "link": "https://arxiv.org/abs/2207.05221"
       },
       {
-        "authors": "Akari Asai et al.",
-        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
-        "publication": "ICLR 2024.",
-        "presentationFocus": "A model that learns when to retrieve and how to critique evidence-grounded generations.",
-        "link": "https://arxiv.org/abs/2310.11511"
+        "authors": "Adam Tauman Kalai and Santosh S. Vempala",
+        "title": "Calibrated Language Models Must Hallucinate",
+        "publication": "STOC 2024",
+        "impact": "Established",
+        "presentationFocus": "An information-theoretic lower bound showing that calibrated next-token learners must misstate sufficiently rare facts.",
+        "link": "https://arxiv.org/abs/2311.14648"
       }
     ]
   },
   {
     "week": 20,
-    "title": "Parameter-Efficient Fine-Tuning",
-    "guidingQuestion": "How much adaptation can be achieved by training only a tiny fraction of model parameters?",
-    "topicFocus": "Adapting large frozen models by learning prompts, low-rank updates, or quantized low-rank adapters.",
+    "title": "Reasoning, Compositionality, and Chain-of-Thought Complexity",
+    "guidingQuestion": "When can autoregressive transformers compose learned operations, and how do intermediate tokens change computational and generalization limits?",
+    "topicFocus": "Computation-graph complexity, error accumulation, circuit lower bounds, and complexity-class accounts of scratchpad reasoning.",
     "papers": [
       {
-        "authors": "Xiang Lisa Li and Percy Liang.",
-        "title": "Prefix-Tuning: Optimizing Continuous Prompts for Generation",
-        "publication": "ACL 2021.",
-        "presentationFocus": "Learning continuous prefix activations while freezing the underlying language model.",
-        "link": "https://aclanthology.org/2021.acl-long.353/"
+        "authors": "Nouha Dziri et al.",
+        "title": "Faith and Fate: Limits of Transformers on Compositionality",
+        "publication": "NeurIPS 2023",
+        "impact": "Highly cited",
+        "presentationFocus": "Computation-graph analysis and theoretical arguments showing how local error compounds on multi-step compositional tasks.",
+        "link": "https://arxiv.org/abs/2305.18654"
       },
       {
-        "authors": "Brian Lester, Rami Al-Rfou, and Noah Constant.",
-        "title": "The Power of Scale for Parameter-Efficient Prompt Tuning",
-        "publication": "EMNLP 2021.",
-        "presentationFocus": "How soft prompt tuning becomes increasingly competitive as model scale grows.",
-        "link": "https://aclanthology.org/2021.emnlp-main.243/"
+        "authors": "Guhao Feng, Bohang Zhang, Yuntian Gu, Haotian Ye, Di He, and Liwei Wang",
+        "title": "Towards Revealing the Mystery behind Chain of Thought: A Theoretical Perspective",
+        "publication": "NeurIPS 2023",
+        "impact": "Established",
+        "presentationFocus": "Circuit lower bounds for direct prediction and constructive gains from autoregressive derivations.",
+        "link": "https://arxiv.org/abs/2305.15408"
       },
       {
-        "authors": "Edward J. Hu et al.",
-        "title": "LoRA: Low-Rank Adaptation of Large Language Models",
-        "publication": "ICLR 2022.",
-        "presentationFocus": "Low-rank parameter updates and evidence that adaptation directions have low intrinsic rank.",
-        "link": "https://arxiv.org/abs/2106.09685"
+        "authors": "Zhiyuan Li, Hong Liu, Denny Zhou, and Tengyu Ma",
+        "title": "Chain of Thought Empowers Transformers to Solve Inherently Serial Problems",
+        "publication": "ICLR 2024",
+        "impact": "Established",
+        "presentationFocus": "How scratchpad tokens let bounded-depth transformers execute serial algorithms.",
+        "link": "https://arxiv.org/abs/2402.12875"
       },
       {
-        "authors": "Tim Dettmers et al.",
-        "title": "QLoRA: Efficient Finetuning of Quantized LLMs",
-        "publication": "NeurIPS 2023.",
-        "presentationFocus": "High-quality finetuning through frozen 4-bit quantized weights and low-rank adapters.",
-        "link": "https://arxiv.org/abs/2305.14314"
+        "authors": "William Merrill and Ashish Sabharwal",
+        "title": "The Expressive Power of Transformers with Chain of Thought",
+        "publication": "ICLR 2024",
+        "impact": "Established",
+        "presentationFocus": "Complexity-class characterizations as a function of the number of generated reasoning steps.",
+        "link": "https://arxiv.org/abs/2310.07923"
       }
     ]
   },
   {
     "week": 21,
-    "title": "Instruction Tuning and Supervised Alignment",
-    "guidingQuestion": "What makes instruction-following generalize to tasks not seen during finetuning?",
-    "topicFocus": "How instruction diversity, synthetic data, and response quality shape zero-shot generalization and assistant behavior.",
+    "title": "Memorization, Rare Events, and Long-Tail Learning",
+    "guidingQuestion": "When is memorization necessary for generalization, and why do language models struggle with rare facts?",
+    "topicFocus": "The theory of long-tail examples connected to empirical memorization and factual recall in neural language models.",
     "papers": [
       {
-        "authors": "Jason Wei et al.",
-        "title": "Finetuned Language Models Are Zero-Shot Learners",
-        "publication": "ICLR 2022.",
-        "presentationFocus": "FLAN and the discovery that instruction tuning strongly improves held-out-task generalization.",
-        "link": "https://arxiv.org/abs/2109.01652"
+        "authors": "Vitaly Feldman",
+        "title": "Does Learning Require Memorization? A Short Tale about a Long Tail",
+        "publication": "STOC 2020",
+        "impact": "Highly cited",
+        "presentationFocus": "A formal sense in which memorizing atypical examples can be necessary for near-optimal learning.",
+        "link": "https://arxiv.org/abs/1906.05271"
       },
       {
-        "authors": "Victor Sanh et al.",
-        "title": "Multitask Prompted Training Enables Zero-Shot Task Generalization",
-        "publication": "ICLR 2022.",
-        "presentationFocus": "T0, prompted multitask training, and generalization to unseen tasks.",
-        "link": "https://arxiv.org/abs/2110.08207"
+        "authors": "Vitaly Feldman and Chiyuan Zhang",
+        "title": "What Neural Networks Memorize and Why: Discovering the Long Tail via Influence Estimation",
+        "publication": "NeurIPS 2020",
+        "impact": "Highly cited",
+        "presentationFocus": "Influence-based evidence that networks memorize rare examples that support long-tail generalization.",
+        "link": "https://arxiv.org/abs/2008.03703"
       },
       {
-        "authors": "Yizhong Wang et al.",
-        "title": "Self-Instruct: Aligning Language Models with Self-Generated Instructions",
-        "publication": "ACL 2023.",
-        "presentationFocus": "Bootstrapping diverse instruction data from a language model itself.",
-        "link": "https://aclanthology.org/2023.acl-long.754/"
+        "authors": "Nicholas Carlini et al.",
+        "title": "Quantifying Memorization Across Neural Language Models",
+        "publication": "ICLR 2023",
+        "impact": "Landmark",
+        "presentationFocus": "How model size, duplication, context, and data frequency govern extractable memorization.",
+        "link": "https://arxiv.org/abs/2202.07646"
       },
       {
-        "authors": "Chunting Zhou et al.",
-        "title": "LIMA: Less Is More for Alignment",
-        "publication": "NeurIPS 2023.",
-        "presentationFocus": "The claim that a small amount of carefully curated supervised data can produce strong assistant behavior.",
-        "link": "https://openreview.net/forum?id=KBMOKmX2he"
+        "authors": "Nikhil Kandpal, Haikang Deng, Adam Roberts, Eric Wallace, and Colin Raffel",
+        "title": "Large Language Models Struggle to Learn Long-Tail Knowledge",
+        "publication": "ICML 2023",
+        "impact": "Highly cited",
+        "presentationFocus": "A quantitative link between pretraining frequency and factual question-answering performance.",
+        "link": "https://arxiv.org/abs/2211.08411"
       }
     ]
   },
   {
     "week": 22,
-    "title": "RLHF and Preference Optimization",
-    "guidingQuestion": "How should pairwise preferences be converted into a training objective?",
-    "topicFocus": "Learning helpful behavior from comparisons, reward models, reinforcement learning, AI feedback, and direct preference objectives.",
+    "title": "Synthetic Data and Model Collapse",
+    "guidingQuestion": "What happens when future models are trained on data produced by earlier models?",
+    "topicFocus": "Recursive training distributions, tail loss, scaling-law changes, and conditions under which real-data accumulation prevents collapse.",
     "papers": [
       {
-        "authors": "Nisan Stiennon et al.",
-        "title": "Learning to Summarize from Human Feedback",
-        "publication": "NeurIPS 2020.",
-        "presentationFocus": "An early large-scale demonstration of reward modeling and RL from pairwise preferences for language generation.",
-        "link": "https://arxiv.org/abs/2009.01325"
+        "authors": "Ilia Shumailov et al.",
+        "title": "AI Models Collapse When Trained on Recursively Generated Data",
+        "publication": "Nature 2024",
+        "impact": "Landmark",
+        "presentationFocus": "A statistical mechanism by which recursive synthetic training loses information from distribution tails.",
+        "link": "https://www.nature.com/articles/s41586-024-07566-y"
       },
       {
-        "authors": "Long Ouyang et al.",
-        "title": "Training Language Models to Follow Instructions with Human Feedback",
-        "publication": "NeurIPS 2022.",
-        "presentationFocus": "The InstructGPT pipeline: supervised finetuning, reward modeling, and PPO.",
-        "link": "https://arxiv.org/abs/2203.02155"
+        "authors": "Sina Alemohammad et al.",
+        "title": "Self-Consuming Generative Models Go MAD",
+        "publication": "ICLR 2024",
+        "impact": "Established",
+        "presentationFocus": "Model-autophagy disorder under repeated replacement or augmentation with generated data.",
+        "link": "https://arxiv.org/abs/2307.01850"
       },
       {
-        "authors": "Yuntao Bai et al.",
-        "title": "Constitutional AI: Harmlessness from AI Feedback",
-        "publication": "Technical report, 2022.",
-        "presentationFocus": "Rule-guided self-critique and preference learning from AI-generated feedback.",
-        "link": "https://arxiv.org/abs/2212.08073"
+        "authors": "Elvis Dohmatob et al.",
+        "title": "A Tale of Tails: Model Collapse as a Change of Scaling Laws",
+        "publication": "ICML 2024",
+        "impact": "Strong recent uptake",
+        "presentationFocus": "Recursive synthetic data as a distortion of scaling exponents and rare-event learning.",
+        "link": "https://arxiv.org/abs/2402.07043"
       },
       {
-        "authors": "Rafael Rafailov et al.",
-        "title": "Direct Preference Optimization: Your Language Model Is Secretly a Reward Model",
-        "publication": "NeurIPS 2023.",
-        "presentationFocus": "A direct supervised objective derived from KL-regularized preference optimization.",
-        "link": "https://arxiv.org/abs/2305.18290"
+        "authors": "Matthias Gerstgrasser et al.",
+        "title": "Is Model Collapse Inevitable? Breaking the Curse of Recursion by Accumulating Real and Synthetic Data",
+        "publication": "Technical report 2024",
+        "impact": "Established",
+        "presentationFocus": "A complementary theorem and experiments showing how retaining real data can prevent recursive collapse.",
+        "link": "https://arxiv.org/abs/2404.01413"
       }
     ]
   },
   {
     "week": 23,
-    "title": "Truthfulness, Hallucination, and Calibration",
-    "guidingQuestion": "When can models know that they are wrong, and which hallucinations are unavoidable?",
-    "topicFocus": "Why language models produce confident falsehoods, whether they know when they are wrong, and which errors are statistically unavoidable.",
+    "title": "Theory of Preference Optimization and Reward Overoptimization",
+    "guidingQuestion": "Which statistical objectives recover human preferences, and when does optimizing a proxy reward cause distribution shift or overoptimization?",
+    "topicFocus": "Closed-form preference objectives, consistency frameworks, scaling laws for overoptimization, and provably robust regularization.",
     "papers": [
       {
-        "authors": "Stephanie Lin, Jacob Hilton, and Owain Evans.",
-        "title": "TruthfulQA: Measuring How Models Mimic Human Falsehoods",
-        "publication": "ACL 2022.",
-        "presentationFocus": "A benchmark targeting imitative falsehoods and common human misconceptions.",
-        "link": "https://arxiv.org/abs/2109.07958"
+        "authors": "Rafael Rafailov, Archit Sharma, Eric Mitchell, Stefano Ermon, Christopher Manning, and Chelsea Finn",
+        "title": "Direct Preference Optimization: Your Language Model Is Secretly a Reward Model",
+        "publication": "NeurIPS 2023",
+        "impact": "Landmark",
+        "presentationFocus": "A closed-form reduction from KL-regularized reward maximization to a direct classification-style objective.",
+        "link": "https://arxiv.org/abs/2305.18290"
       },
       {
-        "authors": "Saurav Kadavath et al.",
-        "title": "Language Models (Mostly) Know What They Know",
-        "publication": "Technical report, 2022.",
-        "presentationFocus": "Self-evaluation, confidence elicitation, and calibration across model scales.",
-        "link": "https://arxiv.org/abs/2207.05221"
+        "authors": "Mohammad Gheshlaghi Azar et al.",
+        "title": "A General Theoretical Paradigm to Understand Learning from Human Preferences",
+        "publication": "AISTATS 2024",
+        "impact": "Established",
+        "presentationFocus": "A unified consistency and regularization framework for preference-learning objectives and link functions.",
+        "link": "https://arxiv.org/abs/2310.12036"
       },
       {
-        "authors": "Adam Tauman Kalai and Santosh S. Vempala.",
-        "title": "Calibrated Language Models Must Hallucinate",
-        "publication": "STOC 2024.",
-        "presentationFocus": "A statistical lower bound connecting calibration, singleton facts, and unavoidable hallucination.",
-        "link": "https://arxiv.org/abs/2311.14648"
+        "authors": "Rafael Rafailov, Yaswanth Chittepu, Ryan Park, Harshit Sikchi, Joey Hejna, W. Bradley Knox, Chelsea Finn, and Scott Niekum",
+        "title": "Scaling Laws for Reward Model Overoptimization in Direct Alignment Algorithms",
+        "publication": "NeurIPS 2024",
+        "impact": "Strong recent uptake",
+        "presentationFocus": "A quantitative characterization of overoptimization in direct alignment as a function of KL budget, objective, and scale.",
+        "link": "https://proceedings.neurips.cc/paper_files/paper/2024/file/e45caa3d5273d105b8d045e748636957-Paper-Conference.pdf"
       },
       {
-        "authors": "Sebastian Farquhar, Jannik Kossen, Lorenz Kuhn, and Yarin Gal.",
-        "title": "Detecting Hallucinations in Large Language Models Using Semantic Entropy",
-        "publication": "Nature 2024.",
-        "presentationFocus": "Uncertainty estimation over semantic equivalence classes rather than token strings.",
-        "link": "https://www.nature.com/articles/s41586-024-07421-0"
+        "authors": "Zhihan Liu, Miao Lu, Shenao Zhang, Boyi Liu, Hongyi Guo, Yingxiang Yang, Jose Blanchet, and Zhaoran Wang",
+        "title": "Provably Mitigating Overoptimization in RLHF: Your SFT Loss Is Implicitly an Adversarial Regularizer",
+        "publication": "NeurIPS 2024",
+        "impact": "Strong recent uptake",
+        "presentationFocus": "A distribution-shift model, sample-efficient robust objective, and equivalence between adversarial reward regularization and adding SFT loss.",
+        "link": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/fa69e968b7319fd42524febd41475fb3-Abstract-Conference.html"
       }
     ]
   },
   {
     "week": 24,
-    "title": "Tool Use and Language-Model Agents",
-    "guidingQuestion": "When does next-token prediction become a policy for using tools and acting in an environment?",
-    "topicFocus": "The transition from passive text prediction to systems that browse, call tools, act in environments, and learn from textual feedback.",
+    "title": "Theory of Pretraining, Transfer, and Fine-Tuning",
+    "guidingQuestion": "How does pretraining reshape the effective hypothesis class, optimization bias, and sample efficiency seen by a downstream task?",
+    "topicFocus": "Intrinsic dimension, feature distortion, kernel approximations, and implicit bias linking pretraining solutions to downstream transfer.",
     "papers": [
       {
-        "authors": "John Yang et al.",
-        "title": "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering",
-        "publication": "NeurIPS 2024.",
-        "presentationFocus": "How agent-computer interface design changes an LLM agent's ability to navigate repositories, edit code, and execute tests.",
-        "link": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/5a7c947568c1b1328ccc5230172e1e7c-Abstract-Conference.html"
+        "authors": "Armen Aghajanyan, Luke Zettlemoyer, and Sonal Gupta",
+        "title": "Intrinsic Dimensionality Explains the Effectiveness of Language Model Fine-Tuning",
+        "publication": "ACL 2021",
+        "impact": "Highly cited",
+        "presentationFocus": "Evidence that downstream adaptation occurs in a low-dimensional subspace that shrinks with pretraining scale.",
+        "link": "https://arxiv.org/abs/2012.13255"
       },
       {
-        "authors": "Shunyu Yao et al.",
-        "title": "ReAct: Synergizing Reasoning and Acting in Language Models",
-        "publication": "ICLR 2023.",
-        "presentationFocus": "Interleaving reasoning traces with actions and observations.",
-        "link": "https://arxiv.org/abs/2210.03629"
+        "authors": "Ananya Kumar et al.",
+        "title": "Fine-Tuning Can Distort Pretrained Features and Underperform Out-of-Distribution",
+        "publication": "ICLR 2022",
+        "impact": "Highly cited",
+        "presentationFocus": "A theoretical and empirical account of feature distortion and the linear-probing versus fine-tuning tradeoff.",
+        "link": "https://arxiv.org/abs/2202.10054"
       },
       {
-        "authors": "Timo Schick et al.",
-        "title": "Toolformer: Language Models Can Teach Themselves to Use Tools",
-        "publication": "NeurIPS 2023.",
-        "presentationFocus": "Self-supervised learning of when and how to invoke external APIs.",
-        "link": "https://arxiv.org/abs/2302.04761"
+        "authors": "Sadhika Malladi et al.",
+        "title": "A Kernel-Based View of Language Model Fine-Tuning",
+        "publication": "ICML 2023",
+        "impact": "Established",
+        "presentationFocus": "Conditions under which language-model fine-tuning is accurately described by a kernel regime.",
+        "link": "https://arxiv.org/abs/2210.05643"
       },
       {
-        "authors": "Noah Shinn et al.",
-        "title": "Reflexion: Language Agents with Verbal Reinforcement Learning",
-        "publication": "NeurIPS 2023.",
-        "presentationFocus": "Improving repeated attempts through linguistic feedback and episodic memory.",
-        "link": "https://arxiv.org/abs/2303.11366"
+        "authors": "Hong Liu, Sang Michael Xie, Zhiyuan Li, and Tengyu Ma",
+        "title": "Same Pre-Training Loss, Better Downstream: Implicit Bias Matters for Language Models",
+        "publication": "ICML 2023",
+        "impact": "Strong recent uptake",
+        "presentationFocus": "Why equal pretraining loss need not imply equal transfer, and how SGD-induced flatness selects more transferable language models.",
+        "link": "https://proceedings.mlr.press/v202/liu23ao.html"
       }
     ]
-  }
+  },
 ];

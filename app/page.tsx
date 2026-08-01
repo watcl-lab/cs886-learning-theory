@@ -1,15 +1,17 @@
 import {
-  claimDistinctions,
+  annualUpdateNote,
   courseDescription,
   courseDesignPrinciples,
   courseFacts,
   courseSchedule,
+  courseScope,
   courseStructure,
   learningOutcomes,
   meetingFormat,
   presentationGuidance,
   presentationRequirements,
   readingExpectations,
+  suggestedAssessment,
 } from "./courseData";
 
 export default function Home() {
@@ -21,14 +23,17 @@ export default function Home() {
 
       <main className="container" id="main-content">
         <header className="course-header">
+          <p className="course-kicker">
+            {courseFacts.institution} · {courseFacts.format}
+          </p>
           <h1>
             {courseFacts.code}: {courseFacts.title}
           </h1>
           <p className="course-subtitle">{courseFacts.subtitle}</p>
-          <p>{courseFacts.format}</p>
+          <p className="course-format">
+            {courseFacts.duration} · {courseFacts.weeklyOrganization} · {courseFacts.presentationsPerMeeting} presentations per meeting
+          </p>
         </header>
-
-        <hr />
 
         <section aria-labelledby="overview-heading">
           <h2 id="overview-heading">Course Overview</h2>
@@ -37,10 +42,7 @@ export default function Home() {
           ))}
           <ul>
             <li>
-              <strong>Institution:</strong> {courseFacts.institution}
-            </li>
-            <li>
-              <strong>Frequency:</strong> {courseFacts.frequency}
+              <strong>Duration:</strong> {courseFacts.duration}
             </li>
             <li>
               <strong>Weekly organization:</strong> {courseFacts.weeklyOrganization}
@@ -51,17 +53,27 @@ export default function Home() {
             <li>
               <strong>Reading program:</strong> {courseFacts.papers} papers and {courseFacts.presentationSlots} presentation slots
             </li>
+            <li>
+              <strong>Primary emphasis:</strong> {courseFacts.selectionEmphasis}
+            </li>
           </ul>
         </section>
 
-        <section aria-labelledby="structure-heading">
-          <h2 id="structure-heading">Course Structure and Selection Policy</h2>
-          <p>
-            The course follows the broad topic-based style of Wenhu Chen&apos;s{" "}
-            <a href={courseStructure.referenceCourseUrl}>{courseStructure.referenceCourse}</a>: each weekly meeting has
-            one standard research topic and four papers, one for each presentation slot.
-          </p>
-          <p>The paper-selection rules are:</p>
+        <section aria-labelledby="scope-heading">
+          <h2 id="scope-heading">Scope of the Course</h2>
+          <p>{courseScope.introduction}</p>
+          <p>A paper is included only when it contributes a substantive theoretical object or question, such as:</p>
+          <ul>
+            {courseScope.inclusionCriteria.map((criterion) => (
+              <li key={criterion}>{criterion}</li>
+            ))}
+          </ul>
+          <p>{courseScope.progression}</p>
+        </section>
+
+        <section aria-labelledby="selection-heading">
+          <h2 id="selection-heading">Paper-Selection and Citation Policy</h2>
+          <p>{courseStructure.description}</p>
           <ul>
             {courseDesignPrinciples.map((principle) => (
               <li key={principle.title}>
@@ -118,7 +130,7 @@ export default function Home() {
                 <tr>
                   <th scope="col">Week</th>
                   <th scope="col">Topic</th>
-                  <th scope="col">Central learning question</th>
+                  <th scope="col">Central question</th>
                 </tr>
               </thead>
               <tbody>
@@ -143,8 +155,12 @@ export default function Home() {
           {courseSchedule.map((week) => (
             <article className="week" id={`week-${week.week}`} key={week.week}>
               <h3>
-                Week {week.week}: {week.title}
+                <span className="week-number">Week {String(week.week).padStart(2, "0")}</span>
+                {week.title}
               </h3>
+              <p className="guiding-question">
+                <strong>Central question.</strong> {week.guidingQuestion}
+              </p>
               <p className="topic-focus">
                 <strong>Topic focus.</strong> {week.topicFocus}
               </p>
@@ -152,10 +168,11 @@ export default function Home() {
                 {week.papers.map((paper) => (
                   <li key={paper.title}>
                     <p>
-                      <strong>{paper.authors}</strong> <em>{paper.title}</em>. {paper.publication}{" "}
+                      <strong>{paper.authors}</strong> <em>{paper.title}</em>. {paper.publication}.{" "}
+                      <span className="paper-impact">{paper.impact}</span>.{" "}
                       <a href={paper.link}>[paper]</a>
                       <br />
-                      <strong>Presentation focus:</strong> {paper.presentationFocus}
+                      <strong>Learning-theory focus:</strong> {paper.presentationFocus}
                     </p>
                   </li>
                 ))}
@@ -174,23 +191,45 @@ export default function Home() {
               <li key={requirement}>{requirement}</li>
             ))}
           </ol>
-          <p>Presenters should explicitly distinguish among the following claims:</p>
-          <ul>
-            {claimDistinctions.map((claim) => (
-              <li key={claim}>{claim}</li>
-            ))}
-          </ul>
-          <p>{readingExpectations.integratorRole}</p>
+        </section>
+
+        <section aria-labelledby="assessment-heading">
+          <h2 id="assessment-heading">Suggested Assessment</h2>
+          <div className="table-wrap" role="region" aria-label="Suggested assessment" tabIndex={0}>
+            <table className="assessment-table">
+              <thead>
+                <tr>
+                  <th scope="col">Component</th>
+                  <th scope="col">Weight</th>
+                  <th scope="col">Standard</th>
+                </tr>
+              </thead>
+              <tbody>
+                {suggestedAssessment.map((item) => (
+                  <tr key={item.component}>
+                    <td>{item.component}</td>
+                    <td>{item.weight}</td>
+                    <td>{item.standard}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </section>
 
         <section aria-labelledby="outcomes-heading">
           <h2 id="outcomes-heading">Learning Outcomes</h2>
           <p>By the end of the course, students should be able to:</p>
-          <ol>
+          <ul>
             {learningOutcomes.map((outcome) => (
               <li key={outcome}>{outcome}</li>
             ))}
-          </ol>
+          </ul>
+        </section>
+
+        <section aria-labelledby="updating-heading">
+          <h2 id="updating-heading">Annual Updating</h2>
+          <p className="annual-note">{annualUpdateNote}</p>
         </section>
       </main>
     </>
