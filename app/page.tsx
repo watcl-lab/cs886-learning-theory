@@ -54,6 +54,10 @@ export default function Home() {
         <section aria-labelledby="topics-heading">
           <h2 id="topics-heading">Topics at a Glance</h2>
           <p className="schedule-note">
+            <strong>Tentative schedule:</strong> The current schedule is a work in progress. Topics, papers, and their
+            order may change.
+          </p>
+          <p className="schedule-note">
             <strong>Reading Week:</strong> No class on {courseFacts.skippedMeeting}. University Reading Week runs{" "}
             <a href={courseFacts.readingWeekUrl}>{courseFacts.readingWeek}</a>.
           </p>

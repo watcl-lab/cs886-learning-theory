@@ -38,6 +38,7 @@ test("server-renders the updated CS 886 course page", async () => {
   assert.match(html, /September 11, 2026/);
   assert.match(html, /December 4, 2026/);
   assert.match(html, /No class on[\s\S]{0,80}October 16, 2026/);
+  assert.match(html, /Tentative schedule:[\s\S]{0,120}current schedule is a work in progress/i);
   assert.match(html, /Detailed 12-Week Schedule/);
   assert.match(html, /Suggested Assessment/);
   assert.match(html, /Paper presentations/);
