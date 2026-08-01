@@ -31,10 +31,15 @@ test("server-renders the updated CS 886 course page", async () => {
   const html = await response.text();
   assert.match(html, /<title>CS 886: Learning Theory for Modern AI<\/title>/i);
   assert.match(html, /Biases and Optimization of Self-Attention/);
-  assert.match(html, /RLHF Distribution Shift and Hallucination Impossibility/);
+  assert.match(html, /RLHF Exploration, Hallucination, and Watermarking/);
   assert.match(html, /The Lipschitz Constant of Self-Attention/);
   assert.match(html, /Transformers Are Minimax Optimal Nonparametric In-Context Learners/);
-  assert.match(html, /Hallucination Is Inevitable: An Innate Limitation of Large Language Models/);
+  assert.match(html, /Masked Hard-Attention Transformers Recognize Exactly the Star-Free Languages/);
+  assert.match(html, /A Theory of Learning with Autoregressive Chain of Thought/);
+  assert.match(html, /Learning Compositional Functions with Transformers from Easy-to-Hard Data/);
+  assert.match(html, /Computational-Statistical Tradeoffs at the Next-Token Prediction Barrier/);
+  assert.match(html, /Is a Good Foundation Necessary for Efficient Reinforcement Learning/);
+  assert.match(html, /Undetectable Watermarks for Language Models/);
   assert.match(html, /September 11, 2026/);
   assert.match(html, /December 4, 2026/);
   assert.match(html, /No class on[\s\S]{0,80}October 16, 2026/);
@@ -63,7 +68,7 @@ test("server-renders the updated CS 886 course page", async () => {
   );
   assert.doesNotMatch(
     html,
-    /Reconciling Modern Machine-Learning Practice|Deep Double Descent|Scaling Laws for Neural Language Models|AI Models Collapse When Trained on Recursively Generated Data|Direct Preference Optimization: Your Language Model Is Secretly a Reward Model/i,
+    /Reconciling Modern Machine-Learning Practice|Deep Double Descent|Scaling Laws for Neural Language Models|AI Models Collapse When Trained on Recursively Generated Data|Direct Preference Optimization: Your Language Model Is Secretly a Reward Model|On the Ability and Limitations of Transformers to Recognize Formal Languages|On Limitations of the Transformer Architecture|Mechanics of Next Token Prediction with Self-Attention|A General Theoretical Paradigm to Understand Learning from Human Preferences|Value-Incentivized Preference Optimization|Towards Revealing the Mystery Behind Chain of Thought|What Algorithms Can Transformers Learn\?|Hallucination Is Inevitable/i,
   );
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|Your site is taking shape/i);
 });
@@ -116,7 +121,7 @@ test("keeps the implementation simple while using a distinct academic style", as
   );
   assert.doesNotMatch(
     data,
-    /Reconciling Modern Machine-Learning Practice|Deep Double Descent|Scaling Laws for Neural Language Models|AI Models Collapse When Trained on Recursively Generated Data|Direct Preference Optimization: Your Language Model Is Secretly a Reward Model/i,
+    /Reconciling Modern Machine-Learning Practice|Deep Double Descent|Scaling Laws for Neural Language Models|AI Models Collapse When Trained on Recursively Generated Data|Direct Preference Optimization: Your Language Model Is Secretly a Reward Model|On the Ability and Limitations of Transformers to Recognize Formal Languages|On Limitations of the Transformer Architecture|Mechanics of Next Token Prediction with Self-Attention|A General Theoretical Paradigm to Understand Learning from Human Preferences|Value-Incentivized Preference Optimization|Towards Revealing the Mystery Behind Chain of Thought|What Algorithms Can Transformers Learn\?|Hallucination Is Inevitable/i,
   );
   assert.doesNotMatch(css, /linear-gradient|radial-gradient|backdrop-filter/i);
   assert.doesNotMatch(css, /max-width:\s*1140px|#0875c1/i);

@@ -39,7 +39,7 @@ export const courseSummary =
 
 export const courseDescription = {
   paragraphs: [
-    "Learning Theory for Modern AI: Transformers and Large Language Models is a graduate research seminar on the computational and statistical principles underlying modern sequence models. The course studies the inductive biases and trainability of self-attention; transformer expressivity, formal languages, and computational lower bounds; positional generalization and infinite-limit theory; associative memory and in-context learning; chain-of-thought and next-token computation; parameter-efficient adaptation and preference optimization; and formal limits on hallucination.",
+    "Learning Theory for Modern AI: Transformers and Large Language Models is a graduate research seminar on the computational and statistical principles underlying modern sequence models. The course studies the inductive biases and trainability of self-attention; transformer expressivity, formal languages, and computational lower bounds; positional generalization and infinite-limit theory; associative memory and in-context learning; chain-of-thought computation and learnability; reasoning curricula and next-token prediction under misspecification; parameter-efficient adaptation, preference optimization, and language-model exploration; and theoretical limits involving calibration, watermarking, and hallucination.",
     "Each weekly meeting is organized around four influential papers. Student presentations emphasize formal problem statements, theorem strength, proof mechanisms, assumptions, and the gap between tractable models and real large language models.",
   ],
 } as const;
@@ -106,8 +106,9 @@ function paper(
 }
 
 // The revised source contains 24 theory topics. Consecutive source topics are
-// paired into the 12 actual meetings, using the first two papers from each
-// source topic to preserve its editorial order and the four-paper workload.
+// paired into the 12 actual meetings, with two papers from each source topic.
+// The COLT readings prioritized by the revised source are retained while the
+// four-paper workload remains unchanged.
 export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 1,
@@ -211,12 +212,12 @@ export const courseSchedule: readonly CourseWeek[] = [
         "https://aclanthology.org/2020.tacl-1.11/",
       ),
       paper(
-        "Satwik Bhattamishra, Kabir Ahuja, and Navin Goyal",
-        "On the Ability and Limitations of Transformers to Recognize Formal Languages",
-        "EMNLP 2020",
+        "Andy Yang, David Chiang, and Dana Angluin",
+        "Masked Hard-Attention Transformers Recognize Exactly the Star-Free Languages",
+        "NeurIPS 2024",
         "Established",
-        "Combines constructions, limitations, and controlled learning experiments for regular and context-free languages.",
-        "https://aclanthology.org/2020.emnlp-main.576/",
+        "Proves that masked hard-attention transformers without positional encodings recognize exactly the star-free languages, via equivalence with linear temporal logic and Boolean RASP.",
+        "https://proceedings.neurips.cc/paper_files/paper/2024/hash/13d7f172259b11b230cc5da8768abc5f-Abstract-Conference.html",
       ),
       paper(
         "William Merrill, Ashish Sabharwal, and Noah A. Smith",
@@ -243,7 +244,7 @@ export const courseSchedule: readonly CourseWeek[] = [
     guidingQuestion:
       "Which tasks impose computational lower bounds, and how can transformers implement programs and automata?",
     topicFocus:
-      "Attention time complexity, communication limits, RASP program constructions, and computational expressivity.",
+      "Attention time complexity, fine-grained lower bounds, RASP program constructions, and computational expressivity.",
     papers: [
       paper(
         "Feyza Duman Keles, Pruthuvi Mahesakya Wijewardena, and Chinmay Hegde",
@@ -254,12 +255,12 @@ export const courseSchedule: readonly CourseWeek[] = [
         "https://arxiv.org/abs/2209.04881",
       ),
       paper(
-        "Binghui Peng, Srini Narayanan, and Christos Papadimitriou",
-        "On Limitations of the Transformer Architecture",
-        "Technical report 2024",
-        "Established",
-        "Uses communication and information arguments to expose tasks that bounded transformers cannot solve without additional resources.",
-        "https://arxiv.org/abs/2402.08164",
+        "Josh Alman and Zhao Song",
+        "Fast Attention Requires Bounded Entries",
+        "NeurIPS 2023",
+        "Highly cited",
+        "Proves a sharp transition in approximate softmax-attention complexity: almost-linear time is possible for sufficiently small entries, while larger entries yield a conditional truly-subquadratic lower bound.",
+        "https://proceedings.neurips.cc/paper_files/paper/2023/hash/c72861451d6fa9dfa64831102b9bb71a-Abstract-Conference.html",
       ),
       paper(
         "Gail Weiss, Yoav Goldberg, and Eran Yahav",
@@ -454,11 +455,11 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 9,
     date: "November 13, 2026",
-    title: "Optimal In-Context Learning and Chain-of-Thought Computation",
+    title: "Optimal In-Context Learning and Chain-of-Thought Theory",
     guidingQuestion:
-      "What statistical rates can in-context learning achieve, and how do intermediate tokens change representational and sample complexity?",
+      "What statistical rates can in-context learning achieve, and how do reasoning tokens change computational power and learnability?",
     topicFocus:
-      "Training convergence, minimax rates, chain-of-thought decompositions, and serial computation.",
+      "Training convergence, minimax rates, serial computation, and autoregressive chain-of-thought learnability.",
     papers: [
       paper(
         "Yu Huang, Yuan Cheng, and Yingbin Liang",
@@ -477,14 +478,6 @@ export const courseSchedule: readonly CourseWeek[] = [
         "https://proceedings.neurips.cc/paper_files/paper/2024/hash/c11daad0a48ea5f3c5c6390c7b060720-Abstract-Conference.html",
       ),
       paper(
-        "Guhao Feng, Bohang Zhang, Yuntian Gu, Haotian Ye, Di He, and Liwei Wang",
-        "Towards Revealing the Mystery Behind Chain of Thought: A Theoretical Perspective",
-        "NeurIPS 2023",
-        "Established",
-        "Provides formal settings in which chain-of-thought decompositions reduce learning and representation complexity.",
-        "https://proceedings.neurips.cc/paper_files/paper/2023/hash/dfc310e81992d2e4cedc09ac47eff13e-Abstract-Conference.html",
-      ),
-      paper(
         "Zhiyuan Li, Hong Liu, Denny Zhou, and Tengyu Ma",
         "Chain of Thought Empowers Transformers to Solve Inherently Serial Problems",
         "ICLR 2024",
@@ -492,25 +485,25 @@ export const courseSchedule: readonly CourseWeek[] = [
         "Proves that generated intermediate tokens allow bounded-depth transformers to solve inherently serial tasks that direct prediction cannot efficiently solve.",
         "https://proceedings.iclr.cc/paper_files/paper/2024/hash/3309b4112c9f04a993f2bbdd0274bba1-Abstract-Conference.html",
       ),
+      paper(
+        "Nirmit Joshi, Gal Vardi, Adam Block, Surbhi Goel, Zhiyuan Li, Theodor Misiakiewicz, and Nathan Srebro",
+        "A Theory of Learning with Autoregressive Chain of Thought",
+        "COLT 2025",
+        "Strong recent uptake",
+        "Formalizes learning with observed and latent chains of thought, derives sample and computational complexity from properties such as VC dimension, and shows how time invariance can remove dependence on chain length from sample complexity.",
+        "https://proceedings.mlr.press/v291/joshi25a.html",
+      ),
     ],
   },
   {
     week: 10,
     date: "November 20, 2026",
-    title: "Reasoning Generalization and Next-Token Learning",
+    title: "Reasoning Generalization and Misspecified Next-Token Prediction",
     guidingQuestion:
-      "Which algorithms generalize beyond training distributions, and what structures does next-token training recover?",
+      "When are scratchpads or easy-to-hard curricula necessary for reasoning, and how do misspecification and latent structure shape next-token prediction?",
     topicFocus:
-      "Length generalization, globality barriers, next-token dynamics, and latent-topic learning.",
+      "Globality barriers, curriculum lower bounds, misspecification tradeoffs, and latent-topic learning.",
     papers: [
-      paper(
-        "Hattie Zhou et al.",
-        "What Algorithms Can Transformers Learn? A Study in Length Generalization",
-        "ICLR 2024",
-        "Highly cited",
-        "Develops a controlled framework for which algorithms transformer training discovers and when those solutions extrapolate to longer inputs.",
-        "https://openreview.net/forum?id=AssIuHnmHX",
-      ),
       paper(
         "Emmanuel Abbe, Samy Bengio, Aryo Lotfi, Colin Sandon, and Omid Saremi",
         "How Far Can Transformers Reason? The Globality Barrier and Inductive Scratchpad",
@@ -520,12 +513,20 @@ export const courseSchedule: readonly CourseWeek[] = [
         "https://proceedings.neurips.cc/paper_files/paper/2024/hash/3107e4bdb658c79053d7ef59cbc804dd-Abstract-Conference.html",
       ),
       paper(
-        "Yingcong Li, Yixiao Huang, M. Emrullah Ildiz, Ankit Singh Rawat, and Samet Oymak",
-        "Mechanics of Next Token Prediction with Self-Attention",
-        "AISTATS 2024",
-        "Established",
-        "Proves that gradient descent learns hard token retrieval plus soft composition determined by a directed priority graph.",
-        "https://proceedings.mlr.press/v238/li24f.html",
+        "Zixuan Wang, Eshaan Nichani, Alberto Bietti, Alex Damian, Daniel Hsu, Jason D. Lee, and Denny Wu",
+        "Learning Compositional Functions with Transformers from Easy-to-Hard Data",
+        "COLT 2025",
+        "Strong recent uptake",
+        "Proves an exponential statistical-query lower bound for learning a compositional task from hard instances alone, while gradient descent on an O(log k)-depth transformer learns it with polynomial resources from suitable easy-to-hard or mixed curricula.",
+        "https://proceedings.mlr.press/v291/wang25a.html",
+      ),
+      paper(
+        "Dhruv Rohatgi, Adam Block, Audrey Huang, Akshay Krishnamurthy, and Dylan J. Foster",
+        "Computational-Statistical Tradeoffs at the Next-Token Prediction Barrier: Autoregressive and Imitation Learning under Misspecification",
+        "COLT 2025 extended abstract",
+        "Strong recent uptake",
+        "Shows that next-token-prediction-style objectives incur an Ω(H) approximation barrier under misspecification, while stronger procedures expose explicit tradeoffs between information, computation, and sequence-length-dependent error amplification.",
+        "https://proceedings.mlr.press/v291/rohatgi25a.html",
       ),
       paper(
         "Yuchen Li, Yuanzhi Li, and Andrej Risteski",
@@ -544,7 +545,7 @@ export const courseSchedule: readonly CourseWeek[] = [
     guidingQuestion:
       "What can frozen language models learn through low-dimensional adaptation, and how should pairwise preferences shape a policy?",
     topicFocus:
-      "Fine-tuning kernels, prompt expressivity, statistical preference learning, and online exploration.",
+      "Fine-tuning kernels, prompt expressivity, iterative RLHF, and online exploration.",
     papers: [
       paper(
         "Sadhika Malladi et al.",
@@ -563,12 +564,12 @@ export const courseSchedule: readonly CourseWeek[] = [
         "https://arxiv.org/abs/2305.18787",
       ),
       paper(
-        "Mohammad Gheshlaghi Azar et al.",
-        "A General Theoretical Paradigm to Understand Learning from Human Preferences",
-        "AISTATS 2024",
+        "Wei Xiong, Hanze Dong, Chenlu Ye, Ziqi Wang, Han Zhong, Heng Ji, Nan Jiang, and Tong Zhang",
+        "Iterative Preference Learning from Human Feedback: Bridging Theory and Practice for RLHF under KL-Constraint",
+        "ICML 2024",
         "Highly cited",
-        "Derives a general preference-optimization framework and clarifies the consistency and regularization properties of direct objectives.",
-        "https://proceedings.mlr.press/v238/gheshlaghi-azar24a.html",
+        "Analyzes reverse-KL-regularized contextual-bandit formulations of offline, online, and hybrid RLHF and gives efficient iterative algorithms with finite-sample guarantees.",
+        "https://proceedings.mlr.press/v235/xiong24a.html",
       ),
       paper(
         "Tengyang Xie, Dylan J. Foster, Akshay Krishnamurthy, Corby Rosset, Ahmed H. Awadallah, and Alexander Rakhlin",
@@ -583,19 +584,19 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 12,
     date: "December 4, 2026",
-    title: "RLHF Distribution Shift and Hallucination Impossibility",
+    title: "RLHF Exploration, Hallucination, and Watermarking",
     guidingQuestion:
-      "How does coverage govern preference optimization, and which forms of language-model hallucination are unavoidable?",
+      "How does base-model coverage govern efficient RLHF exploration, and what can theory prove about calibrated hallucination and undetectable watermarking?",
     topicFocus:
-      "Online and offline RLHF, coverage conditions, computability limits, and calibration lower bounds.",
+      "Base-model exploration, online and offline coverage, calibration lower bounds, and cryptographic watermarking.",
     papers: [
       paper(
-        "Shicong Cen et al.",
-        "Value-Incentivized Preference Optimization: A Unified Approach to Online and Offline RLHF",
-        "ICLR 2025",
-        "Established",
-        "Introduces a value-regularized direct objective with matching-style guarantees for online optimism and offline pessimism.",
-        "https://openreview.net/forum?id=SQnitDuow6",
+        "Dylan J. Foster, Zakaria Mhammedi, and Dhruv Rohatgi",
+        "Is a Good Foundation Necessary for Efficient Reinforcement Learning? The Computational Role of the Base Model in Exploration",
+        "COLT 2025",
+        "Strong recent uptake",
+        "Introduces a sampling-oracle framework for reinforcement learning with language models, proves that base-model coverage lower-bounds runtime, and gives an efficient inference-time exploration algorithm when sufficient coverage is present.",
+        "https://proceedings.mlr.press/v291/foster25a.html",
       ),
       paper(
         "Yuda Song, Gokul Swamy, Aarti Singh, J. Andrew Bagnell, and Wen Sun",
@@ -606,20 +607,20 @@ export const courseSchedule: readonly CourseWeek[] = [
         "https://proceedings.neurips.cc/paper_files/paper/2024/hash/16c628ab12dc4caca8e7712affa6c767-Abstract-Conference.html",
       ),
       paper(
-        "Ziwei Xu, Sanjay Jain, and Mohan Kankanhalli",
-        "Hallucination Is Inevitable: An Innate Limitation of Large Language Models",
-        "Technical report 2024",
-        "Highly cited",
-        "Uses learning-theoretic and computability arguments to prove that a computable general-purpose LLM cannot avoid all hallucinations.",
-        "https://arxiv.org/abs/2401.11817",
-      ),
-      paper(
         "Adam Tauman Kalai and Santosh S. Vempala",
         "Calibrated Language Models Must Hallucinate",
         "STOC 2024",
         "Highly cited",
         "Relates unavoidable hallucination on arbitrary rare facts to calibration and the Good-Turing missing mass.",
         "https://arxiv.org/abs/2311.14648",
+      ),
+      paper(
+        "Miranda Christ, Sam Gunn, and Or Zamir",
+        "Undetectable Watermarks for Language Models",
+        "COLT 2024",
+        "Highly cited",
+        "Constructs secret-key watermarks whose presence is efficiently detectable with the key but computationally indistinguishable from the original language-model distribution without it, even under adaptive prompting.",
+        "https://proceedings.mlr.press/v247/christ24a.html",
       ),
     ],
   },
