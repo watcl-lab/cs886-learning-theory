@@ -30,8 +30,11 @@ test("server-renders the updated CS 886 course page", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>CS 886: Learning Theory for Modern AI<\/title>/i);
-  assert.match(html, /Generalization and Implicit Bias in Overparameterized Models/);
-  assert.match(html, /Preference Optimization, Transfer, and Fine-Tuning/);
+  assert.match(html, /Biases and Optimization of Self-Attention/);
+  assert.match(html, /RLHF Distribution Shift and Hallucination Impossibility/);
+  assert.match(html, /The Lipschitz Constant of Self-Attention/);
+  assert.match(html, /Transformers Are Minimax Optimal Nonparametric In-Context Learners/);
+  assert.match(html, /Hallucination Is Inevitable: An Innate Limitation of Large Language Models/);
   assert.match(html, /September 11, 2026/);
   assert.match(html, /December 4, 2026/);
   assert.match(html, /No class on[\s\S]{0,80}October 16, 2026/);
@@ -55,6 +58,10 @@ test("server-renders the updated CS 886 course page", async () => {
   assert.doesNotMatch(
     html,
     /24 weekly meetings|96 papers|theorem-first|useful maximum is ten substantive slides|Scope of the Course|Paper-Selection and Citation Policy|Recommended Weekly Meeting Format|Reading Expectations|Learning Outcomes/i,
+  );
+  assert.doesNotMatch(
+    html,
+    /Reconciling Modern Machine-Learning Practice|Deep Double Descent|Scaling Laws for Neural Language Models|AI Models Collapse When Trained on Recursively Generated Data|Direct Preference Optimization: Your Language Model Is Secretly a Reward Model/i,
   );
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|Your site is taking shape/i);
 });
@@ -104,6 +111,10 @@ test("keeps the implementation simple while using a distinct academic style", as
   assert.doesNotMatch(
     page,
     /Scope of the Course|Paper-Selection and Citation Policy|Recommended Weekly Meeting Format|Reading Expectations|Learning Outcomes/i,
+  );
+  assert.doesNotMatch(
+    data,
+    /Reconciling Modern Machine-Learning Practice|Deep Double Descent|Scaling Laws for Neural Language Models|AI Models Collapse When Trained on Recursively Generated Data|Direct Preference Optimization: Your Language Model Is Secretly a Reward Model/i,
   );
   assert.doesNotMatch(css, /linear-gradient|radial-gradient|backdrop-filter/i);
   assert.doesNotMatch(css, /max-width:\s*1140px|#0875c1/i);
