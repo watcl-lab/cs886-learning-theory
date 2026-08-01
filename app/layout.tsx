@@ -1,26 +1,46 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { headers } from "next/headers";
 import "./globals.css";
 
-const geist = Geist({
-  variable: "--font-geist",
-  subsets: ["latin"],
-});
+const title = "CS 886: Learning Theory for Modern AI";
+const description =
+  "University of Waterloo graduate research seminar on transformers and large language models.";
 
-export const metadata: Metadata = {
-  title: "CS 886 · Learning Theory for Modern AI",
-  description:
-    "University of Waterloo graduate seminar on the learning theory of transformers and large language models.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const requestHeaders = await headers();
+  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "localhost:3000";
+  const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
+  const imageUrl = `${protocol}://${host}/og.png`;
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      images: [
+        {
+          url: imageUrl,
+          width: 1536,
+          height: 1024,
+          alt: "CS 886: Learning Theory for Modern AI",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl],
+    },
+  };
+}
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={geist.variable}>{children}</body>
+      <body>{children}</body>
     </html>
   );
 }
