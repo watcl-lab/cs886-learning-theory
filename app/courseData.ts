@@ -45,7 +45,7 @@ export const courseDescription = {
 } as const;
 
 export const presentationGuidance =
-  "Each presentation should be organized around the learning-theory content rather than a chronological summary of the paper. A useful maximum is ten substantive slides: one for the question, two for the formal model, two for the main theorem, two for the proof idea, one for evidence, one for limitations, and one for an open problem.";
+  "Each week there will be four presentations. Each presentation will last about 45 minutes (including questions).";
 
 export const presentationRequirements = [
   "What is the formal problem? State the data-generating process, hypothesis or architecture class, loss, training rule, and test criterion.",
@@ -84,7 +84,7 @@ export const suggestedAssessment = [
 ] as const;
 
 export const presentationWorkload =
-  "Presentation workload will depend on enrollment. Students should expect at least two presentations during the term (an estimated number based on previous years).";
+  "Presentation workload will depend on enrollment. Students should expect at least two presentations during the term (an estimated number based on previous years), or an equivalent amount of workload.";
 
 export const optionalProject = {
   description:

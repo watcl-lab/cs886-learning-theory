@@ -43,6 +43,9 @@ test("server-renders the updated CS 886 course page", async () => {
   assert.match(html, /20%/);
   assert.match(html, /Optional Project \(Additional Marks\)/);
   assert.match(html, /at least two presentations/);
+  assert.match(html, /four presentations/);
+  assert.match(html, /45 minutes \(including questions\)/);
+  assert.match(html, /or an equivalent amount of workload/);
   assert.match(html, /University of Waterloo Academic Integrity Policy/);
   assert.match(html, /Robert Wang published his final project/);
   assert.match(html, /Learning-theory focus:/);
@@ -51,7 +54,7 @@ test("server-renders the updated CS 886 course page", async () => {
   assert.equal(paperLinkMentions % 48, 0);
   assert.doesNotMatch(
     html,
-    /24 weekly meetings|96 papers|theorem-first|Scope of the Course|Paper-Selection and Citation Policy|Recommended Weekly Meeting Format|Reading Expectations|Learning Outcomes/i,
+    /24 weekly meetings|96 papers|theorem-first|useful maximum is ten substantive slides|Scope of the Course|Paper-Selection and Citation Policy|Recommended Weekly Meeting Format|Reading Expectations|Learning Outcomes/i,
   );
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|Your site is taking shape/i);
 });
