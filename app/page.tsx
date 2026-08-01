@@ -106,7 +106,6 @@ export default function Home() {
                   <li key={paper.title}>
                     <p>
                       <strong>{paper.authors}</strong> <em>{paper.title}</em>. {paper.publication}.{" "}
-                      <span className="paper-impact">{paper.impact}</span>.{" "}
                       <a href={paper.link}>[paper]</a>
                       <br />
                       <strong>Learning-theory focus:</strong> {paper.presentationFocus}

@@ -52,6 +52,7 @@ test("server-renders the updated CS 886 course page", async () => {
   assert.match(html, /University of Waterloo Academic Integrity Policy/);
   assert.match(html, /Robert Wang published his final project/);
   assert.match(html, /Learning-theory focus:/);
+  assert.doesNotMatch(html, /paper-impact|Highly cited|Strong recent uptake|>Established<|>Landmark</i);
   const paperLinkMentions = (html.match(/\[paper\]/g) ?? []).length;
   assert.ok(paperLinkMentions >= 48);
   assert.equal(paperLinkMentions % 48, 0);

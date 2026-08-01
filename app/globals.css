@@ -266,12 +266,6 @@ table td:first-child {
   margin-bottom: 0;
 }
 
-.paper-impact {
-  color: var(--muted);
-  font-size: 0.9em;
-  white-space: nowrap;
-}
-
 .assessment-table th:nth-child(2),
 .assessment-table td:nth-child(2) {
   width: 100px;
