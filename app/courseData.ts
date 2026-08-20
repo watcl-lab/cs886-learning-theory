@@ -612,8 +612,7 @@ export const courseSchedule: readonly CourseWeek[] = [
     week: 12,
     date: "December 4, 2026",
     title: "Project Presentations II",
-    guidingQuestion:
-      "What new theoretical conclusions, counterexamples, or empirical evidence emerge from the completed projects?",
+    guidingQuestion: "",
     topicFocus:
       "The second half of the final-project presentations and course synthesis. There are no assigned paper presentations this week.",
     papers: [],

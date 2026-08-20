@@ -78,7 +78,7 @@ test("server-renders the updated CS 886 course page", async () => {
   assert.doesNotMatch(html, /Parameter-Efficient Adaptation and Preference Learning|RLHF Exploration, Hallucination, and Watermarking/);
   assert.doesNotMatch(
     html,
-    /How can a course theme be extended, challenged, or tested through a precise and technically rigorous project\?/,
+    /How can a course theme be extended, challenged, or tested through a precise and technically rigorous project\?|What new theoretical conclusions, counterexamples, or empirical evidence emerge from the completed projects\?/,
   );
   assert.doesNotMatch(
     html,
