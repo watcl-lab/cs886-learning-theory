@@ -73,7 +73,7 @@ test("server-renders the updated CS 886 course page", async () => {
   assert.equal(paperLinkMentions % 48, 0);
   assert.doesNotMatch(
     html,
-    /24 weekly meetings|96 papers|theorem-first|useful maximum is ten substantive slides|Scope of the Course|Paper-Selection and Citation Policy|Recommended Weekly Meeting Format|Reading Expectations|Learning Outcomes|Optional Project|Additional Marks|80%|at least two presentations/i,
+    /24 weekly meetings|96 papers|theorem-first|useful maximum is ten substantive slides|Scope of the Course|Paper-Selection and Citation Policy|Recommended Weekly Meeting Format|Reading Expectations|Learning Outcomes|Optional Project|Additional Marks|80%|at least two presentations|The first ten weekly meetings are organized around four influential papers|The required course project may pursue a new theoretical result/i,
   );
   assert.doesNotMatch(html, /Parameter-Efficient Adaptation and Preference Learning|RLHF Exploration, Hallucination, and Watermarking/);
   assert.doesNotMatch(
