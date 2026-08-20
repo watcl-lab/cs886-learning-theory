@@ -9,6 +9,7 @@ import {
   presentationRequirements,
   presentationWorkload,
   projectPresentation,
+  projectPresentationSchedule,
   type CoursePaper,
 } from "./courseData";
 
@@ -32,6 +33,7 @@ function PaperList({ papers }: { papers: readonly CoursePaper[] }) {
 export default function Home() {
   const [publicationBeforeConference, publicationAfterConference = ""] =
     courseProject.publicationSupport.split("NeurIPS 2024");
+  const paperWeeks = courseSchedule.filter((week) => week.papers.length > 0);
 
   return (
     <>
@@ -97,7 +99,7 @@ export default function Home() {
                 </tr>
               </thead>
               <tbody>
-                {courseSchedule.map((week) => (
+                {paperWeeks.map((week) => (
                   <tr key={week.week}>
                     <td>{week.week}</td>
                     <td>{week.date}</td>
@@ -107,6 +109,14 @@ export default function Home() {
                     <td>{week.guidingQuestion}</td>
                   </tr>
                 ))}
+                <tr>
+                  <td>{projectPresentationSchedule.weeks}</td>
+                  <td>{projectPresentationSchedule.dates}</td>
+                  <td>
+                    <a href="#weeks-11-12">{projectPresentationSchedule.title}</a>
+                  </td>
+                  <td></td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -116,7 +126,7 @@ export default function Home() {
 
         <section aria-labelledby="schedule-heading">
           <h2 id="schedule-heading">Detailed 12-Week Schedule</h2>
-          {courseSchedule.map((week) => (
+          {paperWeeks.map((week) => (
             <article className="week" id={`week-${week.week}`} key={week.week}>
               <h3>
                 <span className="week-number">
@@ -132,17 +142,28 @@ export default function Home() {
               <p className="topic-focus">
                 <strong>Topic focus.</strong> {week.topicFocus}
               </p>
-              {week.papers.length > 0 ? <PaperList papers={week.papers} /> : null}
-              {week.projectSession ? (
-                <div className="project-session">
-                  <p>
-                    <strong>Planned format.</strong> {week.projectSession.plannedFormat}
-                  </p>
-                  <p>{week.projectSession.description}</p>
-                </div>
-              ) : null}
+              <PaperList papers={week.papers} />
             </article>
           ))}
+          <article className="week" id="weeks-11-12">
+            <h3>
+              <span className="week-number">
+                Weeks {projectPresentationSchedule.weeks} · {projectPresentationSchedule.dates}
+              </span>
+              {projectPresentationSchedule.title}
+            </h3>
+            <p className="topic-focus">
+              <strong>Topic focus.</strong> {projectPresentationSchedule.topicFocus}
+            </p>
+            <div className="project-session">
+              <p>
+                <strong>Planned format.</strong> {projectPresentationSchedule.plannedFormat}
+              </p>
+              {projectPresentationSchedule.descriptions.map((description) => (
+                <p key={description}>{description}</p>
+              ))}
+            </div>
+          </article>
         </section>
 
         <hr />

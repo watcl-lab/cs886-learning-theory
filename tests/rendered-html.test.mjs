@@ -31,8 +31,9 @@ test("server-renders the updated CS 886 course page", async () => {
   const html = await response.text();
   assert.match(html, /<title>CS 886: Learning Theory for Modern AI<\/title>/i);
   assert.match(html, /Biases and Optimization of Self-Attention/);
-  assert.match(html, /Project Presentations I/);
-  assert.match(html, /Project Presentations II/);
+  assert.match(html, /Project Presentations/);
+  assert.match(html, /href="#weeks-11-12"/);
+  assert.doesNotMatch(html, /Project Presentations I|Project Presentations II|href="#week-(?:11|12)"/);
   assert.match(html, /The Lipschitz Constant of Self-Attention/);
   assert.match(html, /Transformers Are Minimax Optimal Nonparametric In-Context Learners/);
   assert.match(html, /Masked Hard-Attention Transformers Recognize Exactly the Star-Free Languages/);
@@ -90,7 +91,7 @@ test("server-renders the updated CS 886 course page", async () => {
 test("the source contains 10 paper meetings, two project meetings, and 48 total readings", async () => {
   const dataUrl = new URL("../app/courseData.ts", import.meta.url);
   dataUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
-  const { additionalReadings, assessment, courseSchedule } = await import(dataUrl.href);
+  const { additionalReadings, assessment, courseSchedule, projectPresentationSchedule } = await import(dataUrl.href);
   const scheduledPapers = courseSchedule.flatMap((week) => week.papers);
   const allPapers = [...scheduledPapers, ...additionalReadings];
 
@@ -113,11 +114,13 @@ test("the source contains 10 paper meetings, two project meetings, and 48 total 
     "December 4, 2026",
   ]);
   assert.ok(courseSchedule.slice(0, 10).every((week) => week.papers.length === 4));
-  assert.ok(courseSchedule.slice(10).every((week) => week.papers.length === 0 && week.projectSession));
+  assert.ok(courseSchedule.slice(10).every((week) => week.papers.length === 0));
   assert.deepEqual(courseSchedule.slice(10).map((week) => week.title), [
-    "Project Presentations I",
-    "Project Presentations II",
+    "Project Presentations",
+    "Project Presentations",
   ]);
+  assert.equal(projectPresentationSchedule.weeks, "11–12");
+  assert.equal(projectPresentationSchedule.dates, "November 27 and December 4, 2026");
   assert.equal(scheduledPapers.length, 40);
   assert.equal(additionalReadings.length, 8);
   assert.equal(allPapers.length, 48);

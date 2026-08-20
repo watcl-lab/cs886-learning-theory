@@ -14,10 +14,6 @@ export type CourseWeek = {
   guidingQuestion: string;
   topicFocus: string;
   papers: readonly CoursePaper[];
-  projectSession?: {
-    plannedFormat: string;
-    description: string;
-  };
 };
 
 export const courseFacts = {
@@ -159,6 +155,20 @@ function paper(
 ): CoursePaper {
   return { authors, title, publication, impact, presentationFocus, link };
 }
+
+export const projectPresentationSchedule = {
+  weeks: "11–12",
+  dates: "November 27 and December 4, 2026",
+  title: "Project Presentations",
+  topicFocus:
+    "Final-project presentations and course synthesis. There are no assigned paper presentations during these meetings.",
+  plannedFormat:
+    "Approximately 25 student talks across the two meetings. Each slot is planned as a 10-minute presentation, 2 minutes of questions, and a brief transition. The exact order, timing, and distribution may be adjusted after enrollment is known.",
+  descriptions: [
+    "Students should make the theoretical object under study explicit, state their own contribution precisely, and distinguish established results from new arguments or experimental findings.",
+    "The final discussion will synthesize what the projects reveal about the reach, limitations, and empirical faithfulness of current learning theory for transformers and large language models.",
+  ],
+} as const;
 
 // The revised source contains 24 theory topics. Consecutive source topics are
 // paired into the 12 actual meetings, with two papers from each source topic.
@@ -596,32 +606,20 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 11,
     date: "November 27, 2026",
-    title: "Project Presentations I",
+    title: "Project Presentations",
     guidingQuestion: "",
     topicFocus:
-      "The first half of the final-project presentations. There are no assigned paper presentations this week.",
+      "Final-project presentations and course synthesis. There are no assigned paper presentations during these meetings.",
     papers: [],
-    projectSession: {
-      plannedFormat:
-        "Approximately 12–13 student talks. Each slot is planned as a 10-minute presentation, 2 minutes of questions, and a brief transition. The exact order and timing may be adjusted after enrollment is known.",
-      description:
-        "Students should make the theoretical object under study explicit, state their own contribution precisely, and distinguish established results from new arguments or experimental findings.",
-    },
   },
   {
     week: 12,
     date: "December 4, 2026",
-    title: "Project Presentations II",
+    title: "Project Presentations",
     guidingQuestion: "",
     topicFocus:
-      "The second half of the final-project presentations and course synthesis. There are no assigned paper presentations this week.",
+      "Final-project presentations and course synthesis. There are no assigned paper presentations during these meetings.",
     papers: [],
-    projectSession: {
-      plannedFormat:
-        "Approximately 12–13 student talks. Each slot is planned as a 10-minute presentation, 2 minutes of questions, and a brief transition. The exact distribution across Weeks 11 and 12 may be adjusted to accommodate approximately 25 students.",
-      description:
-        "The final discussion will synthesize what the projects reveal about the reach, limitations, and empirical faithfulness of current learning theory for transformers and large language models.",
-    },
   },
 ];
 
