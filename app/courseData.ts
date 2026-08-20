@@ -14,6 +14,10 @@ export type CourseWeek = {
   guidingQuestion: string;
   topicFocus: string;
   papers: readonly CoursePaper[];
+  projectSession?: {
+    plannedFormat: string;
+    description: string;
+  };
 };
 
 export const courseFacts = {
@@ -27,6 +31,9 @@ export const courseFacts = {
   meetingDuration: "one three-hour meeting per week",
   meetingCount: 12,
   papersPerMeeting: 4,
+  paperMeetings: "Weeks 1–10",
+  projectMeetings: "Weeks 11–12",
+  expectedProjectPresentations: "approximately 25 presentations",
   firstMeeting: "September 11, 2026",
   lastMeeting: "December 4, 2026",
   readingWeek: "October 10–18, 2026",
@@ -35,17 +42,18 @@ export const courseFacts = {
 } as const;
 
 export const courseSummary =
-  "A course on the inductive biases, trainability, expressivity, computation, in-context learning, reasoning, adaptation, preference learning, and formal limitations of transformers and large language models.";
+  "A graduate research seminar on learning theory for transformers and large language models, culminating in a required course project.";
 
 export const courseDescription = {
   paragraphs: [
-    "Learning Theory for Modern AI: Transformers and Large Language Models is a graduate research seminar on the computational and statistical principles underlying modern sequence models. The course studies the inductive biases and trainability of self-attention; transformer expressivity, formal languages, and computational lower bounds; positional generalization and infinite-limit theory; associative memory and in-context learning; chain-of-thought computation and learnability; reasoning curricula and next-token prediction under misspecification; parameter-efficient adaptation, preference optimization, and language-model exploration; and theoretical limits involving calibration, watermarking, and hallucination.",
-    "Each weekly meeting is organized around four influential papers. Student presentations emphasize formal problem statements, theorem strength, proof mechanisms, assumptions, and the gap between tractable models and real large language models.",
+    "Learning Theory for Modern AI: Transformers and Large Language Models is a graduate research seminar on the computational and statistical principles underlying modern sequence models. The core paper meetings study the inductive biases and trainability of self-attention; transformer expressivity, formal languages, and computational lower bounds; positional generalization and infinite-limit theory; associative memory and in-context learning; chain-of-thought computation and learnability; and reasoning curricula and next-token prediction under misspecification. Additional project-oriented readings extend these themes to parameter-efficient adaptation, preference optimization, language-model exploration, calibration, watermarking, and hallucination.",
+    "The first ten weekly meetings are organized around four influential papers. Student paper presentations emphasize formal problem statements, theorem strength, proof mechanisms, assumptions, and the gap between tractable models and real large language models. The final two weekly meetings are reserved entirely for student project presentations.",
+    "The required course project may pursue a new theoretical result, such as a theorem, proof extension, sharper rate, lower bound, impossibility result, or counterexample. It may instead perform a rigorous empirical validation, verification, reproduction, stress test, or scrutiny of an existing theoretical result. An empirical project must be organized around a precise theoretical claim; a generic benchmark comparison or systems implementation is not sufficient.",
   ],
 } as const;
 
 export const presentationGuidance =
-  "Each week there will be four presentations. Each presentation will last about 45 minutes (including questions).";
+  "Paper presentations take place during Weeks 1–10. Each paper presentation will last about 45 minutes, including questions.";
 
 export const presentationRequirements = [
   "What is the formal problem? State the data-generating process, hypothesis or architecture class, loss, training rule, and test criterion.",
@@ -57,41 +65,90 @@ export const presentationRequirements = [
   "What would falsify or materially strengthen the claim? End with a concrete lower bound, counterexample, experiment, or theorem.",
 ] as const;
 
-export const presentationSlideLimit = {
-  maximumSubstantiveSlides: 10,
-} as const;
-
-export const claimDistinctions = [
-  "Representation",
-  "Optimization",
-  "Learnability",
-  "Generalization",
-  "Computational complexity",
-] as const;
-
-export const suggestedAssessment = [
+export const assessment = [
+  {
+    component: "Course project",
+    weight: "40%",
+    standard:
+      "A technically substantive project that either develops a new theoretical contribution or rigorously validates, verifies, reproduces, stress-tests, or scrutinizes an existing theoretical result. The grade includes the written report and final project presentation.",
+  },
   {
     component: "Paper presentations",
-    weight: "80%",
+    weight: "40%",
     standard:
-      "Students are expected to have a good understanding of each assigned paper and to answer questions during the presentation.",
+      "Accurate and insightful presentation of assigned papers, including a precise account of the formal problem, theorem, proof mechanism, assumptions, limitations, and responses to questions.",
   },
   {
     component: "Class participation",
     weight: "20%",
-    standard: "Consistent and substantive participation in weekly paper discussions.",
+    standard:
+      "Consistent and substantive participation in weekly paper discussions and project presentations, including preparation, constructive questions, and engagement with other students' work.",
   },
 ] as const;
 
 export const presentationWorkload =
-  "Presentation workload will depend on enrollment. Students should expect at least two presentations during the term (an estimated number based on previous years), or an equivalent amount of workload.";
+  "Presentation workload will depend on enrollment. With approximately 25 students and 40 scheduled paper slots, students should expect one or two paper presentations, or an equivalent amount of assessed presentation work. Assignments will be balanced as fairly as possible.";
 
-export const optionalProject = {
-  description:
-    "Optional projects may earn additional marks. The project topic should be discussed with the instructor.",
+export const courseProject = {
+  introduction:
+    "The project accounts for 40% of the course grade. The topic must be discussed with and approved by the instructor. Projects are individual by default; a small-group project requires prior approval, and each student's contribution must be clearly identifiable.",
+  acceptableForms: [
+    {
+      title: "New theoretical contribution",
+      description:
+        "Examples include a new theorem, proof, lower or upper bound, sharper rate, weaker assumption, impossibility result, counterexample, or extension of an existing result to a more realistic transformer or language-model setting.",
+    },
+    {
+      title: "Empirical validation or scrutiny of theory",
+      description:
+        "The project may reproduce, verify, stress-test, or challenge an existing theoretical claim.",
+      examples: [
+        "Measuring whether the predicted dependence on sample size, sequence length, depth, width, number of heads, task diversity, or conditioning appears in finite models.",
+        "Checking how a theorem behaves when idealized assumptions such as linear attention, Gaussian data, population loss, infinite width, or realizability are relaxed.",
+        "Reproducing a paper's core theoretical experiment and identifying robustness or failure regimes.",
+        "Comparing a formal bound with observed behavior and explaining the gap.",
+        "Searching systematically for counterexamples to a conjectured extension or informal interpretation of a theorem.",
+      ],
+    },
+  ],
+  empiricalStandard:
+    "An empirical project must be hypothesis-driven and anchored in a specific theorem, proposition, conjecture, or formal theoretical prediction. A generic model comparison, benchmark leaderboard, prompt-engineering exercise, or systems implementation is not sufficient by itself.",
+  deliverables: [
+    "A concise proposal identifying the question, the relevant theoretical result, the intended contribution, and the planned methodology.",
+    "A final written report that clearly separates known results from the student's contribution and provides sufficient technical detail to evaluate correctness.",
+    "For empirical projects, reproducible code, configurations, and a clear account of the experimental protocol.",
+    "An individual final presentation during Week 11 or Week 12. The project presentation is assessed as part of the project grade, not as a paper presentation.",
+  ],
+  deadlineNotice: "Exact proposal, checkpoint, and final-report deadlines will be announced by the instructor.",
+  evaluationCriteria: [
+    "Relevance to learning theory for transformers or large language models.",
+    "Precision and importance of the research question.",
+    "Technical correctness and depth.",
+    "Originality of a theoretical contribution, or rigor and informativeness of an empirical validation or scrutiny.",
+    "Understanding of assumptions, limitations, and related work.",
+    "Clarity of the written report and final presentation.",
+    "Reproducibility, where applicable.",
+  ],
+  evaluationNote:
+    "A complete publishable theorem is not required. Careful negative results, counterexamples, unsuccessful proof attempts that isolate a genuine obstruction, and rigorous empirical audits can all constitute strong projects when the analysis is technically substantive and clearly documented.",
   publicationSupport:
-    "Although not required for the course, keep in mind that I am more than happy to help you publish your final project. For example, in CS886 2024, Robert Wang published his final project at NeurIPS 2024.",
+    "Although publication is not required, the instructor is happy to help develop strong projects toward publication. For example, in CS886 2024, Robert Wang published his final project at NeurIPS 2024.",
   exampleUrl: "https://nips.cc/virtual/2024/poster/95519",
+} as const;
+
+export const projectPresentation = {
+  introduction:
+    "Because approximately 25 students are expected, the final two three-hour meetings are reserved entirely for projects. The anticipated format is a 10-minute talk followed by 2 minutes of questions and a brief transition.",
+  requirements: [
+    "The precise research question and its connection to the course.",
+    "The existing theoretical result, conjecture, or limitation being extended or examined.",
+    "The student's original contribution.",
+    "The methods, assumptions, and experimental or proof setup.",
+    "The main theorem, counterexample, quantitative finding, or negative result.",
+    "The strongest limitation and the most important next step.",
+  ],
+  guidance:
+    "For empirical projects, plots and tables should be chosen to test the stated theoretical prediction rather than merely summarize benchmark performance. For theoretical projects, the talk should state the result with its quantifiers and parameter dependence, and should explain the main proof idea or obstruction.",
 } as const;
 
 function paper(
@@ -447,7 +504,7 @@ export const courseSchedule: readonly CourseWeek[] = [
         "How Do Transformers Learn In-Context Beyond Simple Functions? A Case Study on Learning with Representations",
         "ICLR 2024",
         "Established",
-        "Analyzes ICL when tasks share a latent representation and explains how pretraining learns a reusable feature space.",
+        "Analyzes in-context learning when tasks share a latent representation and explains how pretraining learns a reusable feature space.",
         "https://arxiv.org/abs/2310.10616",
       ),
     ],
@@ -541,87 +598,100 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 11,
     date: "November 27, 2026",
-    title: "Parameter-Efficient Adaptation and Preference Learning",
+    title: "Project Presentations I",
     guidingQuestion:
-      "What can frozen language models learn through low-dimensional adaptation, and how should pairwise preferences shape a policy?",
+      "How can a course theme be extended, challenged, or tested through a precise and technically rigorous project?",
     topicFocus:
-      "Fine-tuning kernels, prompt expressivity, iterative RLHF, and online exploration.",
-    papers: [
-      paper(
-        "Sadhika Malladi et al.",
-        "A Kernel-Based View of Language Model Fine-Tuning",
-        "ICML 2023",
-        "Established",
-        "Develops a kernel approximation for language-model fine-tuning and uses it to predict data and hyperparameter effects.",
-        "https://proceedings.mlr.press/v202/malladi23a.html",
-      ),
-      paper(
-        "Yihan Wang, Jatin Chauhan, Wei Wang, and Cho-Jui Hsieh",
-        "Universality and Limitations of Prompt Tuning",
-        "NeurIPS 2023",
-        "Established",
-        "Proves universal approximation results for prompt tuning while deriving prompt-length and computational limitations.",
-        "https://arxiv.org/abs/2305.18787",
-      ),
-      paper(
-        "Wei Xiong, Hanze Dong, Chenlu Ye, Ziqi Wang, Han Zhong, Heng Ji, Nan Jiang, and Tong Zhang",
-        "Iterative Preference Learning from Human Feedback: Bridging Theory and Practice for RLHF under KL-Constraint",
-        "ICML 2024",
-        "Highly cited",
-        "Analyzes reverse-KL-regularized contextual-bandit formulations of offline, online, and hybrid RLHF and gives efficient iterative algorithms with finite-sample guarantees.",
-        "https://proceedings.mlr.press/v235/xiong24a.html",
-      ),
-      paper(
-        "Tengyang Xie, Dylan J. Foster, Akshay Krishnamurthy, Corby Rosset, Ahmed H. Awadallah, and Alexander Rakhlin",
-        "Exploratory Preference Optimization: Harnessing Implicit Q*-Approximation for Sample-Efficient RLHF",
-        "ICLR 2025",
-        "Established",
-        "Gives a theoretically grounded exploration algorithm for online RLHF under general function approximation and proves sample-efficiency guarantees.",
-        "https://openreview.net/forum?id=QYigQ6gXNw",
-      ),
-    ],
+      "The first half of the final-project presentations. There are no assigned paper presentations this week.",
+    papers: [],
+    projectSession: {
+      plannedFormat:
+        "Approximately 12–13 student talks. Each slot is planned as a 10-minute presentation, 2 minutes of questions, and a brief transition. The exact order and timing may be adjusted after enrollment is known.",
+      description:
+        "Students should make the theoretical object under study explicit, state their own contribution precisely, and distinguish established results from new arguments or experimental findings.",
+    },
   },
   {
     week: 12,
     date: "December 4, 2026",
-    title: "RLHF Exploration, Hallucination, and Watermarking",
+    title: "Project Presentations II",
     guidingQuestion:
-      "How does base-model coverage govern efficient RLHF exploration, and what can theory prove about calibrated hallucination and undetectable watermarking?",
+      "What new theoretical conclusions, counterexamples, or empirical evidence emerge from the completed projects?",
     topicFocus:
-      "Base-model exploration, online and offline coverage, calibration lower bounds, and cryptographic watermarking.",
-    papers: [
-      paper(
-        "Dylan J. Foster, Zakaria Mhammedi, and Dhruv Rohatgi",
-        "Is a Good Foundation Necessary for Efficient Reinforcement Learning? The Computational Role of the Base Model in Exploration",
-        "COLT 2025",
-        "Strong recent uptake",
-        "Introduces a sampling-oracle framework for reinforcement learning with language models, proves that base-model coverage lower-bounds runtime, and gives an efficient inference-time exploration algorithm when sufficient coverage is present.",
-        "https://proceedings.mlr.press/v291/foster25a.html",
-      ),
-      paper(
-        "Yuda Song, Gokul Swamy, Aarti Singh, J. Andrew Bagnell, and Wen Sun",
-        "The Importance of Online Data: Understanding Preference Fine-Tuning via Coverage",
-        "NeurIPS 2024",
-        "Established",
-        "Derives coverage conditions separating online and offline preference optimization and explains when offline data is fundamentally insufficient.",
-        "https://proceedings.neurips.cc/paper_files/paper/2024/hash/16c628ab12dc4caca8e7712affa6c767-Abstract-Conference.html",
-      ),
-      paper(
-        "Adam Tauman Kalai and Santosh S. Vempala",
-        "Calibrated Language Models Must Hallucinate",
-        "STOC 2024",
-        "Highly cited",
-        "Relates unavoidable hallucination on arbitrary rare facts to calibration and the Good-Turing missing mass.",
-        "https://arxiv.org/abs/2311.14648",
-      ),
-      paper(
-        "Miranda Christ, Sam Gunn, and Or Zamir",
-        "Undetectable Watermarks for Language Models",
-        "COLT 2024",
-        "Highly cited",
-        "Constructs secret-key watermarks whose presence is efficiently detectable with the key but computationally indistinguishable from the original language-model distribution without it, even under adaptive prompting.",
-        "https://proceedings.mlr.press/v247/christ24a.html",
-      ),
-    ],
+      "The second half of the final-project presentations and course synthesis. There are no assigned paper presentations this week.",
+    papers: [],
+    projectSession: {
+      plannedFormat:
+        "Approximately 12–13 student talks. Each slot is planned as a 10-minute presentation, 2 minutes of questions, and a brief transition. The exact distribution across Weeks 11 and 12 may be adjusted to accommodate approximately 25 students.",
+      description:
+        "The final discussion will synthesize what the projects reveal about the reach, limitations, and empirical faithfulness of current learning theory for transformers and large language models.",
+    },
   },
+];
+
+export const additionalReadings: readonly CoursePaper[] = [
+  paper(
+    "Sadhika Malladi et al.",
+    "A Kernel-Based View of Language Model Fine-Tuning",
+    "ICML 2023",
+    "Established",
+    "Develops a kernel approximation for language-model fine-tuning and uses it to predict data and hyperparameter effects.",
+    "https://proceedings.mlr.press/v202/malladi23a.html",
+  ),
+  paper(
+    "Yihan Wang, Jatin Chauhan, Wei Wang, and Cho-Jui Hsieh",
+    "Universality and Limitations of Prompt Tuning",
+    "NeurIPS 2023",
+    "Established",
+    "Proves universal approximation results for prompt tuning while deriving prompt-length and computational limitations.",
+    "https://arxiv.org/abs/2305.18787",
+  ),
+  paper(
+    "Wei Xiong, Hanze Dong, Chenlu Ye, Ziqi Wang, Han Zhong, Heng Ji, Nan Jiang, and Tong Zhang",
+    "Iterative Preference Learning from Human Feedback: Bridging Theory and Practice for RLHF under KL-Constraint",
+    "ICML 2024",
+    "Highly cited",
+    "Analyzes reverse-KL-regularized contextual-bandit formulations of offline, online, and hybrid RLHF and gives efficient iterative algorithms with finite-sample guarantees.",
+    "https://proceedings.mlr.press/v235/xiong24a.html",
+  ),
+  paper(
+    "Tengyang Xie, Dylan J. Foster, Akshay Krishnamurthy, Corby Rosset, Ahmed H. Awadallah, and Alexander Rakhlin",
+    "Exploratory Preference Optimization: Harnessing Implicit Q*-Approximation for Sample-Efficient RLHF",
+    "ICLR 2025",
+    "Established",
+    "Gives a theoretically grounded exploration algorithm for online RLHF under general function approximation and proves sample-efficiency guarantees.",
+    "https://openreview.net/forum?id=QYigQ6gXNw",
+  ),
+  paper(
+    "Dylan J. Foster, Zakaria Mhammedi, and Dhruv Rohatgi",
+    "Is a Good Foundation Necessary for Efficient Reinforcement Learning? The Computational Role of the Base Model in Exploration",
+    "COLT 2025",
+    "Strong recent uptake",
+    "Introduces a sampling-oracle framework for reinforcement learning with language models, proves that base-model coverage lower-bounds runtime, and gives an efficient inference-time exploration algorithm when sufficient coverage is present.",
+    "https://proceedings.mlr.press/v291/foster25a.html",
+  ),
+  paper(
+    "Yuda Song, Gokul Swamy, Aarti Singh, J. Andrew Bagnell, and Wen Sun",
+    "The Importance of Online Data: Understanding Preference Fine-Tuning via Coverage",
+    "NeurIPS 2024",
+    "Established",
+    "Derives coverage conditions separating online and offline preference optimization and explains when offline data is fundamentally insufficient.",
+    "https://proceedings.neurips.cc/paper_files/paper/2024/hash/16c628ab12dc4caca8e7712affa6c767-Abstract-Conference.html",
+  ),
+  paper(
+    "Adam Tauman Kalai and Santosh S. Vempala",
+    "Calibrated Language Models Must Hallucinate",
+    "STOC 2024",
+    "Highly cited",
+    "Relates unavoidable hallucination on arbitrary rare facts to calibration and the Good-Turing missing mass.",
+    "https://arxiv.org/abs/2311.14648",
+  ),
+  paper(
+    "Miranda Christ, Sam Gunn, and Or Zamir",
+    "Undetectable Watermarks for Language Models",
+    "COLT 2024",
+    "Highly cited",
+    "Constructs secret-key watermarks whose presence is efficiently detectable with the key but computationally indistinguishable from the original language-model distribution without it, even under adaptive prompting.",
+    "https://proceedings.mlr.press/v247/christ24a.html",
+  ),
 ];

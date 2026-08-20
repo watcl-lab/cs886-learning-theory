@@ -1,17 +1,37 @@
 import {
+  additionalReadings,
+  assessment,
+  courseProject,
   courseDescription,
   courseFacts,
   courseSchedule,
-  optionalProject,
   presentationGuidance,
   presentationRequirements,
   presentationWorkload,
-  suggestedAssessment,
+  projectPresentation,
+  type CoursePaper,
 } from "./courseData";
+
+function PaperList({ papers }: { papers: readonly CoursePaper[] }) {
+  return (
+    <ol className="paper-list">
+      {papers.map((paper) => (
+        <li key={paper.title}>
+          <p>
+            <strong>{paper.authors}</strong> <em>{paper.title}</em>. {paper.publication}.{" "}
+            <a href={paper.link}>[paper]</a>
+            <br />
+            <strong>Learning-theory focus:</strong> {paper.presentationFocus}
+          </p>
+        </li>
+      ))}
+    </ol>
+  );
+}
 
 export default function Home() {
   const [publicationBeforeConference, publicationAfterConference = ""] =
-    optionalProject.publicationSupport.split("NeurIPS 2024");
+    courseProject.publicationSupport.split("NeurIPS 2024");
 
   return (
     <>
@@ -46,7 +66,12 @@ export default function Home() {
               <strong>Course dates:</strong> {courseFacts.firstMeeting} to {courseFacts.lastMeeting}
             </li>
             <li>
-              <strong>Weekly discussion:</strong> {courseFacts.papersPerMeeting} papers
+              <strong>Paper discussions:</strong> {courseFacts.papersPerMeeting} papers per meeting in{" "}
+              {courseFacts.paperMeetings}
+            </li>
+            <li>
+              <strong>Project presentations:</strong> {courseFacts.expectedProjectPresentations} across{" "}
+              {courseFacts.projectMeetings}
             </li>
           </ul>
         </section>
@@ -105,18 +130,15 @@ export default function Home() {
               <p className="topic-focus">
                 <strong>Topic focus.</strong> {week.topicFocus}
               </p>
-              <ol className="paper-list">
-                {week.papers.map((paper) => (
-                  <li key={paper.title}>
-                    <p>
-                      <strong>{paper.authors}</strong> <em>{paper.title}</em>. {paper.publication}.{" "}
-                      <a href={paper.link}>[paper]</a>
-                      <br />
-                      <strong>Learning-theory focus:</strong> {paper.presentationFocus}
-                    </p>
-                  </li>
-                ))}
-              </ol>
+              {week.papers.length > 0 ? <PaperList papers={week.papers} /> : null}
+              {week.projectSession ? (
+                <div className="project-session">
+                  <p>
+                    <strong>Planned format.</strong> {week.projectSession.plannedFormat}
+                  </p>
+                  <p>{week.projectSession.description}</p>
+                </div>
+              ) : null}
             </article>
           ))}
         </section>
@@ -124,18 +146,75 @@ export default function Home() {
         <hr />
 
         <section aria-labelledby="presentation-heading">
-          <h2 id="presentation-heading">Presentation Requirements</h2>
+          <h2 id="presentation-heading">Paper Presentation Requirements</h2>
           <p>{presentationGuidance}</p>
           <ol>
             {presentationRequirements.map((requirement) => (
               <li key={requirement}>{requirement}</li>
             ))}
           </ol>
+          <p>{presentationWorkload}</p>
+        </section>
+
+        <section aria-labelledby="project-heading">
+          <h2 id="project-heading">Required Course Project</h2>
+          <p>{courseProject.introduction}</p>
+
+          <h3>Acceptable Project Forms</h3>
+          <ol>
+            {courseProject.acceptableForms.map((form) => (
+              <li key={form.title}>
+                <strong>{form.title}.</strong> {form.description}
+                {"examples" in form ? (
+                  <ul>
+                    {form.examples.map((example) => (
+                      <li key={example}>{example}</li>
+                    ))}
+                  </ul>
+                ) : null}
+              </li>
+            ))}
+          </ol>
+          <p>{courseProject.empiricalStandard}</p>
+
+          <h3>Project Deliverables</h3>
+          <ul>
+            {courseProject.deliverables.map((deliverable) => (
+              <li key={deliverable}>{deliverable}</li>
+            ))}
+          </ul>
+          <p>{courseProject.deadlineNotice}</p>
+
+          <h3>Project Evaluation</h3>
+          <p>Projects will be evaluated according to:</p>
+          <ul>
+            {courseProject.evaluationCriteria.map((criterion) => (
+              <li key={criterion}>{criterion}</li>
+            ))}
+          </ul>
+          <p>{courseProject.evaluationNote}</p>
+          <p>
+            {publicationBeforeConference}
+            <a href={courseProject.exampleUrl}>NeurIPS 2024</a>
+            {publicationAfterConference}
+          </p>
+        </section>
+
+        <section aria-labelledby="project-presentation-heading">
+          <h2 id="project-presentation-heading">Project Presentation Requirements</h2>
+          <p>{projectPresentation.introduction}</p>
+          <p>Every presentation should include:</p>
+          <ol>
+            {projectPresentation.requirements.map((requirement) => (
+              <li key={requirement}>{requirement}</li>
+            ))}
+          </ol>
+          <p>{projectPresentation.guidance}</p>
         </section>
 
         <section aria-labelledby="assessment-heading">
-          <h2 id="assessment-heading">Suggested Assessment</h2>
-          <div className="table-wrap" role="region" aria-label="Suggested assessment" tabIndex={0}>
+          <h2 id="assessment-heading">Assessment</h2>
+          <div className="table-wrap" role="region" aria-label="Assessment" tabIndex={0}>
             <table className="assessment-table">
               <thead>
                 <tr>
@@ -145,7 +224,7 @@ export default function Home() {
                 </tr>
               </thead>
               <tbody>
-                {suggestedAssessment.map((item) => (
+                {assessment.map((item) => (
                   <tr key={item.component}>
                     <td>{item.component}</td>
                     <td>{item.weight}</td>
@@ -155,14 +234,16 @@ export default function Home() {
               </tbody>
             </table>
           </div>
-          <p>{presentationWorkload}</p>
-          <h3>Optional Project (Additional Marks)</h3>
-          <p>{optionalProject.description}</p>
+        </section>
+
+        <section aria-labelledby="additional-readings-heading">
+          <h2 id="additional-readings-heading">Suggested Additional Readings and Project Starting Points</h2>
           <p>
-            {publicationBeforeConference}
-            <a href={optionalProject.exampleUrl}>NeurIPS 2024</a>
-            {publicationAfterConference}
+            The following papers were part of the most recent course material and remain recommended theoretical
+            starting points for projects. They are not scheduled as paper presentations because Weeks 11 and 12 are
+            reserved for project talks.
           </p>
+          <PaperList papers={additionalReadings} />
         </section>
 
         <section className="academic-policy" aria-labelledby="academic-integrity-policy-heading">
@@ -180,32 +261,32 @@ export default function Home() {
             members of the UW community are expected to hold to the highest standard of academic integrity in their
             studies, teaching, and research. This site explains why academic integrity is important and how students
             can avoid academic misconduct. It also identifies resources available on campus for students and faculty
-            to help achieve academic integrity in, and our, of the classroom.
+            to help achieve academic integrity in and out of the classroom.
           </p>
 
           <h3>Grievance</h3>
           <p>
-            A student who believes that a decision affecting some aspect of his/her university life has been unfair or
+            A student who believes that a decision affecting some aspect of their university life has been unfair or
             unreasonable may have grounds for initiating a grievance. Read{" "}
             <a href="https://uwaterloo.ca/secretariat/policies-procedures-guidelines/policy-70">
-              Policy 70 - Student Petitions and Grievances, Section 4
+              Policy 70 – Student Petitions and Grievances, Section 4
             </a>
-            . When in doubt please be certain to contact the department&apos;s administrative assistant who will provide
-            further assistance.
+            . When in doubt, please contact the department&apos;s administrative assistant, who will provide further
+            assistance.
           </p>
 
           <h3>Discipline</h3>
           <p>
             A student is expected to know what constitutes academic integrity, to avoid committing academic offenses,
-            and to take responsibility for his/her actions. A student who is unsure whether an action constitutes an
-            offense, or who needs help in learning how to avoid offenses (e.g., plagiarism, cheating) or about “rules”
-            for group work/collaboration should seek guidance from the course professor, academic advisor, or the
-            Undergraduate Associate Dean. For information on categories of offenses and types of penalties, students
-            should refer to{" "}
+            and to take responsibility for their actions. A student who is unsure whether an action constitutes an
+            offense, or who needs help learning how to avoid offenses (for example, plagiarism or cheating) or
+            understanding rules for group work and collaboration, should seek guidance from the course professor,
+            academic advisor, or the Undergraduate Associate Dean. For information on categories of offenses and types
+            of penalties, students should refer to{" "}
             <a href="https://uwaterloo.ca/secretariat/policies-procedures-guidelines/policy-71">
-              Policy 71-Student Discipline
+              Policy 71 – Student Discipline
             </a>
-            . For typical penalties check{" "}
+            . For typical penalties, check the{" "}
             <a href="https://uwaterloo.ca/secretariat/guidelines/guidelines-assessment-penalties">
               Guidelines for the Assessment of Penalties
             </a>
@@ -223,20 +304,20 @@ export default function Home() {
           <h3>Appeals</h3>
           <p>
             A decision made or a penalty imposed under Policy 70, Student Petitions and Grievances (other than a
-            petition) or Policy 71, Student Discipline may be appealed if there is a ground. A student who believes
-            he/she has a ground for an appeal should refer to{" "}
+            petition), or Policy 71, Student Discipline, may be appealed if there is a ground. A student who believes
+            they have a ground for an appeal should refer to{" "}
             <a href="https://uwaterloo.ca/secretariat/policies-procedures-guidelines/policy-72">
-              Policy 72 - Student Appeals
+              Policy 72 – Student Appeals
             </a>
             .
           </p>
 
-          <h3>Note for students with disabilities</h3>
+          <h3>Note for Students with Disabilities</h3>
           <p>
             The AccessAbility Services Office (AAS), located in Needles Hall, Room 1401, collaborates with all academic
             departments to arrange appropriate accommodations for students with disabilities without compromising the
             academic integrity of the curriculum. If you require academic accommodations to lessen the impact of your
-            disability, please register with the AAS at the beginning of each academic term.
+            disability, please register with AAS at the beginning of each academic term.
           </p>
         </section>
       </main>

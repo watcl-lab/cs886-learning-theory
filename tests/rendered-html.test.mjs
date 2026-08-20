@@ -31,7 +31,8 @@ test("server-renders the updated CS 886 course page", async () => {
   const html = await response.text();
   assert.match(html, /<title>CS 886: Learning Theory for Modern AI<\/title>/i);
   assert.match(html, /Biases and Optimization of Self-Attention/);
-  assert.match(html, /RLHF Exploration, Hallucination, and Watermarking/);
+  assert.match(html, /Project Presentations I/);
+  assert.match(html, /Project Presentations II/);
   assert.match(html, /The Lipschitz Constant of Self-Attention/);
   assert.match(html, /Transformers Are Minimax Optimal Nonparametric In-Context Learners/);
   assert.match(html, /Masked Hard-Attention Transformers Recognize Exactly the Star-Free Languages/);
@@ -45,16 +46,24 @@ test("server-renders the updated CS 886 course page", async () => {
   assert.match(html, /No class on[\s\S]{0,80}October 16, 2026/);
   assert.match(html, /Tentative schedule:[\s\S]{0,120}current schedule is a work in progress/i);
   assert.match(html, /Detailed 12-Week Schedule/);
-  assert.match(html, /Suggested Assessment/);
+  assert.match(html, /Required Course Project/);
+  assert.match(html, /Project Presentation Requirements/);
+  assert.match(html, />Assessment</);
   assert.match(html, /Paper presentations/);
   assert.match(html, /Class participation/);
-  assert.match(html, /80%/);
+  assert.match(html, /Course project/);
+  assert.match(html, /40%/);
   assert.match(html, /20%/);
-  assert.match(html, /Optional Project \(Additional Marks\)/);
-  assert.match(html, /at least two presentations/);
-  assert.match(html, /four presentations/);
-  assert.match(html, /45 minutes \(including questions\)/);
-  assert.match(html, /or an equivalent amount of workload/);
+  assert.match(html, /approximately 25 presentations/);
+  assert.match(html, /one or two paper presentations/);
+  assert.match(html, /40 scheduled paper slots/);
+  assert.match(html, /45 minutes, including questions/);
+  assert.match(html, /or an equivalent amount of assessed presentation work/);
+  assert.match(html, /10-minute presentation/);
+  assert.match(html, /2 minutes of questions/);
+  assert.match(html, /Project Deliverables/);
+  assert.match(html, /Project Evaluation/);
+  assert.match(html, /Suggested Additional Readings and Project Starting Points/);
   assert.match(html, /University of Waterloo Academic Integrity Policy/);
   assert.match(html, /Robert Wang published his final project/);
   assert.match(html, /Learning-theory focus:/);
@@ -64,8 +73,9 @@ test("server-renders the updated CS 886 course page", async () => {
   assert.equal(paperLinkMentions % 48, 0);
   assert.doesNotMatch(
     html,
-    /24 weekly meetings|96 papers|theorem-first|useful maximum is ten substantive slides|Scope of the Course|Paper-Selection and Citation Policy|Recommended Weekly Meeting Format|Reading Expectations|Learning Outcomes/i,
+    /24 weekly meetings|96 papers|theorem-first|useful maximum is ten substantive slides|Scope of the Course|Paper-Selection and Citation Policy|Recommended Weekly Meeting Format|Reading Expectations|Learning Outcomes|Optional Project|Additional Marks|80%|at least two presentations/i,
   );
+  assert.doesNotMatch(html, /Parameter-Efficient Adaptation and Preference Learning|RLHF Exploration, Hallucination, and Watermarking/);
   assert.doesNotMatch(
     html,
     /Reconciling Modern Machine-Learning Practice|Deep Double Descent|Scaling Laws for Neural Language Models|AI Models Collapse When Trained on Recursively Generated Data|Direct Preference Optimization: Your Language Model Is Secretly a Reward Model|On the Ability and Limitations of Transformers to Recognize Formal Languages|On Limitations of the Transformer Architecture|Mechanics of Next Token Prediction with Self-Attention|A General Theoretical Paradigm to Understand Learning from Human Preferences|Value-Incentivized Preference Optimization|Towards Revealing the Mystery Behind Chain of Thought|What Algorithms Can Transformers Learn\?|Hallucination Is Inevitable/i,
@@ -73,11 +83,12 @@ test("server-renders the updated CS 886 course page", async () => {
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|Your site is taking shape/i);
 });
 
-test("the source contains exactly 12 Friday meetings and 48 readings", async () => {
+test("the source contains 10 paper meetings, two project meetings, and 48 total readings", async () => {
   const dataUrl = new URL("../app/courseData.ts", import.meta.url);
   dataUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
-  const { courseSchedule } = await import(dataUrl.href);
-  const papers = courseSchedule.flatMap((week) => week.papers);
+  const { additionalReadings, assessment, courseSchedule } = await import(dataUrl.href);
+  const scheduledPapers = courseSchedule.flatMap((week) => week.papers);
+  const allPapers = [...scheduledPapers, ...additionalReadings];
 
   assert.deepEqual(
     courseSchedule.map((week) => week.week),
@@ -97,10 +108,22 @@ test("the source contains exactly 12 Friday meetings and 48 readings", async () 
     "November 27, 2026",
     "December 4, 2026",
   ]);
-  assert.ok(courseSchedule.every((week) => week.papers.length === 4));
-  assert.equal(papers.length, 48);
-  assert.equal(new Set(papers.map((paper) => paper.title)).size, 48);
-  assert.equal(new Set(papers.map((paper) => paper.link)).size, 48);
+  assert.ok(courseSchedule.slice(0, 10).every((week) => week.papers.length === 4));
+  assert.ok(courseSchedule.slice(10).every((week) => week.papers.length === 0 && week.projectSession));
+  assert.deepEqual(courseSchedule.slice(10).map((week) => week.title), [
+    "Project Presentations I",
+    "Project Presentations II",
+  ]);
+  assert.equal(scheduledPapers.length, 40);
+  assert.equal(additionalReadings.length, 8);
+  assert.equal(allPapers.length, 48);
+  assert.equal(new Set(allPapers.map((paper) => paper.title)).size, 48);
+  assert.equal(new Set(allPapers.map((paper) => paper.link)).size, 48);
+  assert.deepEqual(assessment.map(({ component, weight }) => [component, weight]), [
+    ["Course project", "40%"],
+    ["Paper presentations", "40%"],
+    ["Class participation", "20%"],
+  ]);
 });
 
 test("keeps the implementation simple while using a distinct academic style", async () => {
@@ -119,6 +142,7 @@ test("keeps the implementation simple while using a distinct academic style", as
     page,
     /Scope of the Course|Paper-Selection and Citation Policy|Recommended Weekly Meeting Format|Reading Expectations|Learning Outcomes/i,
   );
+  assert.doesNotMatch(`${page}\n${data}`, /Optional Project|Additional Marks|80%|at least two presentations/i);
   assert.doesNotMatch(
     data,
     /Reconciling Modern Machine-Learning Practice|Deep Double Descent|Scaling Laws for Neural Language Models|AI Models Collapse When Trained on Recursively Generated Data|Direct Preference Optimization: Your Language Model Is Secretly a Reward Model|On the Ability and Limitations of Transformers to Recognize Formal Languages|On Limitations of the Transformer Architecture|Mechanics of Next Token Prediction with Self-Attention|A General Theoretical Paradigm to Understand Learning from Human Preferences|Value-Incentivized Preference Optimization|Towards Revealing the Mystery Behind Chain of Thought|What Algorithms Can Transformers Learn\?|Hallucination Is Inevitable/i,
