@@ -206,8 +206,6 @@ export default function Home() {
               <li key={deliverable}>{deliverable}</li>
             ))}
           </ul>
-          <p>{courseProject.deadlineNotice}</p>
-
           <h3>Project Evaluation</h3>
           <p>Projects will be evaluated according to:</p>
           <ul>

@@ -113,7 +113,6 @@ export const courseProject = {
     "For empirical projects, reproducible code, configurations, and a clear account of the experimental protocol.",
     "An individual final presentation during Week 11 or Week 12. The project presentation is assessed as part of the project grade, not as a paper presentation.",
   ],
-  deadlineNotice: "Exact proposal, checkpoint, and final-report deadlines will be announced by the instructor.",
   evaluationCriteria: [
     "Relevance to learning theory for transformers or large language models.",
     "Precision and importance of the research question.",
