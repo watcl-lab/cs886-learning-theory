@@ -78,6 +78,10 @@ test("server-renders the updated CS 886 course page", async () => {
   assert.doesNotMatch(html, /Parameter-Efficient Adaptation and Preference Learning|RLHF Exploration, Hallucination, and Watermarking/);
   assert.doesNotMatch(
     html,
+    /How can a course theme be extended, challenged, or tested through a precise and technically rigorous project\?/,
+  );
+  assert.doesNotMatch(
+    html,
     /Reconciling Modern Machine-Learning Practice|Deep Double Descent|Scaling Laws for Neural Language Models|AI Models Collapse When Trained on Recursively Generated Data|Direct Preference Optimization: Your Language Model Is Secretly a Reward Model|On the Ability and Limitations of Transformers to Recognize Formal Languages|On Limitations of the Transformer Architecture|Mechanics of Next Token Prediction with Self-Attention|A General Theoretical Paradigm to Understand Learning from Human Preferences|Value-Incentivized Preference Optimization|Towards Revealing the Mystery Behind Chain of Thought|What Algorithms Can Transformers Learn\?|Hallucination Is Inevitable/i,
   );
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|Your site is taking shape/i);

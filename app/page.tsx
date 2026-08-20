@@ -124,9 +124,11 @@ export default function Home() {
                 </span>
                 {week.title}
               </h3>
-              <p className="guiding-question">
-                <strong>Central question.</strong> {week.guidingQuestion}
-              </p>
+              {week.guidingQuestion ? (
+                <p className="guiding-question">
+                  <strong>Central question.</strong> {week.guidingQuestion}
+                </p>
+              ) : null}
               <p className="topic-focus">
                 <strong>Topic focus.</strong> {week.topicFocus}
               </p>
