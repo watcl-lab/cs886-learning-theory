@@ -33,7 +33,7 @@ export const courseFacts = {
   papersPerMeeting: 4,
   paperMeetings: "Weeks 1–10",
   projectMeetings: "Weeks 11–12",
-  expectedProjectPresentations: "approximately 25 presentations",
+  expectedProjectPresentations: "approximately 25 project presentations",
   firstMeeting: "September 11, 2026",
   lastMeeting: "December 4, 2026",
   readingWeek: "October 10–18, 2026",

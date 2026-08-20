@@ -54,7 +54,7 @@ test("server-renders the updated CS 886 course page", async () => {
   assert.match(html, /Course project/);
   assert.match(html, /40%/);
   assert.match(html, /20%/);
-  assert.match(html, /approximately 25 presentations/);
+  assert.match(html, /approximately 25 project presentations/);
   assert.match(html, /one or two paper presentations/);
   assert.match(html, /40 scheduled paper slots/);
   assert.match(html, /45 minutes, including questions/);
