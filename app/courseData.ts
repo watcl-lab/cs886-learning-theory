@@ -100,8 +100,7 @@ export const presentationWorkload =
 
 export const meetingFormat = [
   { duration: "30 minutes", activity: "Lead presentation" },
-  { duration: "5 minutes", activity: "Open questions and discussion" },
-  { duration: "2 minutes", activity: "Transition" },
+  { duration: "12 minutes", activity: "Discussion and questions" },
 ] as const;
 
 export const meetingFormatNote =
