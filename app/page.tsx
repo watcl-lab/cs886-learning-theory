@@ -1,16 +1,26 @@
 import {
   additionalReadings,
   assessment,
-  courseProject,
   courseDescription,
   courseFacts,
+  courseProject,
   courseSchedule,
+  designatedDiscussant,
+  generativeAiPolicy,
+  lateWorkPolicy,
+  learningOutcomes,
+  meetingFormat,
+  meetingFormatNote,
+  navigationItems,
   presentationGuidance,
   presentationRequirements,
   presentationWorkload,
+  projectDeadlines,
   projectPresentation,
-  projectPresentationSchedule,
+  readingExpectations,
+  universityPolicies,
   type CoursePaper,
+  type CourseWeek,
 } from "./courseData";
 
 function PaperList({ papers }: { papers: readonly CoursePaper[] }) {
@@ -19,8 +29,11 @@ function PaperList({ papers }: { papers: readonly CoursePaper[] }) {
       {papers.map((paper) => (
         <li key={paper.title}>
           <p>
-            <strong>{paper.authors}</strong> <em>{paper.title}</em>. {paper.publication}.{" "}
-            <a href={paper.link}>[paper]</a>
+            <strong>{paper.authors}</strong>{" "}
+            <a href={paper.link}>
+              <em>{paper.title}</em>
+            </a>
+            . {paper.publication}.
             <br />
             <strong>Learning-theory focus:</strong> {paper.presentationFocus}
           </p>
@@ -30,10 +43,37 @@ function PaperList({ papers }: { papers: readonly CoursePaper[] }) {
   );
 }
 
+function WeekPaperList({ week }: { week: CourseWeek }) {
+  if (!week.subtopics?.length) {
+    return <PaperList papers={week.papers} />;
+  }
+
+  return (
+    <div className="subtopics">
+      {week.subtopics.map((subtopic) => {
+        const papers = subtopic.paperTitles.map(
+          (paperTitle) => week.papers.find((paper) => paper.title === paperTitle)!,
+        );
+
+        return (
+          <div className="subtopic" key={subtopic.title}>
+            <h4 className="subtopic-label">{subtopic.title}</h4>
+            <p className="subtopic-description">{subtopic.description}</p>
+            <PaperList papers={papers} />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function Home() {
-  const [publicationBeforeConference, publicationAfterConference = ""] =
-    courseProject.publicationSupport.split("NeurIPS 2024");
   const paperWeeks = courseSchedule.filter((week) => week.papers.length > 0);
+  const projectWeeks = courseSchedule.filter((week) => week.papers.length === 0);
+  const firstProjectWeek = projectWeeks[0];
+  const lastProjectWeek = projectWeeks.at(-1);
+  const projectWeekLabel = `${firstProjectWeek.week}–${lastProjectWeek?.week ?? firstProjectWeek.week}`;
+  const projectDateLabel = projectWeeks.map((week) => week.date).join(" and ");
 
   return (
     <>
@@ -52,78 +92,174 @@ export default function Home() {
           <p className="course-subtitle">{courseFacts.subtitle}</p>
         </header>
 
-        <section aria-labelledby="overview-heading">
-          <h2 id="overview-heading">Course Overview</h2>
+        <nav className="course-nav" aria-label="Course sections">
+          <ul>
+            {navigationItems.map((item) => (
+              <li key={item.href}>
+                <a href={item.href}>{item.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <section id="overview" aria-labelledby="overview-heading">
+          <h2 id="overview-heading">Course Overview and Logistics</h2>
           {courseDescription.paragraphs.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
-          <ul className="course-logistics">
-            <li>
-              <strong>Term:</strong> {courseFacts.term}
-            </li>
-            <li>
-              <strong>Meetings:</strong> {courseFacts.meetingDay}, {courseFacts.meetingDuration}
-            </li>
-            <li>
-              <strong>Course dates:</strong> {courseFacts.firstMeeting} to {courseFacts.lastMeeting}
-            </li>
-            <li>
-              <strong>Paper discussions:</strong> {courseFacts.papersPerMeeting} papers per meeting in{" "}
-              {courseFacts.paperMeetings}
-            </li>
-            <li>
-              <strong>Project presentations:</strong> {courseFacts.expectedProjectPresentations} across{" "}
-              {courseFacts.projectMeetings}
-            </li>
-          </ul>
+          <p>
+            <strong>Recommended background.</strong> {courseDescription.recommendedBackground}
+          </p>
+          <p>
+            <strong>Required materials.</strong> {courseDescription.requiredMaterials}
+          </p>
+
+          <dl className="course-logistics">
+            <div className="logistics-item">
+              <dt>Term</dt>
+              <dd>{courseFacts.term}</dd>
+            </div>
+            <div className="logistics-item">
+              <dt>Instructor</dt>
+              <dd>
+                {courseFacts.instructor}, {courseFacts.instructorTitle} ·{" "}
+                <a href={`mailto:${courseFacts.instructorEmail}`}>{courseFacts.instructorEmail}</a>
+              </dd>
+            </div>
+            <div className="logistics-item">
+              <dt>Office</dt>
+              <dd>{courseFacts.instructorOffice}</dd>
+            </div>
+            <div className="logistics-item">
+              <dt>Office hours</dt>
+              <dd>{courseFacts.officeHours}</dd>
+            </div>
+            <div className="logistics-item">
+              <dt>Meeting time</dt>
+              <dd>
+                {courseFacts.meetingDay}, {courseFacts.meetingTime}
+              </dd>
+            </div>
+            <div className="logistics-item">
+              <dt>Location</dt>
+              <dd>{courseFacts.meetingLocation}</dd>
+            </div>
+            <div className="logistics-item">
+              <dt>Delivery mode</dt>
+              <dd>{courseFacts.deliveryMode}</dd>
+            </div>
+            <div className="logistics-item">
+              <dt>Course platform</dt>
+              <dd>{courseFacts.coursePlatform}</dd>
+            </div>
+            <div className="logistics-item">
+              <dt>Scheduled seminar meetings</dt>
+              <dd>{courseFacts.scheduledMeetingRange}</dd>
+            </div>
+            <div className="logistics-item">
+              <dt>University class period</dt>
+              <dd>{courseFacts.universityClassPeriod}</dd>
+            </div>
+            <div className="logistics-item">
+              <dt>Reading Week</dt>
+              <dd>
+                No class on {courseFacts.skippedMeeting}. University Reading Week runs{" "}
+                <a href={courseFacts.readingWeekUrl}>{courseFacts.readingWeek}</a>.
+              </dd>
+            </div>
+            <div className="logistics-item">
+              <dt>Last updated</dt>
+              <dd>{courseFacts.lastUpdated}</dd>
+            </div>
+          </dl>
         </section>
 
-        <section aria-labelledby="topics-heading">
-          <h2 id="topics-heading">Topics at a Glance</h2>
+        <section id="learning-outcomes" aria-labelledby="learning-outcomes-heading">
+          <h2 id="learning-outcomes-heading">Learning Outcomes</h2>
+          <ol>
+            {learningOutcomes.map((outcome) => (
+              <li key={outcome}>{outcome}</li>
+            ))}
+          </ol>
+        </section>
+
+        <section id="schedule" aria-labelledby="schedule-heading">
+          <h2 id="schedule-heading">Topics at a Glance</h2>
           <p className="schedule-note">
             <strong>Tentative schedule:</strong> The current schedule is a work in progress. Topics, papers, and their
             order may change.
           </p>
-          <p className="schedule-note">
-            <strong>Reading Week:</strong> No class on {courseFacts.skippedMeeting}. University Reading Week runs{" "}
-            <a href={courseFacts.readingWeekUrl}>{courseFacts.readingWeek}</a>.
-          </p>
-          <div className="table-wrap" role="region" aria-label="Topics at a glance" tabIndex={0}>
-            <table className="topics-table">
-              <thead>
-                <tr>
-                  <th scope="col">Week</th>
-                  <th scope="col">Date</th>
-                  <th scope="col">Topic</th>
-                  <th scope="col">Central question</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paperWeeks.map((week) => (
-                  <tr key={week.week}>
-                    <td>{week.week}</td>
-                    <td>{week.date}</td>
-                    <td>
-                      <a href={`#week-${week.week}`}>{week.title}</a>
-                    </td>
-                    <td>{week.guidingQuestion}</td>
+
+          <div className="schedule-desktop">
+            <div className="table-wrap" role="region" aria-label="Topics at a glance" tabIndex={0}>
+              <table className="topics-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Week</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Topic</th>
+                    <th scope="col">Central question</th>
                   </tr>
-                ))}
-                <tr>
-                  <td>{projectPresentationSchedule.weeks}</td>
-                  <td>{projectPresentationSchedule.dates}</td>
-                  <td>{projectPresentationSchedule.title}</td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {paperWeeks.map((week) => (
+                    <tr key={week.week}>
+                      <td>{week.week}</td>
+                      <td>{week.date}</td>
+                      <td>
+                        <a href={`#week-${week.week}`}>{week.title}</a>
+                      </td>
+                      <td>{week.guidingQuestion}</td>
+                    </tr>
+                  ))}
+                  <tr>
+                    <td>{projectWeekLabel}</td>
+                    <td>{projectDateLabel}</td>
+                    <td>{firstProjectWeek.title}</td>
+                    <td>{firstProjectWeek.guidingQuestion}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="schedule-mobile" aria-label="Topics at a glance">
+            <ol className="mobile-schedule">
+              {paperWeeks.map((week) => (
+                <li key={week.week}>
+                  <div className="mobile-schedule-header">
+                    <span className="mobile-schedule-week">Week {week.week}</span>
+                    <span className="mobile-schedule-date">{week.date}</span>
+                  </div>
+                  <p className="mobile-schedule-topic">
+                    <a href={`#week-${week.week}`}>{week.title}</a>
+                  </p>
+                  <p className="mobile-schedule-question">
+                    <strong>Central question:</strong> {week.guidingQuestion}
+                  </p>
+                </li>
+              ))}
+              <li>
+                <div className="mobile-schedule-header">
+                  <span className="mobile-schedule-week">Weeks {projectWeekLabel}</span>
+                  <span className="mobile-schedule-date">{projectDateLabel}</span>
+                </div>
+                <p className="mobile-schedule-topic">{firstProjectWeek.title}</p>
+                <p className="mobile-schedule-question">
+                  <strong>Central question:</strong> {firstProjectWeek.guidingQuestion}
+                </p>
+              </li>
+            </ol>
           </div>
         </section>
 
-        <hr />
+        <section id="reading-expectations" aria-labelledby="reading-expectations-heading">
+          <h2 id="reading-expectations-heading">Reading Expectations</h2>
+          <p>{readingExpectations}</p>
+        </section>
 
-        <section aria-labelledby="schedule-heading">
-          <h2 id="schedule-heading">Detailed Paper Schedule</h2>
+        <section id="detailed-schedule" aria-labelledby="detailed-schedule-heading">
+          <h2 id="detailed-schedule-heading">Detailed Paper Schedule</h2>
           {paperWeeks.map((week) => (
             <article className="week" id={`week-${week.week}`} key={week.week}>
               <h3>
@@ -132,33 +268,47 @@ export default function Home() {
                 </span>
                 {week.title}
               </h3>
-              {week.guidingQuestion ? (
-                <p className="guiding-question">
-                  <strong>Central question.</strong> {week.guidingQuestion}
-                </p>
-              ) : null}
+              <p className="guiding-question">
+                <strong>Central question.</strong> {week.guidingQuestion}
+              </p>
               <p className="topic-focus">
                 <strong>Topic focus.</strong> {week.topicFocus}
               </p>
-              <PaperList papers={week.papers} />
+              <WeekPaperList week={week} />
+              <a className="back-to-schedule" href="#schedule">
+                Back to schedule
+              </a>
             </article>
           ))}
         </section>
 
-        <hr />
-
-        <section aria-labelledby="presentation-heading">
-          <h2 id="presentation-heading">Paper Presentation Requirements</h2>
+        <section id="paper-presentations" aria-labelledby="paper-presentations-heading">
+          <h2 id="paper-presentations-heading">Paper Presentation Requirements</h2>
           <p>{presentationGuidance}</p>
+          <p>{presentationWorkload}</p>
+
+          <h3>Meeting Format</h3>
+          <ul className="meeting-format">
+            {meetingFormat.map((item) => (
+              <li key={item.duration}>
+                <strong>{item.duration}:</strong> {item.activity}
+              </li>
+            ))}
+          </ul>
+          <p>{meetingFormatNote}</p>
+
+          <h3>Lead Presentation</h3>
           <ol>
             {presentationRequirements.map((requirement) => (
               <li key={requirement}>{requirement}</li>
             ))}
           </ol>
-          <p>{presentationWorkload}</p>
+
+          <h3>Designated Discussant</h3>
+          <p>{designatedDiscussant}</p>
         </section>
 
-        <section aria-labelledby="project-heading">
+        <section id="project" aria-labelledby="project-heading">
           <h2 id="project-heading">Required Course Project</h2>
           <p>{courseProject.introduction}</p>
 
@@ -179,12 +329,16 @@ export default function Home() {
           </ol>
           <p>{courseProject.empiricalStandard}</p>
 
+          <h3>Group Work</h3>
+          <p>{courseProject.groupWorkPolicy}</p>
+
           <h3>Project Deliverables</h3>
           <ul>
             {courseProject.deliverables.map((deliverable) => (
               <li key={deliverable}>{deliverable}</li>
             ))}
           </ul>
+
           <h3>Project Evaluation</h3>
           <p>Projects will be evaluated according to:</p>
           <ul>
@@ -194,14 +348,40 @@ export default function Home() {
           </ul>
           <p>{courseProject.evaluationNote}</p>
           <p>
-            {publicationBeforeConference}
-            <a href={courseProject.exampleUrl}>NeurIPS 2024</a>
-            {publicationAfterConference}
+            {courseProject.publicationSupport} {courseProject.publicationExample.leadIn}{" "}
+            <a href={courseProject.publicationExample.url}>{courseProject.publicationExample.linkText}</a>.
           </p>
         </section>
 
-        <section aria-labelledby="project-presentation-heading">
-          <h2 id="project-presentation-heading">Project Presentation Requirements</h2>
+        <section id="project-deadlines" aria-labelledby="project-deadlines-heading">
+          <h2 id="project-deadlines-heading">Project Milestones and Deadlines</h2>
+          <div className="table-wrap" role="region" aria-label="Project deadline" tabIndex={0}>
+            <table className="deadline-table">
+              <thead>
+                <tr>
+                  <th scope="col">Deliverable</th>
+                  <th scope="col">Deadline</th>
+                  <th scope="col">Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                {projectDeadlines.map((item) => (
+                  <tr key={item.milestone}>
+                    <td>{item.milestone}</td>
+                    <td>{item.deadline}</td>
+                    <td>{item.description}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section
+          id="project-presentation-requirements"
+          aria-labelledby="project-presentation-requirements-heading"
+        >
+          <h2 id="project-presentation-requirements-heading">Project Presentation Requirements</h2>
           <p>{projectPresentation.introduction}</p>
           <p>Every presentation should include:</p>
           <ol>
@@ -212,7 +392,7 @@ export default function Home() {
           <p>{projectPresentation.guidance}</p>
         </section>
 
-        <section aria-labelledby="assessment-heading">
+        <section id="assessment" aria-labelledby="assessment-heading">
           <h2 id="assessment-heading">Assessment</h2>
           <div className="table-wrap" role="region" aria-label="Assessment" tabIndex={0}>
             <table className="assessment-table">
@@ -236,89 +416,50 @@ export default function Home() {
           </div>
         </section>
 
-        <section aria-labelledby="additional-readings-heading">
+        <section id="late-work" aria-labelledby="late-work-heading">
+          <h2 id="late-work-heading">Late Work, Missed Work, and Extensions</h2>
+          <p>{lateWorkPolicy.contactStatement}</p>
+          <p>{lateWorkPolicy.missedPresentationStatement}</p>
+          <p>{lateWorkPolicy.scopeStatement}</p>
+          <p>{lateWorkPolicy.extensionStatement}</p>
+        </section>
+
+        <section id="generative-ai" aria-labelledby="generative-ai-heading">
+          <h2 id="generative-ai-heading">Use of Generative AI</h2>
+          <p>{generativeAiPolicy}</p>
+        </section>
+
+        <section id="additional-readings" aria-labelledby="additional-readings-heading">
           <h2 id="additional-readings-heading">Suggested Additional Readings and Project Starting Points</h2>
           <p>
-            The following papers were part of the most recent course material and remain recommended theoretical
-            starting points for projects. They are not scheduled as paper presentations because Weeks 11 and 12 are
-            reserved for project talks.
+            These readings extend the main themes of the seminar and may provide useful starting points for projects.
+            They are not scheduled paper presentations.
           </p>
           <PaperList papers={additionalReadings} />
         </section>
 
-        <section className="academic-policy" aria-labelledby="academic-integrity-policy-heading">
-          <h2 id="academic-integrity-policy-heading">University of Waterloo Academic Integrity Policy</h2>
+        <section className="academic-policy" id="policies" aria-labelledby="policies-heading">
+          <h2 id="policies-heading">University Policies and Supports</h2>
+          <p>{universityPolicies.introduction}</p>
           <p>
-            The University of Waterloo Senate Undergraduate Council has also approved the following message outlining
-            University of Waterloo policy on academic integrity and associated policies.
+            <strong>Official course outline:</strong>{" "}
+            {courseFacts.officialOutlineUrl === "TBA" ? (
+              "TBA"
+            ) : (
+              <a href={courseFacts.officialOutlineUrl}>View the official Waterloo course outline</a>
+            )}
           </p>
-
-          <h3>Academic Integrity</h3>
           <p>
-            In order to maintain a culture of academic integrity, members of the University of Waterloo community are
-            expected to promote honesty, trust, fairness, respect and responsibility. Check the Office of Academic
-            Integrity&apos;s <a href="https://uwaterloo.ca/academic-integrity">website</a> for more information. All
-            members of the UW community are expected to hold to the highest standard of academic integrity in their
-            studies, teaching, and research. This site explains why academic integrity is important and how students
-            can avoid academic misconduct. It also identifies resources available on campus for students and faculty
-            to help achieve academic integrity in and out of the classroom.
+            Waterloo provides additional information about{" "}
+            <a href={universityPolicies.outlineGuidanceUrl}>course outlines and institutional requirements</a>.
           </p>
-
-          <h3>Grievance</h3>
-          <p>
-            A student who believes that a decision affecting some aspect of their university life has been unfair or
-            unreasonable may have grounds for initiating a grievance. Read{" "}
-            <a href="https://uwaterloo.ca/secretariat/policies-procedures-guidelines/policy-70">
-              Policy 70 – Student Petitions and Grievances, Section 4
-            </a>
-            . When in doubt, please contact the department&apos;s administrative assistant, who will provide further
-            assistance.
-          </p>
-
-          <h3>Discipline</h3>
-          <p>
-            A student is expected to know what constitutes academic integrity, to avoid committing academic offenses,
-            and to take responsibility for their actions. A student who is unsure whether an action constitutes an
-            offense, or who needs help learning how to avoid offenses (for example, plagiarism or cheating) or
-            understanding rules for group work and collaboration, should seek guidance from the course professor,
-            academic advisor, or the Undergraduate Associate Dean. For information on categories of offenses and types
-            of penalties, students should refer to{" "}
-            <a href="https://uwaterloo.ca/secretariat/policies-procedures-guidelines/policy-71">
-              Policy 71 – Student Discipline
-            </a>
-            . For typical penalties, check the{" "}
-            <a href="https://uwaterloo.ca/secretariat/guidelines/guidelines-assessment-penalties">
-              Guidelines for the Assessment of Penalties
-            </a>
-            .
-          </p>
-
-          <h3>Avoiding Academic Offenses</h3>
-          <p>
-            Most students are unaware of the line between acceptable and unacceptable academic behaviour, especially
-            when discussing assignments with classmates and using the work of other students. For information on
-            commonly misunderstood academic offenses and how to avoid them, students should refer to the Faculty of
-            Mathematics Cheating and Student Academic Discipline Policy.
-          </p>
-
-          <h3>Appeals</h3>
-          <p>
-            A decision made or a penalty imposed under Policy 70, Student Petitions and Grievances (other than a
-            petition), or Policy 71, Student Discipline, may be appealed if there is a ground. A student who believes
-            they have a ground for an appeal should refer to{" "}
-            <a href="https://uwaterloo.ca/secretariat/policies-procedures-guidelines/policy-72">
-              Policy 72 – Student Appeals
-            </a>
-            .
-          </p>
-
-          <h3>Note for Students with Disabilities</h3>
-          <p>
-            The AccessAbility Services Office (AAS), located in Needles Hall, Room 1401, collaborates with all academic
-            departments to arrange appropriate accommodations for students with disabilities without compromising the
-            academic integrity of the curriculum. If you require academic accommodations to lessen the impact of your
-            disability, please register with AAS at the beginning of each academic term.
-          </p>
+          <ul className="policy-links">
+            {universityPolicies.resources.map((resource) => (
+              <li key={resource.url}>
+                <a href={resource.url}>{resource.label}</a>
+              </li>
+            ))}
+          </ul>
         </section>
       </main>
     </>

@@ -35,11 +35,14 @@ if (!response.ok) {
 }
 
 let html = await response.text();
+const faviconUrl = new URL("favicon.svg", siteUrl).href;
 html = html
   .replace(/<link rel="modulepreload"[^>]*>/g, "")
   .replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, "")
   .replaceAll('href="/assets/', 'href="assets/')
   .replaceAll('src="/assets/', 'src="assets/')
+  .replaceAll('href="/favicon.svg"', `href="${faviconUrl}"`)
+  .replaceAll("href='/favicon.svg'", `href='${faviconUrl}'`)
   .replace(
     /content="https?:\/\/localhost(?::\d+)?\/og\.png"/g,
     `content="${new URL("og.png", siteUrl).href}"`,
@@ -55,6 +58,7 @@ await cp(join(projectRoot, "dist", "client", "assets"), join(outputDirectory, "a
   recursive: true,
 });
 await cp(join(projectRoot, "public", "og.png"), join(outputDirectory, "og.png"));
+await cp(join(projectRoot, "public", "favicon.svg"), join(outputDirectory, "favicon.svg"));
 await writeFile(join(outputDirectory, "index.html"), html, "utf8");
 await writeFile(join(outputDirectory, ".nojekyll"), "", "utf8");
 
