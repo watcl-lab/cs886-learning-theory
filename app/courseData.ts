@@ -103,9 +103,6 @@ export const meetingFormat = [
   { duration: "12 minutes", activity: "Discussion and questions" },
 ] as const;
 
-export const meetingFormatNote =
-  "Each meeting will also include a short break and a concluding synthesis.";
-
 export const presentationRequirements = [
   "What is the formal problem? State the data-generating process, hypothesis or architecture class, loss, training rule, and test criterion.",
   "What kind of result is obtained? Distinguish representation, optimization, learnability, generalization, and computational-complexity claims.",
