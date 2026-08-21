@@ -96,17 +96,16 @@ export const presentationGuidance =
   "Paper discussions take place during Weeks 1–10. Each week contains four scheduled papers.";
 
 export const presentationWorkload =
-  "Every student completes the same assessed presentation workload: one lead paper presentation and one designated discussant role. Exact paper assignments will be announced after enrollment is known.";
+  "Students should expect one to two paper presentations during the term. Exact paper assignments will be announced after enrollment is known.";
 
 export const meetingFormat = [
   { duration: "30 minutes", activity: "Lead presentation" },
-  { duration: "5 minutes", activity: "Designated discussant response" },
   { duration: "5 minutes", activity: "Open questions and discussion" },
   { duration: "2 minutes", activity: "Transition" },
 ] as const;
 
 export const meetingFormatNote =
-  "Each complete presentation slot is 42 minutes. Each meeting will also include a short break and a concluding synthesis.";
+  "Each meeting will also include a short break and a concluding synthesis.";
 
 export const presentationRequirements = [
   "What is the formal problem? State the data-generating process, hypothesis or architecture class, loss, training rule, and test criterion.",
@@ -119,9 +118,6 @@ export const presentationRequirements = [
   "Distinguish carefully between what the paper proves, what its experiments suggest, and what the authors conjecture or claim informally.",
   "End with one precise limitation and one concrete theorem, counterexample, or experiment that would materially strengthen or challenge the paper.",
 ] as const;
-
-export const designatedDiscussant =
-  "The designated discussant should prepare a concise technical response that identifies the paper's main contribution, its most consequential assumption, one possible weakness or boundary case, and one question that opens the general discussion. The response should not merely summarize the lead presentation.";
 
 export const assessment = [
   {
