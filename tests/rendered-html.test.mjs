@@ -89,8 +89,7 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /30 minutes\s*:?\s*lead presentation/i);
   assert.match(text, /12 minutes\s*:?\s*discussion and questions/i);
   assert.doesNotMatch(text, /5 minutes\s*:?\s*open questions and discussion|2 minutes\s*:?\s*transition/i);
-  assert.doesNotMatch(text, /designated discussant|42 minutes/i);
-  assert.match(text, /short break and a concluding synthesis/i);
+  assert.doesNotMatch(text, /designated discussant|complete presentation slot|short break and a concluding synthesis/i);
   assert.match(text, /10-minute talk/i);
   assert.match(text, /2 minutes of questions/i);
   assert.match(text, /1-minute transition/i);

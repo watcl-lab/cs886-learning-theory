@@ -9,7 +9,6 @@ import {
   lateWorkPolicy,
   learningOutcomes,
   meetingFormat,
-  meetingFormatNote,
   navigationItems,
   presentationGuidance,
   presentationRequirements,
@@ -297,7 +296,6 @@ export default function Home() {
               </li>
             ))}
           </ul>
-          <p>{meetingFormatNote}</p>
 
           <h3>Lead Presentation</h3>
           <ol>
