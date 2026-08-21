@@ -54,7 +54,8 @@ body {
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
   color: inherit;
   line-height: 1.2;
 }
@@ -83,6 +84,12 @@ h3 {
   font-weight: 700;
 }
 
+h4 {
+  margin: 0 0 8px;
+  font-size: 1.02rem;
+  font-weight: 750;
+}
+
 .course-subtitle {
   margin: 0 0 14px;
   color: var(--muted);
@@ -91,11 +98,64 @@ h3 {
 }
 
 .course-logistics {
-  margin-top: 22px;
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 8px 22px;
+  margin: 24px 0 0;
+}
+
+.logistics-item {
+  display: contents;
+}
+
+.course-logistics dt {
+  font-weight: 700;
+}
+
+.course-logistics dd {
+  margin: 0;
+}
+
+.course-nav {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  margin: 0 -12px;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--line);
+  background: rgb(255 255 255 / 96%);
+}
+
+.course-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.course-nav li,
+.course-nav li + li {
+  margin: 0;
+}
+
+.course-nav a {
+  display: block;
+  padding: 3px 0;
+  color: var(--ink);
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration-color: var(--gold);
 }
 
 section {
   margin-top: 44px;
+}
+
+section[id],
+article[id] {
+  scroll-margin-top: 74px;
 }
 
 p {
@@ -199,6 +259,51 @@ table td:first-child {
   min-width: 840px;
 }
 
+.schedule-mobile {
+  display: none;
+}
+
+.mobile-schedule {
+  margin: 0;
+  padding: 0;
+  border-top: 2px solid var(--ink);
+  list-style: none;
+}
+
+.mobile-schedule > li {
+  margin: 0;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.mobile-schedule-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 5px;
+}
+
+.mobile-schedule-week {
+  font-weight: 800;
+}
+
+.mobile-schedule-date {
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: right;
+}
+
+.mobile-schedule-topic {
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+.mobile-schedule-question {
+  margin: 0;
+  color: var(--muted);
+}
+
 .topics-table th:first-child,
 .topics-table td:first-child {
   width: 64px;
@@ -253,6 +358,30 @@ table td:first-child {
   color: var(--muted);
 }
 
+.subtopics {
+  margin: 22px 0 0;
+}
+
+.subtopic {
+  margin-top: 22px;
+  padding-left: 14px;
+  border-left: 3px solid var(--line);
+}
+
+.subtopic-label {
+  margin-bottom: 5px;
+  color: var(--gold-dark);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.subtopic-description {
+  color: var(--muted);
+}
+
 .paper-list {
   margin-bottom: 0;
 }
@@ -264,6 +393,26 @@ table td:first-child {
 
 .paper-list p {
   margin-bottom: 0;
+}
+
+.back-to-schedule {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.meeting-format {
+  margin-bottom: 18px;
+}
+
+.meeting-format li {
+  padding-left: 3px;
+}
+
+.deadline-table th:first-child,
+.deadline-table td:first-child {
+  width: 180px;
 }
 
 .assessment-table th:nth-child(2),
@@ -280,6 +429,15 @@ table td:first-child {
 .academic-policy {
   padding-top: 8px;
   border-top: 1px solid var(--line);
+}
+
+.policy-links {
+  columns: 2;
+  column-gap: 32px;
+}
+
+.policy-links li {
+  break-inside: avoid;
 }
 
 .academic-policy h3 {
@@ -302,6 +460,48 @@ table td:first-child {
     padding-top: 4px;
   }
 
+  .course-nav {
+    margin-right: -18px;
+    margin-left: -18px;
+    padding-right: 18px;
+    padding-left: 18px;
+    overflow-x: auto;
+  }
+
+  .course-nav ul {
+    width: max-content;
+    max-width: none;
+    flex-wrap: nowrap;
+  }
+
+  section[id],
+  article[id] {
+    scroll-margin-top: 64px;
+  }
+
+  .course-logistics {
+    display: block;
+  }
+
+  .logistics-item {
+    display: block;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .course-logistics dt,
+  .course-logistics dd {
+    display: block;
+  }
+
+  .schedule-desktop {
+    display: none;
+  }
+
+  .schedule-mobile {
+    display: block;
+  }
+
   h2 {
     font-size: 1.42rem;
   }
@@ -321,6 +521,14 @@ table td:first-child {
   th,
   td {
     padding: 9px 10px;
+  }
+
+  .deadline-table {
+    min-width: 520px;
+  }
+
+  .policy-links {
+    columns: 1;
   }
 }
 
@@ -345,12 +553,28 @@ table td:first-child {
     text-decoration: none;
   }
 
+  .course-nav,
+  .back-to-schedule,
+  .schedule-mobile {
+    display: none;
+  }
+
+  .schedule-desktop {
+    display: block;
+  }
+
   thead th {
     background: #fff;
     color: #000;
   }
 
   .week {
+    break-inside: avoid;
+  }
+
+  .subtopic,
+  .logistics-item,
+  .academic-policy li {
     break-inside: avoid;
   }
 }

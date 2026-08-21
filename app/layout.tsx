@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import "./globals.css";
 
-const title = "CS 886: Learning Theory for Modern AI";
+const title = "CS 886: Learning Theory for Modern AI – Fall 2026";
 const description =
-  "A University of Waterloo graduate seminar on learning theory for transformers and large language models, culminating in a required course project.";
+  "Fall 2026 University of Waterloo graduate seminar on learning theory for transformers and large language models, with paper presentations and a required research project.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();
@@ -15,6 +15,9 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
+    icons: {
+      icon: "/favicon.svg",
+    },
     openGraph: {
       title,
       description,
@@ -24,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
           url: imageUrl,
           width: 1536,
           height: 1024,
-          alt: "CS 886: Learning Theory for Modern AI",
+          alt: title,
         },
       ],
     },
