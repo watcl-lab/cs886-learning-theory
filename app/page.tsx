@@ -297,7 +297,7 @@ export default function Home() {
             ))}
           </ul>
 
-          <h3>Lead Presentation</h3>
+          <h3>Presentation</h3>
           <ol>
             {presentationRequirements.map((requirement) => (
               <li key={requirement}>{requirement}</li>
