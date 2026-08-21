@@ -223,8 +223,6 @@ export const lateWorkPolicy = {
   contactStatement:
     "Students should contact the instructor as soon as reasonably possible when illness, emergency, or another serious circumstance affects coursework.",
   scopeStatement: `The final project report and required reproducibility materials have a ${lateGracePeriodHours}-hour grace period. After that grace period, and in the absence of an approved extension, the project grade is reduced by ${latePenaltyPercentagePoints} percentage points for each additional ${latePenaltyPeriodHours}-hour period or part thereof.`,
-  extensionStatement:
-    "Extensions should be arranged before the deadline whenever possible. Approved accommodations and University procedures supersede this default policy.",
 } as const;
 
 export const generativeAiPolicy =
