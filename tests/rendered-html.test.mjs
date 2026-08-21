@@ -53,6 +53,10 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /main schedule places particular emphasis on the theory of in-context learning and reasoning/i);
   assert.match(text, /Recommended background/i);
   assert.match(text, /No textbook is required/i);
+  assert.match(text, /Note for non-theory students/i);
+  assert.match(text, /course is open to students without a theory background/i);
+  assert.match(text, /insight into how transformers work/i);
+  assert.match(text, /scrutinize existing theoretical claims through empirical evidence/i);
   assert.match(text, /Kimon Fountoulakis/);
   assert.match(text, /DC 3611/);
   assert.match(text, /Fridays/);
