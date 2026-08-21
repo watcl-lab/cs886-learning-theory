@@ -416,7 +416,6 @@ export default function Home() {
         <section id="late-work" aria-labelledby="late-work-heading">
           <h2 id="late-work-heading">Late Work, Missed Work, and Extensions</h2>
           <p>{lateWorkPolicy.contactStatement}</p>
-          <p>{lateWorkPolicy.missedPresentationStatement}</p>
           <p>{lateWorkPolicy.scopeStatement}</p>
           <p>{lateWorkPolicy.extensionStatement}</p>
         </section>

@@ -86,6 +86,7 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /Students should expect one to two paper presentations during the term/i);
   assert.match(text, /Exact paper assignments will be announced after enrollment is known/i);
   assert.doesNotMatch(text, /Depending on enrollment and assignments|two or three of those papers|instructor overview, a structured comparison, or a focused group discussion/i);
+  assert.doesNotMatch(text, /A missed presentation with an approved reason/i);
   assert.match(text, /30 minutes\s*:?\s*presentation/i);
   assert.match(text, /12 minutes\s*:?\s*discussion and questions/i);
   assert.doesNotMatch(text, /5 minutes\s*:?\s*open questions and discussion|2 minutes\s*:?\s*transition/i);
