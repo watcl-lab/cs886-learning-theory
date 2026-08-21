@@ -112,9 +112,7 @@ export default function Home() {
                 <tr>
                   <td>{projectPresentationSchedule.weeks}</td>
                   <td>{projectPresentationSchedule.dates}</td>
-                  <td>
-                    <a href="#weeks-11-12">{projectPresentationSchedule.title}</a>
-                  </td>
+                  <td>{projectPresentationSchedule.title}</td>
                   <td></td>
                 </tr>
               </tbody>
@@ -125,7 +123,7 @@ export default function Home() {
         <hr />
 
         <section aria-labelledby="schedule-heading">
-          <h2 id="schedule-heading">Detailed 12-Week Schedule</h2>
+          <h2 id="schedule-heading">Detailed Paper Schedule</h2>
           {paperWeeks.map((week) => (
             <article className="week" id={`week-${week.week}`} key={week.week}>
               <h3>
@@ -145,25 +143,6 @@ export default function Home() {
               <PaperList papers={week.papers} />
             </article>
           ))}
-          <article className="week" id="weeks-11-12">
-            <h3>
-              <span className="week-number">
-                Weeks {projectPresentationSchedule.weeks} · {projectPresentationSchedule.dates}
-              </span>
-              {projectPresentationSchedule.title}
-            </h3>
-            <p className="topic-focus">
-              <strong>Topic focus.</strong> {projectPresentationSchedule.topicFocus}
-            </p>
-            <div className="project-session">
-              <p>
-                <strong>Planned format.</strong> {projectPresentationSchedule.plannedFormat}
-              </p>
-              {projectPresentationSchedule.descriptions.map((description) => (
-                <p key={description}>{description}</p>
-              ))}
-            </div>
-          </article>
         </section>
 
         <hr />

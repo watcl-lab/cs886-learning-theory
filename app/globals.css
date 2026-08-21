@@ -253,13 +253,6 @@ table td:first-child {
   color: var(--muted);
 }
 
-.project-session {
-  margin-top: 20px;
-  padding: 16px 18px 2px;
-  border-left: 3px solid var(--gold);
-  background: var(--soft);
-}
-
 .paper-list {
   margin-bottom: 0;
 }

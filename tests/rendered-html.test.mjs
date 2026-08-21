@@ -34,8 +34,10 @@ test("server-renders the updated CS 886 course page", async () => {
   assert.match(html, /Additional readings connect these ideas to efficient fine-tuning/i);
   assert.match(html, /Biases and Optimization of Self-Attention/);
   assert.match(html, /Project Presentations/);
-  assert.match(html, /href="#weeks-11-12"/);
-  assert.doesNotMatch(html, /Project Presentations I|Project Presentations II|href="#week-(?:11|12)"/);
+  assert.doesNotMatch(
+    html,
+    /Project Presentations I|Project Presentations II|href="#weeks-11-12"|id="weeks-11-12"|href="#week-(?:11|12)"/,
+  );
   assert.match(html, /The Lipschitz Constant of Self-Attention/);
   assert.match(html, /Transformers Are Minimax Optimal Nonparametric In-Context Learners/);
   assert.match(html, /Masked Hard-Attention Transformers Recognize Exactly the Star-Free Languages/);
@@ -48,7 +50,7 @@ test("server-renders the updated CS 886 course page", async () => {
   assert.match(html, /December 4, 2026/);
   assert.match(html, /No class on[\s\S]{0,80}October 16, 2026/);
   assert.match(html, /Tentative schedule:[\s\S]{0,120}current schedule is a work in progress/i);
-  assert.match(html, /Detailed 12-Week Schedule/);
+  assert.match(html, /Detailed Paper Schedule/);
   assert.match(html, /Required Course Project/);
   assert.match(html, /Project Presentation Requirements/);
   assert.match(html, />Assessment</);
@@ -62,7 +64,7 @@ test("server-renders the updated CS 886 course page", async () => {
   assert.match(html, /40 scheduled paper slots/);
   assert.match(html, /45 minutes, including questions/);
   assert.match(html, /or an equivalent amount of assessed presentation work/);
-  assert.match(html, /10-minute presentation/);
+  assert.match(html, /10-minute talk/);
   assert.match(html, /2 minutes of questions/);
   assert.match(html, /Project Deliverables/);
   assert.match(html, /Project Evaluation/);
