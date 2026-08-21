@@ -93,7 +93,7 @@ export const readingExpectations =
   "For every scheduled paper, all students should read at least the abstract, introduction, formal setup, main theorem or principal result, and discussion or limitations. The lead presenter is responsible for the proof details and appendices needed to explain the result accurately. Students are not expected to read every technical appendix of all four weekly papers.";
 
 export const presentationGuidance =
-  "Paper discussions take place during Weeks 1–10. Each week contains four scheduled papers. Depending on enrollment and assignments, two or three of those papers will receive a full student-led presentation; the remaining papers will be discussed through an instructor overview, a structured comparison, or a focused group discussion.";
+  "Paper discussions take place during Weeks 1–10. Each week contains four scheduled papers.";
 
 export const presentationWorkload =
   "Every student completes the same assessed presentation workload: one lead paper presentation and one designated discussant role. Exact paper assignments will be announced after enrollment is known.";
