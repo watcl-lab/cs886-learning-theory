@@ -90,7 +90,7 @@ export const learningOutcomes = [
 ] as const;
 
 export const readingExpectations =
-  "For every scheduled paper, all students should read at least the abstract, introduction, formal setup, main theorem or principal result, and discussion or limitations. The lead presenter is responsible for the proof details and appendices needed to explain the result accurately. Students are not expected to read every technical appendix of all four weekly papers.";
+  "For every scheduled paper, all students should read at least the abstract, introduction, formal setup, main theorem or principal result, and discussion or limitations. The presenter is responsible for the proof details and appendices needed to explain the result accurately. Students are not expected to read every technical appendix of all four weekly papers.";
 
 export const presentationGuidance =
   "Paper discussions take place during Weeks 1–10. Each week contains four scheduled papers.";
@@ -99,7 +99,7 @@ export const presentationWorkload =
   "Students should expect one to two paper presentations during the term. Exact paper assignments will be announced after enrollment is known.";
 
 export const meetingFormat = [
-  { duration: "30 minutes", activity: "Lead presentation" },
+  { duration: "30 minutes", activity: "Presentation" },
   { duration: "12 minutes", activity: "Discussion and questions" },
 ] as const;
 
