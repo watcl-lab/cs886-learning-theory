@@ -42,7 +42,7 @@ export const courseSummary =
 
 export const courseDescription = {
   paragraphs: [
-    "Learning Theory for Modern AI: Transformers and Large Language Models is a graduate research seminar on the computational and statistical principles underlying modern sequence models. The core paper meetings study the inductive biases and trainability of self-attention; transformer expressivity, formal languages, and computational lower bounds; positional generalization and infinite-limit theory; associative memory and in-context learning; chain-of-thought computation and learnability; and reasoning curricula and next-token prediction under misspecification. Additional project-oriented readings extend these themes to parameter-efficient adaptation, preference optimization, language-model exploration, calibration, watermarking, and hallucination.",
+    "Learning Theory for Modern AI is a graduate seminar about how transformers and large language models learn, what they can compute, and why they sometimes fail. Through theoretical papers, we will study attention, optimization, generalization, in-context learning, and reasoning. Additional readings connect these ideas to efficient fine-tuning, learning from human preferences, hallucination, and watermarking.",
   ],
 } as const;
 

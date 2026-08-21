@@ -30,6 +30,8 @@ test("server-renders the updated CS 886 course page", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>CS 886: Learning Theory for Modern AI<\/title>/i);
+  assert.match(html, /how transformers and large language models learn, what they can compute, and why they sometimes fail/i);
+  assert.match(html, /Additional readings connect these ideas to efficient fine-tuning/i);
   assert.match(html, /Biases and Optimization of Self-Attention/);
   assert.match(html, /Project Presentations/);
   assert.match(html, /href="#weeks-11-12"/);
@@ -74,7 +76,7 @@ test("server-renders the updated CS 886 course page", async () => {
   assert.equal(paperLinkMentions % 48, 0);
   assert.doesNotMatch(
     html,
-    /24 weekly meetings|96 papers|theorem-first|useful maximum is ten substantive slides|Scope of the Course|Paper-Selection and Citation Policy|Recommended Weekly Meeting Format|Reading Expectations|Learning Outcomes|Optional Project|Additional Marks|80%|at least two presentations|The first ten weekly meetings are organized around four influential papers|The required course project may pursue a new theoretical result|Exact proposal, checkpoint, and final-report deadlines will be announced by the instructor/i,
+    /24 weekly meetings|96 papers|theorem-first|useful maximum is ten substantive slides|Scope of the Course|Paper-Selection and Citation Policy|Recommended Weekly Meeting Format|Reading Expectations|Learning Outcomes|Optional Project|Additional Marks|80%|at least two presentations|The first ten weekly meetings are organized around four influential papers|The required course project may pursue a new theoretical result|Exact proposal, checkpoint, and final-report deadlines will be announced by the instructor|computational and statistical principles underlying modern sequence models/i,
   );
   assert.doesNotMatch(html, /Parameter-Efficient Adaptation and Preference Learning|RLHF Exploration, Hallucination, and Watermarking/);
   assert.doesNotMatch(
