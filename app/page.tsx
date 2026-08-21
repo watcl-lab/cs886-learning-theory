@@ -5,7 +5,6 @@ import {
   courseFacts,
   courseProject,
   courseSchedule,
-  designatedDiscussant,
   generativeAiPolicy,
   lateWorkPolicy,
   learningOutcomes,
@@ -306,9 +305,6 @@ export default function Home() {
               <li key={requirement}>{requirement}</li>
             ))}
           </ol>
-
-          <h3>Designated Discussant</h3>
-          <p>{designatedDiscussant}</p>
         </section>
 
         <section id="project" aria-labelledby="project-heading">
