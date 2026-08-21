@@ -113,6 +113,9 @@ export default function Home() {
           <p>
             <strong>Required materials.</strong> {courseDescription.requiredMaterials}
           </p>
+          <p>
+            <strong>Note for non-theory students.</strong> {courseDescription.nonTheoryStudents}
+          </p>
 
           <dl className="course-logistics">
             <div className="logistics-item">

@@ -66,6 +66,8 @@ export const courseDescription = {
   recommendedBackground:
     "Students should have mathematical maturity and working knowledge of probability, linear algebra, optimization, and introductory machine learning. Prior familiarity with transformers is helpful but not required.",
   requiredMaterials: `No textbook is required. All assigned papers are linked from this website. Final project reports and reproducibility materials will be submitted through ${courseFacts.coursePlatform}, where marked work and feedback will also be returned.`,
+  nonTheoryStudents:
+    "The course is open to students without a theory background. You can still gain substantial insight into how transformers work and use the course project to scrutinize existing theoretical claims through empirical evidence.",
 } as const;
 
 export const navigationItems = [
