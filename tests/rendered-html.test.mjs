@@ -84,6 +84,7 @@ test("server-renders the corrected course content and operational policies", asy
   ]) assert.match(text, new RegExp(heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
 
   assert.match(text, /Every student completes the same assessed presentation workload:\s*one lead paper presentation and one designated discussant role/i);
+  assert.doesNotMatch(text, /Depending on enrollment and assignments|two or three of those papers|instructor overview, a structured comparison, or a focused group discussion/i);
   assert.match(text, /30 minutes\s*:?\s*lead presentation/i);
   assert.match(text, /5 minutes\s*:?\s*designated discussant response/i);
   assert.match(text, /5 minutes\s*:?\s*open questions and discussion/i);
