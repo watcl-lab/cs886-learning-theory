@@ -275,6 +275,11 @@ export default function Home() {
               <p className="topic-focus">
                 <strong>Topic focus.</strong> {week.topicFocus}
               </p>
+              {week.presentationNote ? (
+                <p className="topic-focus">
+                  <strong>Presentation plan.</strong> {week.presentationNote}
+                </p>
+              ) : null}
               <WeekPaperList week={week} />
               <a className="back-to-schedule" href="#schedule">
                 Back to schedule

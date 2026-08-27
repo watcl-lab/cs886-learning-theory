@@ -18,6 +18,7 @@ export type CourseWeek = {
   title: string;
   guidingQuestion: string;
   topicFocus: string;
+  presentationNote?: string;
   papers: readonly CoursePaper[];
   subtopics?: readonly CourseSubtopic[];
 };
@@ -37,6 +38,7 @@ export const courseFacts = {
   deliveryMode: "In person",
   meetingDay: "Fridays",
   meetingTime: "1:30–4:20 p.m.",
+  meetingDurationMinutes: 170,
   meetingLocation: "TBA",
   coursePlatform: "TBA",
   officialOutlineUrl: "TBA",
@@ -51,7 +53,8 @@ export const courseFacts = {
   scheduledPapersPerMeeting: 4,
   paperMeetings: "Weeks 1–10",
   projectMeetings: "Weeks 11–12",
-  expectedProjectPresentations: "approximately 25",
+  plannedEnrollment: 25,
+  expectedProjectPresentations: 25,
   lastUpdated: "August 27, 2026",
 } as const;
 
@@ -90,18 +93,51 @@ export const learningOutcomes = [
 ] as const;
 
 export const readingExpectations =
-  "For every scheduled paper, all students should read at least the abstract, introduction, formal setup, main theorem or principal result, and discussion or limitations. The presenter is responsible for the proof details and appendices needed to explain the result accurately. Students are not expected to read every technical appendix of all four weekly papers.";
+  "For every scheduled paper, all students should read at least the abstract, introduction, formal setup, main theorem or principal result, and discussion or limitations. The presenter or presenting team is responsible for the proof details and appendices needed to explain the result accurately. Students are not expected to read every technical appendix of all four weekly papers.";
 
-export const presentationGuidance =
-  "Paper discussions take place during Weeks 1–10. Each week contains four scheduled papers.";
-
-export const presentationWorkload =
-  "Students should expect one to two paper presentations during the term. Exact paper assignments will be announced after enrollment is known.";
+const paperPresentationMinutes = 30;
+const paperDiscussionMinutes = 12;
 
 export const meetingFormat = [
-  { duration: "30 minutes", activity: "Presentation" },
-  { duration: "12 minutes", activity: "Discussion and questions" },
+  { duration: `${paperPresentationMinutes} minutes`, activity: "Presentation" },
+  { duration: `${paperDiscussionMinutes} minutes`, activity: "Discussion and questions" },
 ] as const;
+
+const instructorLedWeek = 1;
+const firstStudentPresentationWeek = 2;
+const lastStudentPresentationWeek = 10;
+const studentPaperMeetingCount = lastStudentPresentationWeek - firstStudentPresentationWeek + 1;
+const studentPaperPresentationSlots = studentPaperMeetingCount * courseFacts.scheduledPapersPerMeeting;
+const minimumPaperPresentationsPerStudent = 2;
+const studentPaperPresentationAssignments =
+  courseFacts.plannedEnrollment * minimumPaperPresentationsPerStudent;
+const coPresentedPaperSlots = studentPaperPresentationAssignments - studentPaperPresentationSlots;
+const soloPaperPresentationSlots = studentPaperPresentationSlots - coPresentedPaperSlots;
+
+export const paperPresentationPlan = {
+  plannedEnrollment: courseFacts.plannedEnrollment,
+  instructorLedWeek,
+  firstStudentPresentationWeek,
+  lastStudentPresentationWeek,
+  studentPaperMeetingCount,
+  papersPerMeeting: courseFacts.scheduledPapersPerMeeting,
+  studentPaperPresentationSlots,
+  minimumPaperPresentationsPerStudent,
+  studentPaperPresentationAssignments,
+  soloPaperPresentationSlots,
+  coPresentedPaperSlots,
+  paperPresentationMinutes,
+  paperDiscussionMinutes,
+  minutesPerPaper: paperPresentationMinutes + paperDiscussionMinutes,
+  scheduledPaperMinutesPerMeeting:
+    courseFacts.scheduledPapersPerMeeting * (paperPresentationMinutes + paperDiscussionMinutes),
+} as const;
+
+export const presentationGuidance =
+  `Week ${instructorLedWeek} is instructor-led: the instructor will present all four papers, and that week does not count toward students' presentation workload. Student paper presentations begin in Week ${firstStudentPresentationWeek} and run through Week ${lastStudentPresentationWeek}. Each of those ${studentPaperMeetingCount} meetings contains ${courseFacts.scheduledPapersPerMeeting} paper-presentation slots.`;
+
+export const presentationWorkload =
+  `With a planning enrollment of ${courseFacts.plannedEnrollment} students, Weeks ${firstStudentPresentationWeek}–${lastStudentPresentationWeek} provide ${studentPaperMeetingCount} × ${courseFacts.scheduledPapersPerMeeting} = ${studentPaperPresentationSlots} paper-presentation slots. Each student will give at least ${minimumPaperPresentationsPerStudent} paper presentations, so ${courseFacts.plannedEnrollment} × ${minimumPaperPresentationsPerStudent} = ${studentPaperPresentationAssignments} student presentation assignments are required. The plan uses ${soloPaperPresentationSlots} solo presentation slots and ${coPresentedPaperSlots} co-presented slots, which gives ${soloPaperPresentationSlots} + 2 × ${coPresentedPaperSlots} = ${studentPaperPresentationAssignments} assignments. Co-presenters share the ${paperPresentationMinutes}-minute presentation for their assigned paper. The required project presentation is separate and does not count toward this minimum. Exact paper assignments will be announced after enrollment is confirmed.`;
 
 export const presentationRequirements = [
   "What is the formal problem? State the data-generating process, hypothesis or architecture class, loss, training rule, and test criterion.",
@@ -196,9 +232,35 @@ export const projectDeadlines = [
   },
 ] as const;
 
+const projectTalkMinutes = 10;
+const projectQuestionMinutes = 2;
+const projectTransitionMinutes = 1;
+const projectPresentationMinutes = projectTalkMinutes + projectQuestionMinutes + projectTransitionMinutes;
+const projectPresentationsByMeeting = [12, 13] as const;
+const projectPresentationMeetingCount = projectPresentationsByMeeting.length;
+const totalProjectPresentationMinutes =
+  courseFacts.expectedProjectPresentations * projectPresentationMinutes;
+const totalProjectMeetingMinutes = projectPresentationMeetingCount * courseFacts.meetingDurationMinutes;
+
+export const projectPresentationPlan = {
+  presentationCount: courseFacts.expectedProjectPresentations,
+  meetingCount: projectPresentationMeetingCount,
+  presentationsByMeeting: projectPresentationsByMeeting,
+  talkMinutes: projectTalkMinutes,
+  questionMinutes: projectQuestionMinutes,
+  transitionMinutes: projectTransitionMinutes,
+  minutesPerPresentation: projectPresentationMinutes,
+  usedMinutesByMeeting: projectPresentationsByMeeting.map(
+    (count) => count * projectPresentationMinutes,
+  ),
+  totalPresentationMinutes: totalProjectPresentationMinutes,
+  totalAvailableMinutes: totalProjectMeetingMinutes,
+  remainingMinutes: totalProjectMeetingMinutes - totalProjectPresentationMinutes,
+} as const;
+
 export const projectPresentation = {
   introduction:
-    "The final two three-hour meetings are reserved for approximately 25 individual project presentations. The planned format is a 10-minute talk, 2 minutes of questions, and a 1-minute transition. The schedule may be adjusted slightly after enrollment and approved group projects are known.",
+    `Based on the planning enrollment of ${courseFacts.plannedEnrollment} students, Weeks 11–12 contain ${courseFacts.expectedProjectPresentations} individual project presentations: ${projectPresentationsByMeeting[0]} in one meeting and ${projectPresentationsByMeeting[1]} in the other. Each slot is ${projectPresentationMinutes} minutes: a ${projectTalkMinutes}-minute talk, ${projectQuestionMinutes} minutes of questions, and a ${projectTransitionMinutes}-minute transition. The two ${courseFacts.meetingDurationMinutes}-minute meetings provide ${totalProjectMeetingMinutes} minutes in total; the presentations use ${totalProjectPresentationMinutes} minutes, leaving ${totalProjectMeetingMinutes - totalProjectPresentationMinutes} minutes. The ${projectPresentationsByMeeting[0]}-presentation meeting uses ${projectPresentationsByMeeting[0] * projectPresentationMinutes} minutes, and the ${projectPresentationsByMeeting[1]}-presentation meeting uses ${projectPresentationsByMeeting[1] * projectPresentationMinutes} minutes. Timing will therefore be strict. Project presentations do not count toward the paper-presentation minimum.`,
   requirements: [
     "The precise research question and its connection to the course.",
     "The existing theoretical result, conjecture, or limitation being extended or examined.",
@@ -280,8 +342,8 @@ export const projectPresentationSchedule = {
     "What did the projects establish, and which theoretical questions remain open?",
 } as const;
 
-// Weeks 1–10 are four-paper theory meetings; Weeks 11–12 are reserved for
-// project presentations and contain no scheduled readings.
+// Week 1 is instructor-led. Weeks 2–10 contain student paper presentations.
+// Weeks 11–12 are reserved for project presentations and contain no readings.
 export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 1,
@@ -291,6 +353,8 @@ export const courseSchedule: readonly CourseWeek[] = [
       "When can neural networks learn to execute algorithms exactly from a small number of examples, and when is exactness hard to learn or certify?",
     topicFocus:
       "Exact certification, exact execution of graph algorithms and algorithmic instructions, and statistical-query hardness for semiautomata.",
+    presentationNote:
+      "All four papers will be presented by the instructor. Student paper presentations begin in Week 2.",
     papers: [
       paper(
         "Artur Back de Luca and Kimon Fountoulakis",
