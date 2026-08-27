@@ -90,8 +90,18 @@ test("server-renders the corrected course content and operational policies", asy
     "University Policies and Supports",
   ]) assert.match(text, new RegExp(heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
 
-  assert.match(text, /Students should expect one to two paper presentations during the term/i);
-  assert.match(text, /Exact paper assignments will be announced after enrollment is known/i);
+  assert.match(text, /Week 1 is instructor-led: the instructor will present all four papers/i);
+  assert.match(text, /does not count toward students' presentation workload/i);
+  assert.match(text, /Student paper presentations begin in Week 2 and run through Week 10/i);
+  assert.match(text, /planning enrollment of 25 students/i);
+  assert.match(text, /9 × 4 = 36 paper-presentation slots/i);
+  assert.match(text, /Each student will give at least 2 paper presentations/i);
+  assert.match(text, /25 × 2 = 50 student presentation assignments/i);
+  assert.match(text, /22 solo presentation slots and 14 co-presented slots/i);
+  assert.match(text, /22 \+ 2 × 14 = 50 assignments/i);
+  assert.match(text, /Co-presenters share the 30-minute presentation/i);
+  assert.match(text, /project presentation is separate and does not count toward this minimum/i);
+  assert.match(text, /Exact paper assignments will be announced after enrollment is confirmed/i);
   assert.doesNotMatch(text, /Depending on enrollment and assignments|two or three of those papers|instructor overview, a structured comparison, or a focused group discussion/i);
   assert.doesNotMatch(text, /A missed presentation with an approved reason/i);
   assert.doesNotMatch(text, /Extensions should be arranged before the deadline whenever possible|Approved accommodations and University procedures supersede this default policy/i);
@@ -103,6 +113,14 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /10-minute talk/i);
   assert.match(text, /2 minutes of questions/i);
   assert.match(text, /1-minute transition/i);
+  assert.match(text, /25 individual project presentations/i);
+  assert.match(text, /12 in one meeting and 13 in the other/i);
+  assert.match(text, /Each slot is 13 minutes/i);
+  assert.match(text, /two 170-minute meetings provide 340 minutes in total/i);
+  assert.match(text, /presentations use 325 minutes, leaving 15 minutes/i);
+  assert.match(text, /12-presentation meeting uses 156 minutes/i);
+  assert.match(text, /13-presentation meeting uses 169 minutes/i);
+  assert.match(text, /Timing will therefore be strict/i);
   assert.match(text, /November 26, 2026/);
   assert.match(text, /48-hour grace period/i);
   assert.match(text, /(?:five|5) percentage points for each additional 24-hour period/i);
@@ -116,7 +134,7 @@ test("server-renders the corrected course content and operational policies", asy
 
   assert.doesNotMatch(html, /TODO_INSTRUCTOR_/i);
   assert.doesNotMatch(text, /Assignment Screening|assignment-screening|automated screening software/i);
-  assert.doesNotMatch(text, /45 minutes, including questions|one or two paper presentations|40 scheduled paper slots/i);
+  assert.doesNotMatch(text, /45 minutes, including questions|one or two paper presentations|40 scheduled paper slots|approximately 25 individual project presentations|final two three-hour meetings/i);
   assert.doesNotMatch(text, /Robert Wang published his final project/i);
   assert.doesNotMatch(text, /Project proposal and progress checkpoint|progress checkpoint deadline/i);
   assert.doesNotMatch(html, /\[paper\]/i);
@@ -131,8 +149,8 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   const data = await loadCourseData();
   const {
     additionalReadings, assessment, courseFacts, courseProject, courseSchedule,
-    generativeAiPolicy, lateWorkPolicy, navigationItems, projectDeadlines,
-    projectPresentationSchedule, universityPolicies,
+    generativeAiPolicy, lateWorkPolicy, navigationItems, paperPresentationPlan,
+    projectDeadlines, projectPresentationPlan, projectPresentationSchedule, universityPolicies,
   } = data;
   const scheduledPapers = courseSchedule.flatMap((week) => week.papers);
   const allPapers = [...scheduledPapers, ...additionalReadings];
@@ -145,6 +163,7 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     "November 20, 2026", "November 27, 2026", "December 4, 2026",
   ]);
   assert.ok(courseSchedule.slice(0, 10).every((week) => week.papers.length === 4));
+  assert.equal(courseSchedule.slice(1, 10).flatMap((week) => week.papers).length, 36);
   assert.ok(courseSchedule.slice(10).every((week) => week.papers.length === 0));
   assert.equal(scheduledPapers.length, 40);
   assert.equal(additionalReadings.length, 10);
@@ -187,11 +206,61 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(courseFacts.meetingCount, 12);
   assert.equal(courseFacts.scheduledPapersPerMeeting, 4);
   assert.equal(courseFacts.meetingTime, "1:30–4:20 p.m.");
+  assert.equal(courseFacts.meetingDurationMinutes, 170);
+  assert.equal(courseFacts.plannedEnrollment, 25);
+  assert.equal(courseFacts.expectedProjectPresentations, 25);
   for (const key of ["officeHours", "meetingLocation", "coursePlatform", "officialOutlineUrl"]) assert.equal(courseFacts[key], "TBA");
+
+  assert.equal(paperPresentationPlan.instructorLedWeek, 1);
+  assert.equal(paperPresentationPlan.firstStudentPresentationWeek, 2);
+  assert.equal(paperPresentationPlan.lastStudentPresentationWeek, 10);
+  assert.equal(paperPresentationPlan.studentPaperMeetingCount, 9);
+  assert.equal(paperPresentationPlan.papersPerMeeting, 4);
+  assert.equal(paperPresentationPlan.studentPaperPresentationSlots, 36);
+  assert.equal(paperPresentationPlan.minimumPaperPresentationsPerStudent, 2);
+  assert.equal(paperPresentationPlan.studentPaperPresentationAssignments, 50);
+  assert.equal(paperPresentationPlan.soloPaperPresentationSlots, 22);
+  assert.equal(paperPresentationPlan.coPresentedPaperSlots, 14);
+  assert.equal(
+    paperPresentationPlan.soloPaperPresentationSlots + paperPresentationPlan.coPresentedPaperSlots,
+    paperPresentationPlan.studentPaperPresentationSlots,
+  );
+  assert.equal(
+    paperPresentationPlan.soloPaperPresentationSlots + 2 * paperPresentationPlan.coPresentedPaperSlots,
+    paperPresentationPlan.studentPaperPresentationAssignments,
+  );
+  assert.equal(paperPresentationPlan.paperPresentationMinutes, 30);
+  assert.equal(paperPresentationPlan.paperDiscussionMinutes, 12);
+  assert.equal(paperPresentationPlan.minutesPerPaper, 42);
+  assert.equal(paperPresentationPlan.scheduledPaperMinutesPerMeeting, 168);
+  assert.ok(paperPresentationPlan.scheduledPaperMinutesPerMeeting <= courseFacts.meetingDurationMinutes);
+
+  assert.equal(projectPresentationPlan.presentationCount, 25);
+  assert.equal(projectPresentationPlan.meetingCount, 2);
+  assert.deepEqual([...projectPresentationPlan.presentationsByMeeting], [12, 13]);
+  assert.equal(projectPresentationPlan.talkMinutes, 10);
+  assert.equal(projectPresentationPlan.questionMinutes, 2);
+  assert.equal(projectPresentationPlan.transitionMinutes, 1);
+  assert.equal(projectPresentationPlan.minutesPerPresentation, 13);
+  assert.deepEqual(projectPresentationPlan.usedMinutesByMeeting, [156, 169]);
+  assert.equal(projectPresentationPlan.totalPresentationMinutes, 325);
+  assert.equal(projectPresentationPlan.totalAvailableMinutes, 340);
+  assert.equal(projectPresentationPlan.remainingMinutes, 15);
+  assert.equal(
+    projectPresentationPlan.presentationsByMeeting.reduce((total, count) => total + count, 0),
+    projectPresentationPlan.presentationCount,
+  );
+  assert.ok(
+    projectPresentationPlan.usedMinutesByMeeting.every(
+      (minutes) => minutes <= courseFacts.meetingDurationMinutes,
+    ),
+  );
 
   const firstWeek = courseSchedule[0];
   assert.equal(firstWeek.title, "Exact Learning");
   assert.match(firstWeek.guidingQuestion, /execute algorithms exactly/i);
+  assert.match(firstWeek.presentationNote, /All four papers will be presented by the instructor/i);
+  assert.match(firstWeek.presentationNote, /Student paper presentations begin in Week 2/i);
   assert.deepEqual(firstWeek.papers.map((paper) => paper.title), [
     "Certification from Examples is Hard for Circuits and Transformers under Minimal Overparametrization",
     "Learning to Execute Graph Algorithms Exactly with Graph Neural Networks",
