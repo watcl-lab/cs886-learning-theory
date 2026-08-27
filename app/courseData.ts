@@ -499,7 +499,7 @@ export const courseSchedule: readonly CourseWeek[] = [
     guidingQuestion:
       "Which tasks impose computational lower bounds, and how can transformers implement programs and automata?",
     topicFocus:
-      "Attention time complexity, fine-grained lower bounds, RASP program constructions, and computational expressivity.",
+      "Attention time complexity, fine-grained lower bounds, automata shortcuts, and programmable looped computation.",
     papers: [
       paper(
         "Feyza Duman Keles, Pruthuvi Mahesakya Wijewardena, and Chinmay Hegde",
@@ -516,18 +516,18 @@ export const courseSchedule: readonly CourseWeek[] = [
         "https://proceedings.neurips.cc/paper_files/paper/2023/hash/c72861451d6fa9dfa64831102b9bb71a-Abstract-Conference.html",
       ),
       paper(
-        "Gail Weiss, Yoav Goldberg, and Eran Yahav",
-        "Thinking Like Transformers",
-        "ICML 2021",
-        "Introduces the RASP programming language and compiles algorithmic sequence operations into transformer-like computations.",
-        "https://proceedings.mlr.press/v139/weiss21a.html",
+        "Bingbin Liu, Jordan T. Ash, Surbhi Goel, Akshay Krishnamurthy, and Cyril Zhang",
+        "Transformers Learn Shortcuts to Automata",
+        "ICLR 2023 oral",
+        "Proves that transformers can exactly simulate any finite-state automaton using O(log T) depth and that broad classes of solvable automata admit constant-depth simulations. It connects automata theory, semigroup theory, and circuit complexity, and examines when gradient-based training learns these parallel shortcut algorithms and why they may fail to generalize out of distribution.",
+        "https://openreview.net/forum?id=De4FYqjFueZ",
       ),
       paper(
-        "Satwik Bhattamishra, Arkil Patel, and Navin Goyal",
-        "On the Computational Power of Transformers and Its Implications in Sequence Modeling",
-        "CoNLL 2020",
-        "Studies which automata and algorithmic computations transformers can simulate and how positional encodings affect power.",
-        "https://aclanthology.org/2020.conll-1.37/",
+        "Angeliki Giannou, Shashank Rajput, Jy-Yong Sohn, Kangwook Lee, Jason D. Lee, and Dimitris Papailiopoulos",
+        "Looped Transformers as Programmable Computers",
+        "ICML 2023",
+        "Constructs a constant-depth looped transformer that implements an explicit instruction-set architecture, including memory access, nonlinear operations, program counters, conditional branches, linear-algebra routines, and backpropagation. It clarifies how weight tying and recurrent execution turn a fixed transformer block into a programmable computational device.",
+        "https://proceedings.mlr.press/v202/giannou23a.html",
       ),
     ],
   },

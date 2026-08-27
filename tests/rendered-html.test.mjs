@@ -126,6 +126,13 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /What did the projects establish, and which theoretical questions remain open\?/i);
   assert.match(text, /Tight Sample Complexity of Transformers/);
   assert.match(text, /Transformers Provably Learn Chain-of-Thought Reasoning with Length Generalization/);
+  assert.match(text, /Bingbin Liu, Jordan T\. Ash, Surbhi Goel, Akshay Krishnamurthy, and Cyril Zhang/i);
+  assert.match(text, /Transformers Learn Shortcuts to Automata/i);
+  assert.match(text, /ICLR 2023 oral/i);
+  assert.match(text, /exactly simulate any finite-state automaton using O\(log T\) depth/i);
+  assert.match(text, /Angeliki Giannou, Shashank Rajput, Jy-Yong Sohn, Kangwook Lee, Jason D\. Lee, and Dimitris Papailiopoulos/i);
+  assert.match(text, /Looped Transformers as Programmable Computers/i);
+  assert.match(text, /explicit instruction-set architecture/i);
 
   assert.doesNotMatch(html, /TODO_INSTRUCTOR_/i);
   assert.doesNotMatch(text, /Assignment Screening|assignment-screening|automated screening software/i);
@@ -135,8 +142,10 @@ test("server-renders the corrected course content and operational policies", asy
   assert.doesNotMatch(html, /\[paper\]/i);
   assert.doesNotMatch(html, /paper-impact|Highly cited|Strong recent uptake|>Established<|>Landmark</i);
   assert.doesNotMatch(html, /href="#weeks-11-12"|id="weeks-11-12"|href="#week-(?:11|12)"/i);
-  assert.doesNotMatch(html, /2020\.conll-1\.25|v235\/huang24l\.html/i);
-  assert.match(html, /2020\.conll-1\.37/);
+  assert.doesNotMatch(html, /2020\.conll-1\.(?:25|37)|v139\/weiss21a\.html|v235\/huang24l\.html/i);
+  assert.doesNotMatch(text, /Thinking Like Transformers|On the Computational Power of Transformers and Its Implications in Sequence Modeling|RASP program constructions/i);
+  assert.match(html, /openreview\.net\/forum\?id=De4FYqjFueZ/);
+  assert.match(html, /v202\/giannou23a\.html/);
   assert.match(html, /v235\/huang24d\.html/);
 });
 
@@ -275,13 +284,31 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   ]);
 
   const allUrls = allPapers.map((paper) => paper.link);
-  for (const url of ["https://aclanthology.org/2020.conll-1.37/", "https://proceedings.mlr.press/v235/huang24d.html"]) assert.ok(allUrls.includes(url));
-  for (const url of ["https://aclanthology.org/2020.conll-1.25/", "https://proceedings.mlr.press/v235/huang24l.html"]) assert.ok(!allUrls.includes(url));
+  for (const url of [
+    "https://openreview.net/forum?id=De4FYqjFueZ",
+    "https://proceedings.mlr.press/v202/giannou23a.html",
+    "https://proceedings.mlr.press/v235/huang24d.html",
+  ]) assert.ok(allUrls.includes(url));
+  for (const url of [
+    "https://proceedings.mlr.press/v139/weiss21a.html",
+    "https://aclanthology.org/2020.conll-1.37/",
+    "https://aclanthology.org/2020.conll-1.25/",
+    "https://proceedings.mlr.press/v235/huang24l.html",
+  ]) assert.ok(!allUrls.includes(url));
 
   const scheduledTitles = scheduledPapers.map((paper) => paper.title);
-  for (const title of ["Tight Sample Complexity of Transformers", "Transformers Provably Learn Chain-of-Thought Reasoning with Length Generalization"]) {
+  for (const title of [
+    "Tight Sample Complexity of Transformers",
+    "Transformers Provably Learn Chain-of-Thought Reasoning with Length Generalization",
+    "Transformers Learn Shortcuts to Automata",
+    "Looped Transformers as Programmable Computers",
+  ]) {
     assert.equal(scheduledTitles.filter((candidate) => candidate === title).length, 1);
   }
+  for (const title of [
+    "Thinking Like Transformers",
+    "On the Computational Power of Transformers and Its Implications in Sequence Modeling",
+  ]) assert.ok(!scheduledTitles.includes(title));
   const additionalTitles = additionalReadings.map((paper) => paper.title);
   for (const title of [
     "How Do Transformers Learn In-Context Beyond Simple Functions? A Case Study on Learning with Representations",
@@ -310,6 +337,15 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   ];
   assert.deepEqual(weekTwo.papers.slice(0, 2).map((paper) => paper.title), requestedWeekTwoOrder);
   assert.deepEqual([...weekTwo.subtopics[0].paperTitles], requestedWeekTwoOrder);
+  const weekFour = courseSchedule.find(({ week }) => week === 4);
+  assert.deepEqual(weekFour.papers.map((paper) => paper.title), [
+    "On the Computational Complexity of Self-Attention",
+    "Fast Attention Requires Bounded Entries",
+    "Transformers Learn Shortcuts to Automata",
+    "Looped Transformers as Programmable Computers",
+  ]);
+  assert.match(weekFour.topicFocus, /automata shortcuts.*programmable looped computation/i);
+  assert.doesNotMatch(weekFour.topicFocus, /RASP/i);
 
   const serializedData = JSON.stringify(data);
   assert.doesNotMatch(serializedData, /TODO_INSTRUCTOR_|"impact"\s*:|subweights?|assignment.?screening/i);
