@@ -303,6 +303,13 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     assert.equal(week.subtopics.length, 2);
     assert.equal(new Set(week.subtopics.flatMap((subtopic) => subtopic.paperTitles)).size, 4);
   }
+  const weekTwo = courseSchedule.find(({ week }) => week === 2);
+  const requestedWeekTwoOrder = [
+    "Improving Transformer Optimization Through Better Initialization",
+    "On Layer Normalization in the Transformer Architecture",
+  ];
+  assert.deepEqual(weekTwo.papers.slice(0, 2).map((paper) => paper.title), requestedWeekTwoOrder);
+  assert.deepEqual([...weekTwo.subtopics[0].paperTitles], requestedWeekTwoOrder);
 
   const serializedData = JSON.stringify(data);
   assert.doesNotMatch(serializedData, /TODO_INSTRUCTOR_|"impact"\s*:|subweights?|assignment.?screening/i);

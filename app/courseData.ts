@@ -408,8 +408,8 @@ export const courseSchedule: readonly CourseWeek[] = [
         description:
           "How normalization placement and initialization shape gradient flow and stable optimization.",
         paperTitles: [
-          "On Layer Normalization in the Transformer Architecture",
           "Improving Transformer Optimization Through Better Initialization",
+          "On Layer Normalization in the Transformer Architecture",
         ],
       },
       {
@@ -424,18 +424,18 @@ export const courseSchedule: readonly CourseWeek[] = [
     ],
     papers: [
       paper(
-        "Ruibin Xiong et al.",
-        "On Layer Normalization in the Transformer Architecture",
-        "ICML 2020",
-        "Explains the gradient behavior of pre-layer-normalized and post-layer-normalized transformers and gives a theoretical account of warmup sensitivity.",
-        "https://arxiv.org/abs/2002.04745",
-      ),
-      paper(
         "Xiao Shi Huang, Felipe Perez, Jimmy Ba, and Maksims Volkovs",
         "Improving Transformer Optimization Through Better Initialization",
         "ICML 2020",
         "Derives signal- and gradient-preserving initialization principles for deep transformers and connects them to stable optimization.",
         "https://proceedings.mlr.press/v119/huang20f.html",
+      ),
+      paper(
+        "Ruibin Xiong et al.",
+        "On Layer Normalization in the Transformer Architecture",
+        "ICML 2020",
+        "Explains the gradient behavior of pre-layer-normalized and post-layer-normalized transformers and gives a theoretical account of warmup sensitivity.",
+        "https://arxiv.org/abs/2002.04745",
       ),
       paper(
         "Chulhee Yun, Srinadh Bhojanapalli, Ankit Singh Rawat, Sashank J. Reddi, and Sanjiv Kumar",
