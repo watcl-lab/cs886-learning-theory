@@ -52,7 +52,7 @@ export const courseFacts = {
   paperMeetings: "Weeks 1–10",
   projectMeetings: "Weeks 11–12",
   expectedProjectPresentations: "approximately 25",
-  lastUpdated: "August 21, 2026",
+  lastUpdated: "August 27, 2026",
 } as const;
 
 export const courseSummary =
@@ -60,7 +60,7 @@ export const courseSummary =
 
 export const courseDescription = {
   paragraphs: [
-    "Learning Theory for Modern AI is a graduate research seminar about how transformers and large language models learn, what they can compute, how they generalize, and why they sometimes fail. Through theoretical papers, we will study self-attention, optimization, expressivity, computational limitations, in-context learning, and reasoning.",
+    "Learning Theory for Modern AI is a graduate research seminar about how transformers and large language models learn, what they can compute, how they generalize, and why they sometimes fail. Through theoretical papers, we will study exact learning, self-attention, optimization, expressivity, computational limitations, in-context learning, and reasoning.",
     "The main schedule places particular emphasis on the theory of in-context learning and reasoning. Additional readings connect the central themes to efficient fine-tuning, preference learning, hallucination, watermarking, and other current topics. The course culminates in an individual research project that may develop a new theoretical result or rigorously test an existing theoretical prediction.",
   ],
   recommendedBackground:
@@ -286,38 +286,39 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 1,
     date: "September 11, 2026",
-    title: "Biases and Optimization of Self-Attention",
+    title: "Exact Learning",
     guidingQuestion:
-      "What functions and token interactions does self-attention learn efficiently, and which max-margin solutions does gradient descent select?",
-    topicFocus: "Rank collapse, Lipschitz stability, implicit bias, and max-margin token selection.",
+      "When can neural networks learn to execute algorithms exactly from a small number of examples, and when is exactness hard to learn or certify?",
+    topicFocus:
+      "Exact certification, exact execution of graph algorithms and algorithmic instructions, and statistical-query hardness for semiautomata.",
     papers: [
       paper(
-        "Yihe Dong, Jean-Baptiste Cordonnier, and Andreas Loukas",
-        "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
-        "ICML 2021",
-        "Proves rank collapse for deep pure self-attention and isolates a structural reason that residual and feed-forward components matter.",
-        "https://proceedings.mlr.press/v139/dong21a.html",
+        "Artur Back de Luca and Kimon Fountoulakis",
+        "Certification from Examples is Hard for Circuits and Transformers under Minimal Overparametrization",
+        "Preprint 2026",
+        "Shows that adding one gate can make exact certification exponentially hard for threshold circuits, with an analogous lower bound for log-precision transformers under constant architectural overhead.",
+        "https://arxiv.org/abs/2605.22964",
       ),
       paper(
-        "Hyunjik Kim, George Papamakarios, and Andriy Mnih",
-        "The Lipschitz Constant of Self-Attention",
-        "ICML 2021",
-        "Characterizes why ordinary dot-product self-attention is not globally Lipschitz and develops Lipschitz alternatives suitable for stability analysis.",
-        "https://proceedings.mlr.press/v139/kim21i.html",
+        "Muhammad Fetrat Qharabagh, Artur Back de Luca, George Giapitzakis, and Kimon Fountoulakis",
+        "Learning to Execute Graph Algorithms Exactly with Graph Neural Networks",
+        "ICML 2026 (Spotlight)",
+        "Uses neural-tangent-kernel theory to learn local update instructions from a small training set and compose them in a graph neural network that executes bounded-degree, finite-precision graph algorithms exactly with high probability.",
+        "https://arxiv.org/abs/2601.23207",
       ),
       paper(
-        "Daniel Soudry, Elad Hoffer, Mor Shpigel Nacson, Suriya Gunasekar, and Nathan Srebro",
-        "The Implicit Bias of Gradient Descent on Separable Data",
-        "JMLR 2018",
-        "The landmark bridge: proves convergence in direction to the hard-margin separator, providing the template used by later attention analyses.",
-        "https://www.jmlr.org/papers/v19/18-188.html",
+        "George Giapitzakis, Kimon Fountoulakis, Eshaan Nichani, and Jason D. Lee",
+        "On the Statistical Query Complexity of Learning Semiautomata: a Random Walk Approach",
+        "COLT 2026",
+        "Proves the first statistical-query hardness result for semiautomata under a uniform distribution, using random walks, Fourier analysis, and representation theory to establish near-uncorrelated transition dynamics.",
+        "https://proceedings.mlr.press/v336/giapitzakis26a.html",
       ),
       paper(
-        "Davoud Ataee Tarzanagh, Yingcong Li, Xuechen Zhang, and Samet Oymak",
-        "Max-Margin Token Selection in Attention Mechanism",
-        "NeurIPS 2023",
-        "Shows that gradient descent on attention parameters converges toward a max-margin token-selection problem and formalizes attention sparsification.",
-        "https://proceedings.neurips.cc/paper_files/paper/2023/hash/970f59b22f4c72aec75174aae63c7459-Abstract-Conference.html",
+        "Artur Back de Luca, George Giapitzakis, and Kimon Fountoulakis",
+        "Learning to Add, Multiply, and Execute Algorithmic Instructions Exactly with Neural Networks",
+        "NeurIPS 2025",
+        "Shows that ensembles of two-layer networks in the neural-tangent-kernel regime can exactly execute binary permutations, addition, multiplication, and Turing-complete SBN instructions with high probability from logarithmically many examples.",
+        "https://proceedings.nips.cc/paper_files/paper/2025/hash/71553eb7d97b9c332d9c520c5de724d9-Abstract-Conference.html",
       ),
     ],
   },

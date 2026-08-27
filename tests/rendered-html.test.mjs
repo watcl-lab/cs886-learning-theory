@@ -64,7 +64,14 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /Scheduled seminar meetings:?\s*September 11.{0,3}December 4, 2026/i);
   assert.match(text, /University class period:?\s*September 9.{0,3}December 8, 2026/i);
   assert.match(text, /No class on October 16, 2026/i);
-  assert.match(text, /Last updated:?\s*August 21, 2026/i);
+  assert.match(text, /Last updated:?\s*August 27, 2026/i);
+  assert.match(text, /Exact Learning/i);
+  for (const title of [
+    "Certification from Examples is Hard for Circuits and Transformers under Minimal Overparametrization",
+    "Learning to Execute Graph Algorithms Exactly with Graph Neural Networks",
+    "On the Statistical Query Complexity of Learning Semiautomata: a Random Walk Approach",
+    "Learning to Add, Multiply, and Execute Algorithmic Instructions Exactly with Neural Networks",
+  ]) assert.match(text, new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
 
   for (const heading of [
     "Course Overview and Logistics",
@@ -88,6 +95,7 @@ test("server-renders the corrected course content and operational policies", asy
   assert.doesNotMatch(text, /Depending on enrollment and assignments|two or three of those papers|instructor overview, a structured comparison, or a focused group discussion/i);
   assert.doesNotMatch(text, /A missed presentation with an approved reason/i);
   assert.doesNotMatch(text, /Extensions should be arranged before the deadline whenever possible|Approved accommodations and University procedures supersede this default policy/i);
+  assert.doesNotMatch(text, /Biases and Optimization of Self-Attention|Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth|The Lipschitz Constant of Self-Attention|The Implicit Bias of Gradient Descent on Separable Data|Max-Margin Token Selection in Attention Mechanism/i);
   assert.match(text, /30 minutes\s*:?\s*presentation/i);
   assert.match(text, /12 minutes\s*:?\s*discussion and questions/i);
   assert.doesNotMatch(text, /5 minutes\s*:?\s*open questions and discussion|2 minutes\s*:?\s*transition/i);
@@ -180,6 +188,22 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(courseFacts.scheduledPapersPerMeeting, 4);
   assert.equal(courseFacts.meetingTime, "1:30–4:20 p.m.");
   for (const key of ["officeHours", "meetingLocation", "coursePlatform", "officialOutlineUrl"]) assert.equal(courseFacts[key], "TBA");
+
+  const firstWeek = courseSchedule[0];
+  assert.equal(firstWeek.title, "Exact Learning");
+  assert.match(firstWeek.guidingQuestion, /execute algorithms exactly/i);
+  assert.deepEqual(firstWeek.papers.map((paper) => paper.title), [
+    "Certification from Examples is Hard for Circuits and Transformers under Minimal Overparametrization",
+    "Learning to Execute Graph Algorithms Exactly with Graph Neural Networks",
+    "On the Statistical Query Complexity of Learning Semiautomata: a Random Walk Approach",
+    "Learning to Add, Multiply, and Execute Algorithmic Instructions Exactly with Neural Networks",
+  ]);
+  assert.deepEqual(firstWeek.papers.map((paper) => paper.link), [
+    "https://arxiv.org/abs/2605.22964",
+    "https://arxiv.org/abs/2601.23207",
+    "https://proceedings.mlr.press/v336/giapitzakis26a.html",
+    "https://proceedings.nips.cc/paper_files/paper/2025/hash/71553eb7d97b9c332d9c520c5de724d9-Abstract-Conference.html",
+  ]);
 
   const allUrls = allPapers.map((paper) => paper.link);
   for (const url of ["https://aclanthology.org/2020.conll-1.37/", "https://proceedings.mlr.press/v235/huang24d.html"]) assert.ok(allUrls.includes(url));
