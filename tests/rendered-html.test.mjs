@@ -92,18 +92,13 @@ test("server-renders the corrected course content and operational policies", asy
 
   assert.match(text, /Week 1 is instructor-led: the instructor will present all four papers/i);
   assert.match(text, /does not count toward students' presentation workload/i);
-  assert.match(text, /Student paper presentations begin in Week 2 and run through Week 10/i);
-  assert.match(text, /planning enrollment of 25 students/i);
-  assert.match(text, /9 × 4 = 36 paper-presentation slots/i);
-  assert.match(text, /Each student will give at least 2 paper presentations/i);
-  assert.match(text, /25 × 2 = 50 student presentation assignments/i);
-  assert.match(text, /Every student will give one solo presentation, using 25 slots/i);
-  assert.match(text, /remaining 11 paper slots provide every student with one shared presentation/i);
-  assert.match(text, /8 papers will be presented by pairs and 3 by teams of three/i);
-  assert.match(text, /8 × 2 \+ 3 × 3 = 25 shared assignments/i);
+  assert.match(text, /Student paper presentations run from Week 2 through Week 10/i);
+  assert.match(text, /with 4 paper presentations each week/i);
+  assert.match(text, /Each student will give 2 paper presentations: one solo presentation and one shared presentation/i);
+  assert.match(text, /25 papers will have a solo presenter, 8 will be presented by pairs, and 3 will be presented by teams of three/i);
   assert.match(text, /Students sharing a paper divide the 30-minute presentation/i);
   assert.match(text, /must each make a substantive contribution/i);
-  assert.match(text, /project presentation is separate and does not count toward this minimum/i);
+  assert.match(text, /project presentation is separate and does not count toward these two paper presentations/i);
   assert.match(text, /Exact paper assignments will be announced after enrollment is confirmed/i);
   assert.doesNotMatch(text, /Depending on enrollment and assignments|two or three of those papers|instructor overview, a structured comparison, or a focused group discussion/i);
   assert.doesNotMatch(text, /A missed presentation with an approved reason/i);
@@ -117,13 +112,10 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /2 minutes of questions/i);
   assert.match(text, /1-minute transition/i);
   assert.match(text, /25 individual project presentations/i);
-  assert.match(text, /12 in one meeting and 13 in the other/i);
-  assert.match(text, /Each slot is 13 minutes/i);
-  assert.match(text, /two 170-minute meetings provide 340 minutes in total/i);
-  assert.match(text, /presentations use 325 minutes, leaving 15 minutes/i);
-  assert.match(text, /12-presentation meeting uses 156 minutes/i);
-  assert.match(text, /13-presentation meeting uses 169 minutes/i);
-  assert.match(text, /Timing will therefore be strict/i);
+  assert.match(text, /Week 11 will have 12 presentations, and Week 12 will have 13/i);
+  assert.match(text, /Each presentation has a 13-minute slot/i);
+  assert.match(text, /Timing will be strict/i);
+  assert.match(text, /Project presentations do not count toward the two required paper presentations/i);
   assert.match(text, /November 26, 2026/);
   assert.match(text, /48-hour grace period/i);
   assert.match(text, /(?:five|5) percentage points for each additional 24-hour period/i);
@@ -137,7 +129,7 @@ test("server-renders the corrected course content and operational policies", asy
 
   assert.doesNotMatch(html, /TODO_INSTRUCTOR_/i);
   assert.doesNotMatch(text, /Assignment Screening|assignment-screening|automated screening software/i);
-  assert.doesNotMatch(text, /45 minutes, including questions|one or two paper presentations|40 scheduled paper slots|approximately 25 individual project presentations|final two three-hour meetings|22 solo presentation slots|14 co-presented slots/i);
+  assert.doesNotMatch(text, /45 minutes, including questions|one or two paper presentations|40 scheduled paper slots|approximately 25 individual project presentations|final two three-hour meetings|22 solo presentation slots|14 co-presented slots|9 × 4|25 × 2|8 × 2|two 170-minute meetings provide|presentations use 325 minutes|meeting uses 156 minutes|meeting uses 169 minutes/i);
   assert.doesNotMatch(text, /Robert Wang published his final project/i);
   assert.doesNotMatch(text, /Project proposal and progress checkpoint|progress checkpoint deadline/i);
   assert.doesNotMatch(html, /\[paper\]/i);
