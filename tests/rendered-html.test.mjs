@@ -97,9 +97,12 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /9 × 4 = 36 paper-presentation slots/i);
   assert.match(text, /Each student will give at least 2 paper presentations/i);
   assert.match(text, /25 × 2 = 50 student presentation assignments/i);
-  assert.match(text, /22 solo presentation slots and 14 co-presented slots/i);
-  assert.match(text, /22 \+ 2 × 14 = 50 assignments/i);
-  assert.match(text, /Co-presenters share the 30-minute presentation/i);
+  assert.match(text, /Every student will give one solo presentation, using 25 slots/i);
+  assert.match(text, /remaining 11 paper slots provide every student with one shared presentation/i);
+  assert.match(text, /8 papers will be presented by pairs and 3 by teams of three/i);
+  assert.match(text, /8 × 2 \+ 3 × 3 = 25 shared assignments/i);
+  assert.match(text, /Students sharing a paper divide the 30-minute presentation/i);
+  assert.match(text, /must each make a substantive contribution/i);
   assert.match(text, /project presentation is separate and does not count toward this minimum/i);
   assert.match(text, /Exact paper assignments will be announced after enrollment is confirmed/i);
   assert.doesNotMatch(text, /Depending on enrollment and assignments|two or three of those papers|instructor overview, a structured comparison, or a focused group discussion/i);
@@ -134,7 +137,7 @@ test("server-renders the corrected course content and operational policies", asy
 
   assert.doesNotMatch(html, /TODO_INSTRUCTOR_/i);
   assert.doesNotMatch(text, /Assignment Screening|assignment-screening|automated screening software/i);
-  assert.doesNotMatch(text, /45 minutes, including questions|one or two paper presentations|40 scheduled paper slots|approximately 25 individual project presentations|final two three-hour meetings/i);
+  assert.doesNotMatch(text, /45 minutes, including questions|one or two paper presentations|40 scheduled paper slots|approximately 25 individual project presentations|final two three-hour meetings|22 solo presentation slots|14 co-presented slots/i);
   assert.doesNotMatch(text, /Robert Wang published his final project/i);
   assert.doesNotMatch(text, /Project proposal and progress checkpoint|progress checkpoint deadline/i);
   assert.doesNotMatch(html, /\[paper\]/i);
@@ -219,14 +222,19 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(paperPresentationPlan.studentPaperPresentationSlots, 36);
   assert.equal(paperPresentationPlan.minimumPaperPresentationsPerStudent, 2);
   assert.equal(paperPresentationPlan.studentPaperPresentationAssignments, 50);
-  assert.equal(paperPresentationPlan.soloPaperPresentationSlots, 22);
-  assert.equal(paperPresentationPlan.coPresentedPaperSlots, 14);
+  assert.equal(paperPresentationPlan.soloPaperPresentationSlots, 25);
+  assert.equal(paperPresentationPlan.sharedPaperPresentationSlots, 11);
+  assert.equal(paperPresentationPlan.sharedPaperPresentationAssignments, 25);
+  assert.equal(paperPresentationPlan.pairedPaperPresentationSlots, 8);
+  assert.equal(paperPresentationPlan.threePersonPaperPresentationSlots, 3);
   assert.equal(
-    paperPresentationPlan.soloPaperPresentationSlots + paperPresentationPlan.coPresentedPaperSlots,
+    paperPresentationPlan.soloPaperPresentationSlots + paperPresentationPlan.sharedPaperPresentationSlots,
     paperPresentationPlan.studentPaperPresentationSlots,
   );
   assert.equal(
-    paperPresentationPlan.soloPaperPresentationSlots + 2 * paperPresentationPlan.coPresentedPaperSlots,
+    paperPresentationPlan.soloPaperPresentationSlots
+      + 2 * paperPresentationPlan.pairedPaperPresentationSlots
+      + 3 * paperPresentationPlan.threePersonPaperPresentationSlots,
     paperPresentationPlan.studentPaperPresentationAssignments,
   );
   assert.equal(paperPresentationPlan.paperPresentationMinutes, 30);

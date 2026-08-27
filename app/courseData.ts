@@ -111,8 +111,14 @@ const studentPaperPresentationSlots = studentPaperMeetingCount * courseFacts.sch
 const minimumPaperPresentationsPerStudent = 2;
 const studentPaperPresentationAssignments =
   courseFacts.plannedEnrollment * minimumPaperPresentationsPerStudent;
-const coPresentedPaperSlots = studentPaperPresentationAssignments - studentPaperPresentationSlots;
-const soloPaperPresentationSlots = studentPaperPresentationSlots - coPresentedPaperSlots;
+const soloPaperPresentationSlots = courseFacts.plannedEnrollment;
+const sharedPaperPresentationSlots = studentPaperPresentationSlots - soloPaperPresentationSlots;
+const sharedPaperPresentationAssignments =
+  studentPaperPresentationAssignments - soloPaperPresentationSlots;
+const threePersonPaperPresentationSlots =
+  sharedPaperPresentationAssignments - 2 * sharedPaperPresentationSlots;
+const pairedPaperPresentationSlots =
+  sharedPaperPresentationSlots - threePersonPaperPresentationSlots;
 
 export const paperPresentationPlan = {
   plannedEnrollment: courseFacts.plannedEnrollment,
@@ -125,7 +131,10 @@ export const paperPresentationPlan = {
   minimumPaperPresentationsPerStudent,
   studentPaperPresentationAssignments,
   soloPaperPresentationSlots,
-  coPresentedPaperSlots,
+  sharedPaperPresentationSlots,
+  sharedPaperPresentationAssignments,
+  pairedPaperPresentationSlots,
+  threePersonPaperPresentationSlots,
   paperPresentationMinutes,
   paperDiscussionMinutes,
   minutesPerPaper: paperPresentationMinutes + paperDiscussionMinutes,
@@ -137,7 +146,7 @@ export const presentationGuidance =
   `Week ${instructorLedWeek} is instructor-led: the instructor will present all four papers, and that week does not count toward students' presentation workload. Student paper presentations begin in Week ${firstStudentPresentationWeek} and run through Week ${lastStudentPresentationWeek}. Each of those ${studentPaperMeetingCount} meetings contains ${courseFacts.scheduledPapersPerMeeting} paper-presentation slots.`;
 
 export const presentationWorkload =
-  `With a planning enrollment of ${courseFacts.plannedEnrollment} students, Weeks ${firstStudentPresentationWeek}–${lastStudentPresentationWeek} provide ${studentPaperMeetingCount} × ${courseFacts.scheduledPapersPerMeeting} = ${studentPaperPresentationSlots} paper-presentation slots. Each student will give at least ${minimumPaperPresentationsPerStudent} paper presentations, so ${courseFacts.plannedEnrollment} × ${minimumPaperPresentationsPerStudent} = ${studentPaperPresentationAssignments} student presentation assignments are required. The plan uses ${soloPaperPresentationSlots} solo presentation slots and ${coPresentedPaperSlots} co-presented slots, which gives ${soloPaperPresentationSlots} + 2 × ${coPresentedPaperSlots} = ${studentPaperPresentationAssignments} assignments. Co-presenters share the ${paperPresentationMinutes}-minute presentation for their assigned paper. The required project presentation is separate and does not count toward this minimum. Exact paper assignments will be announced after enrollment is confirmed.`;
+  `With a planning enrollment of ${courseFacts.plannedEnrollment} students, Weeks ${firstStudentPresentationWeek}–${lastStudentPresentationWeek} provide ${studentPaperMeetingCount} × ${courseFacts.scheduledPapersPerMeeting} = ${studentPaperPresentationSlots} paper-presentation slots. Each student will give at least ${minimumPaperPresentationsPerStudent} paper presentations, so ${courseFacts.plannedEnrollment} × ${minimumPaperPresentationsPerStudent} = ${studentPaperPresentationAssignments} student presentation assignments are required. Every student will give one solo presentation, using ${soloPaperPresentationSlots} slots. The remaining ${sharedPaperPresentationSlots} paper slots provide every student with one shared presentation: ${pairedPaperPresentationSlots} papers will be presented by pairs and ${threePersonPaperPresentationSlots} by teams of three, giving ${pairedPaperPresentationSlots} × 2 + ${threePersonPaperPresentationSlots} × 3 = ${sharedPaperPresentationAssignments} shared assignments. Students sharing a paper divide the ${paperPresentationMinutes}-minute presentation and must each make a substantive contribution. The required project presentation is separate and does not count toward this minimum. Exact paper assignments will be announced after enrollment is confirmed.`;
 
 export const presentationRequirements = [
   "What is the formal problem? State the data-generating process, hypothesis or architecture class, loss, training rule, and test criterion.",
