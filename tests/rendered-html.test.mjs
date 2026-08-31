@@ -65,7 +65,7 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /University class period:?\s*September 9.{0,3}December 8, 2026/i);
   assert.match(text, /No class on October 16, 2026/i);
   assert.match(text, /Last updated:?\s*August 31, 2026/i);
-  assert.match(text, /Exact Learning/i);
+  assert.match(text, /Exact Algorithmic Learning, Certification, and Hardness/i);
   for (const title of [
     "Certification from Examples is Hard for Circuits and Transformers under Minimal Overparametrization",
     "Learning to Execute Graph Algorithms Exactly with Graph Neural Networks",
@@ -103,7 +103,10 @@ test("server-renders the corrected course content and operational policies", asy
   assert.doesNotMatch(text, /Depending on enrollment and assignments|two or three of those papers|instructor overview, a structured comparison, or a focused group discussion/i);
   assert.doesNotMatch(text, /A missed presentation with an approved reason/i);
   assert.doesNotMatch(text, /Extensions should be arranged before the deadline whenever possible|Approved accommodations and University procedures supersede this default policy/i);
-  assert.doesNotMatch(text, /Biases and Optimization of Self-Attention|Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth|The Lipschitz Constant of Self-Attention|The Implicit Bias of Gradient Descent on Separable Data/i);
+  assert.doesNotMatch(
+    text,
+    /Biases and Optimization of Self-Attention|The Lipschitz Constant of Self-Attention|The Implicit Bias of Gradient Descent on Separable Data/i,
+  );
   assert.match(text, /30 minutes\s*:?\s*presentation/i);
   assert.match(text, /12 minutes\s*:?\s*discussion and questions/i);
   assert.doesNotMatch(text, /5 minutes\s*:?\s*open questions and discussion|2 minutes\s*:?\s*transition/i);
@@ -143,6 +146,38 @@ test("server-renders the corrected course content and operational policies", asy
     "Max-Margin Token Selection in Attention Mechanism",
     "Transformers Provably Learn Sparse Token Selection While Fully-Connected Nets Cannot",
   ]) assert.match(text, new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
+
+  for (const title of [
+    "Exact Algorithmic Learning, Certification, and Hardness",
+    "Trainability and Signal Propagation in Deep Transformers",
+    "Expressivity, Formal Languages, and Circuit Classes",
+    "Parallel and Fine-Grained Complexity of Transformers",
+  ]) assert.match(text, new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
+
+  for (const heading of [
+    "Part I: Exact execution learned from examples",
+    "Part II: Hardness of exact learning and certification",
+    "Part I: Normalization and architectural degeneration",
+    "Part II: Rank collapse and stable depth scaling",
+    "Part I: Positive expressivity and computational universality",
+    "Part II: Exact characterizations and upper bounds",
+    "Part I: Parallel depth and communication",
+    "Part II: Fine-grained complexity of attention",
+  ]) assert.match(text, new RegExp(heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
+
+  for (const title of [
+    "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
+    "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
+    "Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models",
+    "Transformers, Parallel Computation, and Logarithmic Depth",
+  ]) assert.match(text, new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
+
+  assert.match(text, /Theoretical focus:/i);
+  assert.doesNotMatch(text, /Learning-theory focus:/i);
+  assert.doesNotMatch(
+    text,
+    /Trainability, Expressivity, and Approximation|Formal Languages, Logic, and Circuit Complexity|Computational Limits and Programmable Transformers/i,
+  );
 
   for (const title of [
     "Bayesian and Statistical Foundations of In-Context Learning",
@@ -204,6 +239,13 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(html, /b295b3a940706f431076c86b78907757-Abstract-Conference\.html/);
   assert.match(html, /v336\/rajaraman26a\.html/);
   assert.match(html, /arxiv\.org\/abs\/2502\.12465/);
+  assert.match(html, /v119\/xiong20b\.html/);
+  assert.match(html, /v139\/dong21a\.html/);
+  assert.match(html, /ae0cba715b60c4052359b3d52a2cff7f-Abstract-Conference\.html/);
+  assert.match(html, /v235\/kedia24a\.html/);
+  assert.match(html, /2023\.tacl-1\.31/);
+  assert.match(html, /v235\/sanford24a\.html/);
+  assert.match(html, /v201\/duman-keles23a\.html/);
 });
 
 test("course data preserves the schedule arithmetic, readings, and user-confirmed policies", async () => {
@@ -224,6 +266,21 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     "November 20, 2026", "November 27, 2026", "December 4, 2026",
   ]);
   assert.deepEqual(
+    courseSchedule.slice(0, 5).map(({ week, title }) => [week, title]),
+    [
+      [1, "Exact Algorithmic Learning, Certification, and Hardness"],
+      [2, "Trainability and Signal Propagation in Deep Transformers"],
+      [3, "Expressivity, Formal Languages, and Circuit Classes"],
+      [4, "Parallel and Fine-Grained Complexity of Transformers"],
+      [5, "Learnability and Inductive Bias of Self-Attention"],
+    ],
+  );
+  assert.match(courseSchedule[0].guidingQuestion, /behavioral certification provably hard/i);
+  assert.match(courseSchedule[1].guidingQuestion, /normalization, residual structure, initialization, and rank collapse/i);
+  assert.match(courseSchedule[2].guidingQuestion, /universal approximation and Turing completeness coexist/i);
+  assert.match(courseSchedule[3].guidingQuestion, /depth, precision, parallel communication, entry magnitudes/i);
+  assert.match(courseSchedule[4].guidingQuestion, /sparse, task-relevant structure from finite data/i);
+  assert.deepEqual(
     courseSchedule.slice(5, 10).map(({ week, title }) => [week, title]),
     [
       [6, "Bayesian and Statistical Foundations of In-Context Learning"],
@@ -242,10 +299,10 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(courseSchedule.slice(1, 10).flatMap((week) => week.papers).length, 36);
   assert.ok(courseSchedule.slice(10).every((week) => week.papers.length === 0));
   assert.equal(scheduledPapers.length, 40);
-  assert.equal(additionalReadings.length, 16);
-  assert.equal(allPapers.length, 56);
-  assert.equal(new Set(allPapers.map((paper) => paper.title)).size, 56);
-  assert.equal(new Set(allPapers.map((paper) => paper.link)).size, 56);
+  assert.equal(additionalReadings.length, 20);
+  assert.equal(allPapers.length, 60);
+  assert.equal(new Set(allPapers.map((paper) => paper.title)).size, 60);
+  assert.equal(new Set(allPapers.map((paper) => paper.link)).size, 60);
 
   assert.deepEqual(assessment.map(({ component, weight }) => [component, weight]), [
     ["Course project", "40%"], ["Paper-presentation work", "40%"], ["Class participation", "20%"],
@@ -339,21 +396,23 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   );
 
   const firstWeek = courseSchedule[0];
-  assert.equal(firstWeek.title, "Exact Learning");
-  assert.match(firstWeek.guidingQuestion, /execute algorithms exactly/i);
+  assert.equal(firstWeek.title, "Exact Algorithmic Learning, Certification, and Hardness");
+  assert.match(firstWeek.guidingQuestion, /learn discrete algorithms exactly/i);
+  assert.match(firstWeek.guidingQuestion, /behavioral certification provably hard/i);
   assert.match(firstWeek.presentationNote, /All four papers will be presented by the instructor/i);
+  assert.match(firstWeek.presentationNote, /recent research program/i);
   assert.match(firstWeek.presentationNote, /Student paper presentations begin in Week 2/i);
   assert.deepEqual(firstWeek.papers.map((paper) => paper.title), [
-    "Certification from Examples is Hard for Circuits and Transformers under Minimal Overparametrization",
+    "Learning to Add, Multiply, and Execute Algorithmic Instructions Exactly with Neural Networks",
     "Learning to Execute Graph Algorithms Exactly with Graph Neural Networks",
     "On the Statistical Query Complexity of Learning Semiautomata: a Random Walk Approach",
-    "Learning to Add, Multiply, and Execute Algorithmic Instructions Exactly with Neural Networks",
+    "Certification from Examples is Hard for Circuits and Transformers under Minimal Overparametrization",
   ]);
   assert.deepEqual(firstWeek.papers.map((paper) => paper.link), [
-    "https://arxiv.org/abs/2605.22964",
+    "https://proceedings.nips.cc/paper_files/paper/2025/hash/71553eb7d97b9c332d9c520c5de724d9-Abstract-Conference.html",
     "https://arxiv.org/abs/2601.23207",
     "https://proceedings.mlr.press/v336/giapitzakis26a.html",
-    "https://proceedings.nips.cc/paper_files/paper/2025/hash/71553eb7d97b9c332d9c520c5de724d9-Abstract-Conference.html",
+    "https://arxiv.org/abs/2605.22964",
   ]);
 
   const allUrls = allPapers.map((paper) => paper.link);
@@ -373,8 +432,8 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   for (const title of [
     "Tight Sample Complexity of Transformers",
     "Transformers Provably Learn Chain-of-Thought Reasoning with Length Generalization",
-    "Transformers Learn Shortcuts to Automata",
-    "Looped Transformers as Programmable Computers",
+    "Are Transformers Universal Approximators of Sequence-to-Sequence Functions?",
+    "Attention Is Turing Complete",
   ]) {
     assert.equal(scheduledTitles.filter((candidate) => candidate === title).length, 1);
   }
@@ -392,6 +451,10 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   }
 
   const newlyRequiredTitles = [
+    "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
+    "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
+    "Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models",
+    "Transformers, Parallel Computation, and Logarithmic Depth",
     "An Information-Theoretic Analysis of In-Context Learning",
     "Universal Priors: Solving Empirical Bayes via Bayesian Inference and Pretraining",
     "Can Looped Transformers Learn to Implement Multi-step Gradient Descent for In-context Learning?",
@@ -400,6 +463,10 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     "Learning to Reason with Curriculum I: Provable Benefits of Autocurriculum",
   ];
   const movedToAdditionalTitles = [
+    "Improving Transformer Optimization Through Better Initialization",
+    "Theoretical Limitations of Self-Attention in Neural Sequence Models",
+    "Transformers Learn Shortcuts to Automata",
+    "Looped Transformers as Programmable Computers",
     "Hopfield Networks Is All You Need",
     "Birth of a Transformer: A Memory Viewpoint",
     "What Learning Algorithm Is In-Context Learning? Investigations with Linear Models",
@@ -434,27 +501,42 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
       `Week ${week.week} must assign every paper to exactly one subtopic`,
     );
   }
-  for (const weekNumber of [2, 5, 6, 7, 8, 9, 10]) {
+  for (const weekNumber of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) {
     const week = courseSchedule.find(({ week }) => week === weekNumber);
     assert.equal(week.subtopics.length, 2);
     assert.equal(new Set(week.subtopics.flatMap((subtopic) => subtopic.paperTitles)).size, 4);
   }
   const weekTwo = courseSchedule.find(({ week }) => week === 2);
-  const requestedWeekTwoOrder = [
-    "Improving Transformer Optimization Through Better Initialization",
+  assert.deepEqual(weekTwo.papers.map((paper) => paper.title), [
     "On Layer Normalization in the Transformer Architecture",
-  ];
-  assert.deepEqual(weekTwo.papers.slice(0, 2).map((paper) => paper.title), requestedWeekTwoOrder);
-  assert.deepEqual([...weekTwo.subtopics[0].paperTitles], requestedWeekTwoOrder);
+    "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
+    "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
+    "Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models",
+  ]);
+  assert.match(weekTwo.topicFocus, /rank collapse/i);
+  assert.match(weekTwo.topicFocus, /forward-backward moment propagation/i);
+
+  const weekThree = courseSchedule.find(({ week }) => week === 3);
+  assert.deepEqual(weekThree.papers.map((paper) => paper.title), [
+    "Are Transformers Universal Approximators of Sequence-to-Sequence Functions?",
+    "Attention Is Turing Complete",
+    "Masked Hard-Attention Transformers Recognize Exactly the Star-Free Languages",
+    "Saturated Transformers Are Constant-Depth Threshold Circuits",
+  ]);
+  assert.match(weekThree.guidingQuestion, /universal approximation and Turing completeness coexist/i);
+  assert.match(weekThree.guidingQuestion, /depth, precision, masking, recurrence, and positional information/i);
+
   const weekFour = courseSchedule.find(({ week }) => week === 4);
   assert.deepEqual(weekFour.papers.map((paper) => paper.title), [
+    "The Parallelism Tradeoff: Limitations of Log-Precision Transformers",
+    "Transformers, Parallel Computation, and Logarithmic Depth",
     "On the Computational Complexity of Self-Attention",
     "Fast Attention Requires Bounded Entries",
-    "Transformers Learn Shortcuts to Automata",
-    "Looped Transformers as Programmable Computers",
   ]);
-  assert.match(weekFour.topicFocus, /automata shortcuts.*programmable looped computation/i);
-  assert.doesNotMatch(weekFour.topicFocus, /RASP/i);
+  assert.match(weekFour.topicFocus, /Threshold-circuit simulation/i);
+  assert.match(weekFour.topicFocus, /Massively Parallel Computation/i);
+  assert.match(weekFour.topicFocus, /SETH-based lower bounds/i);
+  assert.doesNotMatch(weekFour.topicFocus, /automata shortcuts|programmable looped computation|RASP/i);
 
   const weekFive = courseSchedule.find(({ week }) => week === 5);
   assert.equal(weekFive.date, "October 9, 2026");
@@ -504,6 +586,21 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
       link: "https://proceedings.mlr.press/v235/wang24ca.html",
     },
   ]);
+  const weekFiveByTitle = new Map(
+    weekFive.papers.map((paper) => [paper.title, paper.presentationFocus]),
+  );
+  assert.match(
+    weekFiveByTitle.get("Max-Margin Token Selection in Attention Mechanism"),
+    /gradient descent on the attention parameter/i,
+  );
+  assert.match(
+    weekFiveByTitle.get("Max-Margin Token Selection in Attention Mechanism"),
+    /joint optimization with the prediction head/i,
+  );
+  assert.match(
+    weekFiveByTitle.get("From Self-Attention to Markov Models: Unveiling the Dynamics of Generative Transformers"),
+    /teacher-student and trajectory settings/i,
+  );
   for (const removedTitle of [
     "Your Transformer May Not Be as Powerful as You Expect",
     "Position Coupling: Improving Length Generalization of Arithmetic Transformers Using Task Structure",
@@ -512,6 +609,51 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   ]) assert.ok(!weekFive.papers.some(({ title }) => title === removedTitle));
 
   const expectedPapersByWeek = new Map([
+    [
+      1,
+      [
+        "Learning to Add, Multiply, and Execute Algorithmic Instructions Exactly with Neural Networks",
+        "Learning to Execute Graph Algorithms Exactly with Graph Neural Networks",
+        "On the Statistical Query Complexity of Learning Semiautomata: a Random Walk Approach",
+        "Certification from Examples is Hard for Circuits and Transformers under Minimal Overparametrization",
+      ],
+    ],
+    [
+      2,
+      [
+        "On Layer Normalization in the Transformer Architecture",
+        "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
+        "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
+        "Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models",
+      ],
+    ],
+    [
+      3,
+      [
+        "Are Transformers Universal Approximators of Sequence-to-Sequence Functions?",
+        "Attention Is Turing Complete",
+        "Masked Hard-Attention Transformers Recognize Exactly the Star-Free Languages",
+        "Saturated Transformers Are Constant-Depth Threshold Circuits",
+      ],
+    ],
+    [
+      4,
+      [
+        "The Parallelism Tradeoff: Limitations of Log-Precision Transformers",
+        "Transformers, Parallel Computation, and Logarithmic Depth",
+        "On the Computational Complexity of Self-Attention",
+        "Fast Attention Requires Bounded Entries",
+      ],
+    ],
+    [
+      5,
+      [
+        "Inductive Biases and Variable Creation in Self-Attention Mechanisms",
+        "From Self-Attention to Markov Models: Unveiling the Dynamics of Generative Transformers",
+        "Max-Margin Token Selection in Attention Mechanism",
+        "Transformers Provably Learn Sparse Token Selection While Fully-Connected Nets Cannot",
+      ],
+    ],
     [
       6,
       [
@@ -581,6 +723,34 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(
     linkByTitle.get("Learning to Reason with Curriculum I: Provable Benefits of Autocurriculum"),
     "https://proceedings.mlr.press/v336/rajaraman26a.html",
+  );
+  assert.equal(
+    linkByTitle.get("On Layer Normalization in the Transformer Architecture"),
+    "https://proceedings.mlr.press/v119/xiong20b.html",
+  );
+  assert.equal(
+    linkByTitle.get("Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth"),
+    "https://proceedings.mlr.press/v139/dong21a.html",
+  );
+  assert.equal(
+    linkByTitle.get("Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse"),
+    "https://proceedings.neurips.cc/paper_files/paper/2022/hash/ae0cba715b60c4052359b3d52a2cff7f-Abstract-Conference.html",
+  );
+  assert.equal(
+    linkByTitle.get("Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models"),
+    "https://proceedings.mlr.press/v235/kedia24a.html",
+  );
+  assert.equal(
+    linkByTitle.get("The Parallelism Tradeoff: Limitations of Log-Precision Transformers"),
+    "https://aclanthology.org/2023.tacl-1.31/",
+  );
+  assert.equal(
+    linkByTitle.get("Transformers, Parallel Computation, and Logarithmic Depth"),
+    "https://proceedings.mlr.press/v235/sanford24a.html",
+  );
+  assert.equal(
+    linkByTitle.get("On the Computational Complexity of Self-Attention"),
+    "https://proceedings.mlr.press/v201/duman-keles23a.html",
   );
 
   const serializedData = JSON.stringify(data);
