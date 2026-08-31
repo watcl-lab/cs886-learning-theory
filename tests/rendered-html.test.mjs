@@ -64,7 +64,7 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /Scheduled seminar meetings:?\s*September 11.{0,3}December 4, 2026/i);
   assert.match(text, /University class period:?\s*September 9.{0,3}December 8, 2026/i);
   assert.match(text, /No class on October 16, 2026/i);
-  assert.match(text, /Last updated:?\s*August 27, 2026/i);
+  assert.match(text, /Last updated:?\s*August 31, 2026/i);
   assert.match(text, /Exact Learning/i);
   for (const title of [
     "Certification from Examples is Hard for Circuits and Transformers under Minimal Overparametrization",
@@ -103,7 +103,7 @@ test("server-renders the corrected course content and operational policies", asy
   assert.doesNotMatch(text, /Depending on enrollment and assignments|two or three of those papers|instructor overview, a structured comparison, or a focused group discussion/i);
   assert.doesNotMatch(text, /A missed presentation with an approved reason/i);
   assert.doesNotMatch(text, /Extensions should be arranged before the deadline whenever possible|Approved accommodations and University procedures supersede this default policy/i);
-  assert.doesNotMatch(text, /Biases and Optimization of Self-Attention|Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth|The Lipschitz Constant of Self-Attention|The Implicit Bias of Gradient Descent on Separable Data|Max-Margin Token Selection in Attention Mechanism/i);
+  assert.doesNotMatch(text, /Biases and Optimization of Self-Attention|Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth|The Lipschitz Constant of Self-Attention|The Implicit Bias of Gradient Descent on Separable Data/i);
   assert.match(text, /30 minutes\s*:?\s*presentation/i);
   assert.match(text, /12 minutes\s*:?\s*discussion and questions/i);
   assert.doesNotMatch(text, /5 minutes\s*:?\s*open questions and discussion|2 minutes\s*:?\s*transition/i);
@@ -133,6 +133,16 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /Angeliki Giannou, Shashank Rajput, Jy-Yong Sohn, Kangwook Lee, Jason D\. Lee, and Dimitris Papailiopoulos/i);
   assert.match(text, /Looped Transformers as Programmable Computers/i);
   assert.match(text, /explicit instruction-set architecture/i);
+  assert.match(text, /Learnability and Inductive Bias of Self-Attention/i);
+  assert.match(text, /When can self-attention learn sparse, task-relevant structure from finite data/i);
+  assert.match(text, /Part I: Statistical learnability and model identification/i);
+  assert.match(text, /Part II: Optimization bias and learned token selection/i);
+  for (const title of [
+    "Inductive Biases and Variable Creation in Self-Attention Mechanisms",
+    "From Self-Attention to Markov Models: Unveiling the Dynamics of Generative Transformers",
+    "Max-Margin Token Selection in Attention Mechanism",
+    "Transformers Provably Learn Sparse Token Selection While Fully-Connected Nets Cannot",
+  ]) assert.match(text, new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
 
   assert.doesNotMatch(html, /TODO_INSTRUCTOR_/i);
   assert.doesNotMatch(text, /Assignment Screening|assignment-screening|automated screening software/i);
@@ -144,6 +154,7 @@ test("server-renders the corrected course content and operational policies", asy
   assert.doesNotMatch(html, /href="#weeks-11-12"|id="weeks-11-12"|href="#week-(?:11|12)"/i);
   assert.doesNotMatch(html, /2020\.conll-1\.(?:25|37)|v139\/weiss21a\.html|v235\/huang24l\.html/i);
   assert.doesNotMatch(text, /Thinking Like Transformers|On the Computational Power of Transformers and Its Implications in Sequence Modeling|RASP program constructions/i);
+  assert.doesNotMatch(text, /Length Generalization and Infinite-Limit Theory/i);
   assert.match(html, /openreview\.net\/forum\?id=De4FYqjFueZ/);
   assert.match(html, /v202\/giannou23a\.html/);
   assert.match(html, /v235\/huang24d\.html/);
@@ -213,6 +224,7 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(courseFacts.meetingDurationMinutes, 170);
   assert.equal(courseFacts.plannedEnrollment, 25);
   assert.equal(courseFacts.expectedProjectPresentations, 25);
+  assert.equal(courseFacts.lastUpdated, "August 31, 2026");
   for (const key of ["officeHours", "meetingLocation", "coursePlatform", "officialOutlineUrl"]) assert.equal(courseFacts[key], "TBA");
 
   assert.equal(paperPresentationPlan.instructorLedWeek, 1);
@@ -346,6 +358,61 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   ]);
   assert.match(weekFour.topicFocus, /automata shortcuts.*programmable looped computation/i);
   assert.doesNotMatch(weekFour.topicFocus, /RASP/i);
+
+  const weekFive = courseSchedule.find(({ week }) => week === 5);
+  assert.equal(weekFive.date, "October 9, 2026");
+  assert.equal(weekFive.title, "Learnability and Inductive Bias of Self-Attention");
+  assert.equal(
+    weekFive.guidingQuestion,
+    "When can self-attention learn sparse, task-relevant structure from finite data, and what biases gradient-based training toward particular tokens and solutions?",
+  );
+  assert.equal(
+    weekFive.topicFocus,
+    "Norm-based sample complexity, model identifiability, implicit max-margin bias, sparse token selection, and out-of-distribution length generalization.",
+  );
+  assert.deepEqual(weekFive.subtopics.map(({ title, paperTitles }) => ({
+    title,
+    paperTitles: [...paperTitles],
+  })), [
+    {
+      title: "Part I: Statistical learnability and model identification",
+      paperTitles: [
+        "Inductive Biases and Variable Creation in Self-Attention Mechanisms",
+        "From Self-Attention to Markov Models: Unveiling the Dynamics of Generative Transformers",
+      ],
+    },
+    {
+      title: "Part II: Optimization bias and learned token selection",
+      paperTitles: [
+        "Max-Margin Token Selection in Attention Mechanism",
+        "Transformers Provably Learn Sparse Token Selection While Fully-Connected Nets Cannot",
+      ],
+    },
+  ]);
+  assert.deepEqual(weekFive.papers.map(({ title, link }) => ({ title, link })), [
+    {
+      title: "Inductive Biases and Variable Creation in Self-Attention Mechanisms",
+      link: "https://proceedings.mlr.press/v162/edelman22a.html",
+    },
+    {
+      title: "From Self-Attention to Markov Models: Unveiling the Dynamics of Generative Transformers",
+      link: "https://proceedings.mlr.press/v235/ildiz24a.html",
+    },
+    {
+      title: "Max-Margin Token Selection in Attention Mechanism",
+      link: "https://proceedings.neurips.cc/paper_files/paper/2023/hash/970f59b22f4c72aec75174aae63c7459-Abstract-Conference.html",
+    },
+    {
+      title: "Transformers Provably Learn Sparse Token Selection While Fully-Connected Nets Cannot",
+      link: "https://proceedings.mlr.press/v235/wang24ca.html",
+    },
+  ]);
+  for (const removedTitle of [
+    "Your Transformer May Not Be as Powerful as You Expect",
+    "Position Coupling: Improving Length Generalization of Arithmetic Transformers Using Task Structure",
+    "Infinite Attention: NNGP and NTK for Deep Attention Networks",
+    "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
+  ]) assert.ok(!weekFive.papers.some(({ title }) => title === removedTitle));
 
   const serializedData = JSON.stringify(data);
   assert.doesNotMatch(serializedData, /TODO_INSTRUCTOR_|"impact"\s*:|subweights?|assignment.?screening/i);

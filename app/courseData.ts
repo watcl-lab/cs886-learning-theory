@@ -55,7 +55,7 @@ export const courseFacts = {
   projectMeetings: "Weeks 11–12",
   plannedEnrollment: 25,
   expectedProjectPresentations: 25,
-  lastUpdated: "August 27, 2026",
+  lastUpdated: "August 31, 2026",
 } as const;
 
 export const courseSummary =
@@ -534,59 +534,59 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 5,
     date: "October 9, 2026",
-    title: "Length Generalization and Infinite-Limit Theory",
+    title: "Learnability and Inductive Bias of Self-Attention",
     guidingQuestion:
-      "Which positional structures enable length extrapolation, and what do infinite-width and depthwise signal analyses reveal?",
+      "When can self-attention learn sparse, task-relevant structure from finite data, and what biases gradient-based training toward particular tokens and solutions?",
     topicFocus:
-      "Positional expressivity, constructive length generalization, infinite attention kernels, and signal propagation.",
+      "Norm-based sample complexity, model identifiability, implicit max-margin bias, sparse token selection, and out-of-distribution length generalization.",
     subtopics: [
       {
-        title: "Part I: Positional structure and length generalization",
+        title: "Part I: Statistical learnability and model identification",
         description:
-          "How positional mechanisms and task structure affect expressivity and extrapolation to longer sequences.",
+          "How the norm structure of self-attention, identifiability conditions, and data coverage govern finite-sample learning.",
         paperTitles: [
-          "Your Transformer May Not Be as Powerful as You Expect",
-          "Position Coupling: Improving Length Generalization of Arithmetic Transformers Using Task Structure",
+          "Inductive Biases and Variable Creation in Self-Attention Mechanisms",
+          "From Self-Attention to Markov Models: Unveiling the Dynamics of Generative Transformers",
         ],
       },
       {
-        title: "Part II: Infinite-width kernels and signal propagation",
+        title: "Part II: Optimization bias and learned token selection",
         description:
-          "What infinite-width limits and depthwise covariance dynamics reveal about training and rank collapse.",
+          "How gradient-based training selects relevant tokens, approaches max-margin solutions, and supports length generalization.",
         paperTitles: [
-          "Infinite Attention: NNGP and NTK for Deep Attention Networks",
-          "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
+          "Max-Margin Token Selection in Attention Mechanism",
+          "Transformers Provably Learn Sparse Token Selection While Fully-Connected Nets Cannot",
         ],
       },
     ],
     papers: [
       paper(
-        "Shengjie Luo, Shanda Li, Shuxin Zheng, Tie-Yan Liu, Liwei Wang, and Di He",
-        "Your Transformer May Not Be as Powerful as You Expect",
-        "NeurIPS 2022",
-        "Shows that common relative-position mechanisms impose expressivity limitations and gives constructions that recover lost power.",
-        "https://arxiv.org/abs/2205.13401",
+        "Benjamin L. Edelman, Surbhi Goel, Sham Kakade, and Cyril Zhang",
+        "Inductive Biases and Variable Creation in Self-Attention Mechanisms",
+        "ICML 2022",
+        "Proves norm-based sample-complexity guarantees showing that bounded-norm self-attention can learn sparse dependencies with only logarithmic dependence on the context length.",
+        "https://proceedings.mlr.press/v162/edelman22a.html",
       ),
       paper(
-        "Hanseul Cho, Jaeyoung Cha, Pranjal Awasthi, Srinadh Bhojanapalli, Anupam Gupta, and Chulhee Yun",
-        "Position Coupling: Improving Length Generalization of Arithmetic Transformers Using Task Structure",
-        "NeurIPS 2024",
-        "Proves an exponential-length advantage for a one-layer transformer when task-relevant tokens share coupled positional identifiers.",
-        "https://proceedings.neurips.cc/paper_files/paper/2024/hash/27aa3a0e6d63db269977bb2df5607cb8-Abstract-Conference.html",
+        "Muhammed Emrullah Ildiz, Yixiao Huang, Yingcong Li, Ankit Singh Rawat, and Samet Oymak",
+        "From Self-Attention to Markov Models: Unveiling the Dynamics of Generative Transformers",
+        "ICML 2024",
+        "Connects one-layer generative self-attention to context-conditioned Markov models and gives identifiability, coverage, consistency, and finite-sample guarantees for learning the latent model.",
+        "https://proceedings.mlr.press/v235/ildiz24a.html",
       ),
       paper(
-        "Jiri Hron, Yasaman Bahri, Jascha Sohl-Dickstein, and Roman Novak",
-        "Infinite Attention: NNGP and NTK for Deep Attention Networks",
-        "ICML 2020",
-        "Derives Gaussian-process and neural-tangent-kernel limits for multi-head attention and identifies scaling requirements.",
-        "https://proceedings.mlr.press/v119/hron20a.html",
+        "Davoud Ataee Tarzanagh, Yingcong Li, Xuechen Zhang, and Samet Oymak",
+        "Max-Margin Token Selection in Attention Mechanism",
+        "NeurIPS 2023",
+        "Proves that gradient descent on a softmax-attention model converges in direction to a max-margin solution that separates locally optimal tokens from non-optimal tokens.",
+        "https://proceedings.neurips.cc/paper_files/paper/2023/hash/970f59b22f4c72aec75174aae63c7459-Abstract-Conference.html",
       ),
       paper(
-        "Lorenzo Noci et al.",
-        "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
-        "NeurIPS 2022",
-        "Studies depthwise covariance dynamics and explains how attention rank collapse interacts with residual scaling and initialization.",
-        "https://arxiv.org/abs/2206.03126",
+        "Zixuan Wang, Stanley Wei, Daniel Hsu, and Jason D. Lee",
+        "Transformers Provably Learn Sparse Token Selection While Fully-Connected Nets Cannot",
+        "ICML 2024",
+        "Proves that gradient descent trains a one-layer transformer to solve sparse token selection, establishes an average-case separation from fully connected networks, and obtains out-of-distribution length generalization.",
+        "https://proceedings.mlr.press/v235/wang24ca.html",
       ),
     ],
   },
