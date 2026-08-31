@@ -357,177 +357,238 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 1,
     date: "September 11, 2026",
-    title: "Exact Learning",
+    title: "Exact Algorithmic Learning, Certification, and Hardness",
     guidingQuestion:
-      "When can neural networks learn to execute algorithms exactly from a small number of examples, and when is exactness hard to learn or certify?",
+      "When can neural models learn discrete algorithms exactly from small structured samples, and when are exact learning or behavioral certification provably hard?",
     topicFocus:
-      "Exact certification, exact execution of graph algorithms and algorithmic instructions, and statistical-query hardness for semiautomata.",
+      "NTK-based exact learning of arithmetic and graph algorithms, statistical-query hardness for semiautomata, and certification lower bounds under minimal overparameterization.",
     presentationNote:
-      "All four papers will be presented by the instructor. Student paper presentations begin in Week 2.",
+      "All four papers will be presented by the instructor. The meeting presents a recent research program on exact algorithmic learning, certification, and hardness. Student paper presentations begin in Week 2.",
+    subtopics: [
+      {
+        title: "Part I: Exact execution learned from examples",
+        description:
+          "How NTK-regime neural models can learn local update rules, arithmetic operations, and algorithmic instructions exactly from small structured training sets.",
+        paperTitles: [
+          "Learning to Add, Multiply, and Execute Algorithmic Instructions Exactly with Neural Networks",
+          "Learning to Execute Graph Algorithms Exactly with Graph Neural Networks",
+        ],
+      },
+      {
+        title: "Part II: Hardness of exact learning and certification",
+        description:
+          "Why exact transition behavior can be statistically hard to learn and why verifying exact behavior from examples can become exponentially hard after minimal overparameterization.",
+        paperTitles: [
+          "On the Statistical Query Complexity of Learning Semiautomata: a Random Walk Approach",
+          "Certification from Examples is Hard for Circuits and Transformers under Minimal Overparametrization",
+        ],
+      },
+    ],
     papers: [
       paper(
-        "Artur Back de Luca and Kimon Fountoulakis",
-        "Certification from Examples is Hard for Circuits and Transformers under Minimal Overparametrization",
-        "Preprint 2026",
-        "Shows that adding one gate can make exact certification exponentially hard for threshold circuits, with an analogous lower bound for log-precision transformers under constant architectural overhead.",
-        "https://arxiv.org/abs/2605.22964",
+        "Artur Back de Luca, George Giapitzakis, and Kimon Fountoulakis",
+        "Learning to Add, Multiply, and Execute Algorithmic Instructions Exactly with Neural Networks",
+        "NeurIPS 2025",
+        "Proves that ensembles of infinite-width two-layer networks in the neural-tangent-kernel regime can exactly execute binary permutations, addition, multiplication, and a Turing-complete SBN instruction set with high probability from logarithmically many structured examples.",
+        "https://proceedings.nips.cc/paper_files/paper/2025/hash/71553eb7d97b9c332d9c520c5de724d9-Abstract-Conference.html",
       ),
       paper(
         "Muhammad Fetrat Qharabagh, Artur Back de Luca, George Giapitzakis, and Kimon Fountoulakis",
         "Learning to Execute Graph Algorithms Exactly with Graph Neural Networks",
         "ICML 2026 (Spotlight)",
-        "Uses neural-tangent-kernel theory to learn local update instructions from a small training set and compose them in a graph neural network that executes bounded-degree, finite-precision graph algorithms exactly with high probability.",
+        "Uses neural-tangent-kernel theory to learn local update instructions from a small training set and composes them in a graph neural network that exactly executes bounded-degree, finite-precision graph algorithms with high probability.",
         "https://arxiv.org/abs/2601.23207",
       ),
       paper(
         "George Giapitzakis, Kimon Fountoulakis, Eshaan Nichani, and Jason D. Lee",
         "On the Statistical Query Complexity of Learning Semiautomata: a Random Walk Approach",
         "COLT 2026",
-        "Proves the first statistical-query hardness result for semiautomata under a uniform distribution, using random walks, Fourier analysis, and representation theory to establish near-uncorrelated transition dynamics.",
+        "Proves the first statistical-query hardness result for learning semiautomata under a uniform distribution over words and initial states, using random walks, Fourier analysis, representation theory, and spectral-gap bounds.",
         "https://proceedings.mlr.press/v336/giapitzakis26a.html",
       ),
       paper(
-        "Artur Back de Luca, George Giapitzakis, and Kimon Fountoulakis",
-        "Learning to Add, Multiply, and Execute Algorithmic Instructions Exactly with Neural Networks",
-        "NeurIPS 2025",
-        "Shows that ensembles of two-layer networks in the neural-tangent-kernel regime can exactly execute binary permutations, addition, multiplication, and Turing-complete SBN instructions with high probability from logarithmically many examples.",
-        "https://proceedings.nips.cc/paper_files/paper/2025/hash/71553eb7d97b9c332d9c520c5de724d9-Abstract-Conference.html",
+        "Artur Back de Luca and Kimon Fountoulakis",
+        "Certification from Examples is Hard for Circuits and Transformers under Minimal Overparametrization",
+        "Preprint 2026",
+        "Proves that one additional threshold gate can make behavioral certification from examples exponentially hard and gives an analogous lower bound for a specific log-precision transformer model under constant architectural overhead.",
+        "https://arxiv.org/abs/2605.22964",
       ),
     ],
   },
   {
     week: 2,
     date: "September 18, 2026",
-    title: "Trainability, Expressivity, and Approximation",
+    title: "Trainability and Signal Propagation in Deep Transformers",
     guidingQuestion:
-      "Which architectural choices make transformers trainable, and which functions and computations can they represent?",
-    topicFocus: "Normalization, initialization, universal approximation, and Turing completeness.",
+      "How do normalization, residual structure, initialization, and rank collapse determine whether representations and gradients remain stable as transformer depth grows?",
+    topicFocus:
+      "Pre-LN versus Post-LN, token uniformity, rank collapse, vanishing query and key gradients, residual scaling, and forward-backward moment propagation.",
     subtopics: [
       {
-        title: "Part I: Trainability, normalization, and initialization",
+        title: "Part I: Normalization and architectural degeneration",
         description:
-          "How normalization placement and initialization shape gradient flow and stable optimization.",
+          "How normalization placement affects initial gradients and why pure self-attention degenerates without residual pathways or feed-forward blocks.",
         paperTitles: [
-          "Improving Transformer Optimization Through Better Initialization",
           "On Layer Normalization in the Transformer Architecture",
+          "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
         ],
       },
       {
-        title: "Part II: Approximation and computational expressivity",
+        title: "Part II: Rank collapse and stable depth scaling",
         description:
-          "What transformers can approximate or compute under explicit architectural and precision assumptions.",
+          "How rank collapse affects optimization and how depth-dependent scaling can preserve forward and backward signals in very deep transformers.",
         paperTitles: [
-          "Are Transformers Universal Approximators of Sequence-to-Sequence Functions?",
-          "Attention Is Turing Complete",
+          "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
+          "Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models",
         ],
       },
     ],
     papers: [
       paper(
-        "Xiao Shi Huang, Felipe Perez, Jimmy Ba, and Maksims Volkovs",
-        "Improving Transformer Optimization Through Better Initialization",
-        "ICML 2020",
-        "Derives signal- and gradient-preserving initialization principles for deep transformers and connects them to stable optimization.",
-        "https://proceedings.mlr.press/v119/huang20f.html",
-      ),
-      paper(
-        "Ruibin Xiong et al.",
+        "Ruibin Xiong, Yunchang Yang, Di He, Kai Zheng, Shuxin Zheng, Chen Xing, Huishuai Zhang, Yanyan Lan, Liwei Wang, and Tie-Yan Liu",
         "On Layer Normalization in the Transformer Architecture",
         "ICML 2020",
-        "Explains the gradient behavior of pre-layer-normalized and post-layer-normalized transformers and gives a theoretical account of warmup sensitivity.",
-        "https://arxiv.org/abs/2002.04745",
+        "Uses mean-field analysis at initialization to show that Post-LN produces large expected gradients near the output while Pre-LN yields better-behaved initial gradients, providing a theoretical explanation for warmup sensitivity under the paper's model.",
+        "https://proceedings.mlr.press/v119/xiong20b.html",
       ),
       paper(
-        "Chulhee Yun, Srinadh Bhojanapalli, Ankit Singh Rawat, Sashank J. Reddi, and Sanjiv Kumar",
-        "Are Transformers Universal Approximators of Sequence-to-Sequence Functions?",
-        "ICLR 2020",
-        "Proves universality for permutation-equivariant sequence maps without positional encodings and for general continuous sequence maps with positional encodings.",
-        "https://openreview.net/forum?id=ByxRM0Ntvr",
+        "Yihe Dong, Jean-Baptiste Cordonnier, and Andreas Loukas",
+        "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
+        "ICML 2021",
+        "Uses a path decomposition to prove that pure self-attention without residual connections or multilayer perceptrons converges doubly exponentially toward rank-one token representations and explains how those architectural components prevent degeneration.",
+        "https://proceedings.mlr.press/v139/dong21a.html",
       ),
       paper(
-        "Jorge Perez, Pablo Barcelo, and Javier Marinkovic",
-        "Attention Is Turing Complete",
-        "JMLR 2021",
-        "Shows Turing completeness under explicit precision and architectural assumptions, making clear why representability alone is not learnability.",
-        "https://www.jmlr.org/papers/v22/20-302.html",
+        "Lorenzo Noci, Sotiris Anagnostidis, Luca Biggio, Antonio Orvieto, Sidak Pal Singh, and Aurelien Lucchi",
+        "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
+        "NeurIPS 2022",
+        "Proves that token-rank collapse causes query and key gradients to vanish at initialization, analyzes gradient imbalances across query, key, and value parameters, and derives depth-dependent residual scaling that preserves signal propagation.",
+        "https://proceedings.neurips.cc/paper_files/paper/2022/hash/ae0cba715b60c4052359b3d52a2cff7f-Abstract-Conference.html",
+      ),
+      paper(
+        "Akhil Kedia, Mohd Abbas Zaidi, Sushil Khyalia, Jungho Jung, Harshith Goka, and Haejun Lee",
+        "Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models",
+        "ICML 2024",
+        "Develops end-to-end formulas for forward and backward signal moments in deep transformers, uses them to analyze exploding or vanishing gradients, rank collapse, and large attention scores, and derives the DeepScaleLM scaling prescription.",
+        "https://proceedings.mlr.press/v235/kedia24a.html",
       ),
     ],
   },
   {
     week: 3,
     date: "September 25, 2026",
-    title: "Formal Languages, Logic, and Circuit Complexity",
+    title: "Expressivity, Formal Languages, and Circuit Classes",
     guidingQuestion:
-      "Which formal languages can transformers recognize, and how do depth, precision, and parallelism constrain them?",
+      "How can universal approximation and Turing completeness coexist with exact formal-language and circuit upper bounds, and which assumptions about depth, precision, masking, recurrence, and positional information explain the difference?",
     topicFocus:
-      "Self-attention lower bounds, formal-language recognition, threshold circuits, and log-precision limits.",
+      "Universal approximation, hard-attention Turing completeness, star-free language characterization, and finite-precision threshold-circuit upper bounds.",
+    subtopics: [
+      {
+        title: "Part I: Positive expressivity and computational universality",
+        description:
+          "What transformers can approximate or compute when suitable parameters, positional information, precision, and architectural mechanisms are available.",
+        paperTitles: [
+          "Are Transformers Universal Approximators of Sequence-to-Sequence Functions?",
+          "Attention Is Turing Complete",
+        ],
+      },
+      {
+        title: "Part II: Exact characterizations and upper bounds",
+        description:
+          "How masking, positional information, attention saturation, floating-point precision, and constant depth restrict formal-language recognition.",
+        paperTitles: [
+          "Masked Hard-Attention Transformers Recognize Exactly the Star-Free Languages",
+          "Saturated Transformers Are Constant-Depth Threshold Circuits",
+        ],
+      },
+    ],
     papers: [
       paper(
-        "Michael Hahn",
-        "Theoretical Limitations of Self-Attention in Neural Sequence Models",
-        "TACL 2020",
-        "Proves limitations of bounded-depth self-attention for parity and hierarchical dependencies under finite precision.",
-        "https://aclanthology.org/2020.tacl-1.11/",
+        "Chulhee Yun, Srinadh Bhojanapalli, Ankit Singh Rawat, Sashank J. Reddi, and Sanjiv Kumar",
+        "Are Transformers Universal Approximators of Sequence-to-Sequence Functions?",
+        "ICLR 2020",
+        "Proves universal approximation of continuous permutation-equivariant sequence-to-sequence maps on compact domains without positional encodings and of arbitrary continuous sequence maps on compact domains with positional encodings.",
+        "https://openreview.net/forum?id=ByxRM0Ntvr",
+      ),
+      paper(
+        "Jorge Perez, Pablo Barcelo, and Javier Marinkovic",
+        "Attention Is Turing Complete",
+        "JMLR 2021",
+        "Proves that hard-attention transformers are Turing complete through their ability to compute and access dense internal representations, under explicit architectural and precision assumptions.",
+        "https://www.jmlr.org/papers/v22/20-302.html",
       ),
       paper(
         "Andy Yang, David Chiang, and Dana Angluin",
         "Masked Hard-Attention Transformers Recognize Exactly the Star-Free Languages",
         "NeurIPS 2024",
-        "Proves that masked hard-attention transformers without positional encodings recognize exactly the star-free languages, via equivalence with linear temporal logic and Boolean RASP.",
+        "Proves that strictly masked hard-attention transformers without positional embeddings are equivalent to linear temporal logic and therefore recognize exactly the star-free languages, while analyzing how masking, position embeddings, and depth change expressivity.",
         "https://proceedings.neurips.cc/paper_files/paper/2024/hash/13d7f172259b11b230cc5da8768abc5f-Abstract-Conference.html",
       ),
       paper(
         "William Merrill, Ashish Sabharwal, and Noah A. Smith",
         "Saturated Transformers Are Constant-Depth Threshold Circuits",
         "TACL 2022",
-        "Places saturated transformers in constant-depth threshold circuits and derives consequences for formal-language recognition.",
+        "Shows that saturated attention is more expressive than hard attention while proving that floating-point saturated transformers can be simulated by constant-depth threshold circuits, yielding TC0 as an upper bound.",
         "https://aclanthology.org/2022.tacl-1.49/",
-      ),
-      paper(
-        "William Merrill and Ashish Sabharwal",
-        "The Parallelism Tradeoff: Limitations of Log-Precision Transformers",
-        "TACL 2023",
-        "Relates transformer depth and precision to parallel computation, showing limitations under logarithmic precision.",
-        "https://arxiv.org/abs/2207.00729",
       ),
     ],
   },
   {
     week: 4,
     date: "October 2, 2026",
-    title: "Computational Limits and Programmable Transformers",
+    title: "Parallel and Fine-Grained Complexity of Transformers",
     guidingQuestion:
-      "Which tasks impose computational lower bounds, and how can transformers implement programs and automata?",
+      "How do depth, precision, parallel communication, entry magnitudes, and approximation error determine what transformers and self-attention can compute efficiently?",
     topicFocus:
-      "Attention time complexity, fine-grained lower bounds, automata shortcuts, and programmable looped computation.",
+      "Threshold-circuit simulation, Massively Parallel Computation, logarithmic depth, SETH-based lower bounds, and complexity transitions for approximate attention.",
+    subtopics: [
+      {
+        title: "Part I: Parallel depth and communication",
+        description:
+          "How finite-precision transformers relate to threshold circuits and Massively Parallel Computation, and what logarithmic depth adds beyond constant-depth parallelism.",
+        paperTitles: [
+          "The Parallelism Tradeoff: Limitations of Log-Precision Transformers",
+          "Transformers, Parallel Computation, and Logarithmic Depth",
+        ],
+      },
+      {
+        title: "Part II: Fine-grained complexity of attention",
+        description:
+          "When exact or approximate attention requires quadratic time and when bounded entries permit almost-linear approximation.",
+        paperTitles: [
+          "On the Computational Complexity of Self-Attention",
+          "Fast Attention Requires Bounded Entries",
+        ],
+      },
+    ],
     papers: [
+      paper(
+        "William Merrill and Ashish Sabharwal",
+        "The Parallelism Tradeoff: Limitations of Log-Precision Transformers",
+        "TACL 2023",
+        "Proves that log-precision transformers with suitably space-bounded feed-forward blocks can be simulated by constant-depth logspace-uniform threshold circuits and derives conditional computational limitations from standard complexity assumptions.",
+        "https://aclanthology.org/2023.tacl-1.31/",
+      ),
+      paper(
+        "Clayton Sanford, Daniel Hsu, and Matus Telgarsky",
+        "Transformers, Parallel Computation, and Logarithmic Depth",
+        "ICML 2024",
+        "Proves a two-way simulation between a constant number of self-attention layers and a constant number of Massively Parallel Computation rounds, and shows that logarithmic depth suffices for tasks beyond several sequence models and subquadratic transformer approximations.",
+        "https://proceedings.mlr.press/v235/sanford24a.html",
+      ),
       paper(
         "Feyza Duman Keles, Pruthuvi Mahesakya Wijewardena, and Chinmay Hegde",
         "On the Computational Complexity of Self-Attention",
         "ALT 2023",
-        "Derives conditional lower bounds for exact and approximate self-attention, clarifying when subquadratic computation is impossible.",
-        "https://arxiv.org/abs/2209.04881",
+        "Establishes SETH-based quadratic lower bounds for exact and approximate attention across several mechanisms and gives a finite-Taylor-series linear-time approximation with exponential dependence on the polynomial order.",
+        "https://proceedings.mlr.press/v201/duman-keles23a.html",
       ),
       paper(
         "Josh Alman and Zhao Song",
         "Fast Attention Requires Bounded Entries",
         "NeurIPS 2023",
-        "Proves a sharp transition in approximate softmax-attention complexity: almost-linear time is possible for sufficiently small entries, while larger entries yield a conditional truly-subquadratic lower bound.",
+        "Proves a sharp transition for low-dimensional approximate softmax attention: sufficiently bounded entries permit almost-linear time, while larger entries yield a conditional truly-subquadratic lower bound under SETH.",
         "https://proceedings.neurips.cc/paper_files/paper/2023/hash/c72861451d6fa9dfa64831102b9bb71a-Abstract-Conference.html",
-      ),
-      paper(
-        "Bingbin Liu, Jordan T. Ash, Surbhi Goel, Akshay Krishnamurthy, and Cyril Zhang",
-        "Transformers Learn Shortcuts to Automata",
-        "ICLR 2023 oral",
-        "Proves that transformers can exactly simulate any finite-state automaton using O(log T) depth and that broad classes of solvable automata admit constant-depth simulations. It connects automata theory, semigroup theory, and circuit complexity, and examines when gradient-based training learns these parallel shortcut algorithms and why they may fail to generalize out of distribution.",
-        "https://openreview.net/forum?id=De4FYqjFueZ",
-      ),
-      paper(
-        "Angeliki Giannou, Shashank Rajput, Jy-Yong Sohn, Kangwook Lee, Jason D. Lee, and Dimitris Papailiopoulos",
-        "Looped Transformers as Programmable Computers",
-        "ICML 2023",
-        "Constructs a constant-depth looped transformer that implements an explicit instruction-set architecture, including memory access, nonlinear operations, program counters, conditional branches, linear-algebra routines, and backpropagation. It clarifies how weight tying and recurrent execution turn a fixed transformer block into a programmable computational device.",
-        "https://proceedings.mlr.press/v202/giannou23a.html",
       ),
     ],
   },
@@ -564,21 +625,21 @@ export const courseSchedule: readonly CourseWeek[] = [
         "Benjamin L. Edelman, Surbhi Goel, Sham Kakade, and Cyril Zhang",
         "Inductive Biases and Variable Creation in Self-Attention Mechanisms",
         "ICML 2022",
-        "Proves norm-based sample-complexity guarantees showing that bounded-norm self-attention can learn sparse dependencies with only logarithmic dependence on the context length.",
+        "Proves norm-based sample-complexity guarantees showing that bounded-norm self-attention can learn sparse dependencies with only logarithmic dependence on context length.",
         "https://proceedings.mlr.press/v162/edelman22a.html",
       ),
       paper(
         "Muhammed Emrullah Ildiz, Yixiao Huang, Yingcong Li, Ankit Singh Rawat, and Samet Oymak",
         "From Self-Attention to Markov Models: Unveiling the Dynamics of Generative Transformers",
         "ICML 2024",
-        "Connects one-layer generative self-attention to context-conditioned Markov models and gives identifiability, coverage, consistency, and finite-sample guarantees for learning the latent model.",
+        "Connects one-layer generative self-attention to context-conditioned Markov models and establishes identifiability, coverage, consistency, and finite-sample guarantees under the paper's teacher-student and trajectory settings.",
         "https://proceedings.mlr.press/v235/ildiz24a.html",
       ),
       paper(
         "Davoud Ataee Tarzanagh, Yingcong Li, Xuechen Zhang, and Samet Oymak",
         "Max-Margin Token Selection in Attention Mechanism",
         "NeurIPS 2023",
-        "Proves that gradient descent on a softmax-attention model converges in direction to a max-margin solution that separates locally optimal tokens from non-optimal tokens.",
+        "Proves that gradient descent on the attention parameter converges in direction to a max-margin solution separating locally optimal tokens from non-optimal tokens, and gives conditions for corresponding margin behavior under joint optimization with the prediction head.",
         "https://proceedings.neurips.cc/paper_files/paper/2023/hash/970f59b22f4c72aec75174aae63c7459-Abstract-Conference.html",
       ),
       paper(
@@ -906,6 +967,34 @@ export const courseSchedule: readonly CourseWeek[] = [
 ];
 
 export const additionalReadings: readonly CoursePaper[] = [
+  paper(
+    "Xiao Shi Huang, Felipe Perez, Jimmy Ba, and Maksims Volkovs",
+    "Improving Transformer Optimization Through Better Initialization",
+    "ICML 2020",
+    "Proposes T-Fixup using a simplified analysis of depth-dependent update scaling and validates that the initialization can train very deep encoder-decoder transformers without warmup or layer normalization. It is useful practical background for Week 2 but is not one of the core signal-propagation theorem papers.",
+    "https://proceedings.mlr.press/v119/huang20f.html",
+  ),
+  paper(
+    "Michael Hahn",
+    "Theoretical Limitations of Self-Attention in Neural Sequence Models",
+    "TACL 2020",
+    "A foundational formal-language lower-bound paper showing limitations of fixed-depth self-attention for periodic and hierarchical languages under its model assumptions. It supports Week 3, while the required schedule uses newer exact characterizations and circuit-class results.",
+    "https://aclanthology.org/2020.tacl-1.11/",
+  ),
+  paper(
+    "Bingbin Liu, Jordan T. Ash, Surbhi Goel, Akshay Krishnamurthy, and Cyril Zhang",
+    "Transformers Learn Shortcuts to Automata",
+    "ICLR 2023 oral",
+    "Proves that transformers can exactly simulate any finite-state automaton using O(log T) depth and that broad algebraic classes admit constant-depth shortcut constructions; the claim that gradient-based training discovers these shortcuts is supported empirically rather than by a general optimization theorem.",
+    "https://openreview.net/forum?id=De4FYqjFueZ",
+  ),
+  paper(
+    "Angeliki Giannou, Shashank Rajput, Jy-Yong Sohn, Kangwook Lee, Jason D. Lee, and Dimitris Papailiopoulos",
+    "Looped Transformers as Programmable Computers",
+    "ICML 2023",
+    "Constructs explicit weights for a looped transformer that implements an explicit instruction-set architecture, memory access, branching, nonlinear operations, linear algebra, and backpropagation. It is a strong programmable-computation result but not a theorem that the program or weights are learned from data.",
+    "https://proceedings.mlr.press/v202/giannou23a.html",
+  ),
   paper(
     "Hubert Ramsauer et al.",
     "Hopfield Networks Is All You Need",

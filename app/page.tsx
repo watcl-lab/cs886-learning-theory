@@ -33,7 +33,7 @@ function PaperList({ papers }: { papers: readonly CoursePaper[] }) {
             </a>
             . {paper.publication}.
             <br />
-            <strong>Learning-theory focus:</strong> {paper.presentationFocus}
+            <strong>Theoretical focus:</strong> {paper.presentationFocus}
           </p>
         </li>
       ))}
