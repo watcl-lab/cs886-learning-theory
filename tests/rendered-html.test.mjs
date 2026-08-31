@@ -144,6 +144,45 @@ test("server-renders the corrected course content and operational policies", asy
     "Transformers Provably Learn Sparse Token Selection While Fully-Connected Nets Cannot",
   ]) assert.match(text, new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
 
+  for (const title of [
+    "Bayesian and Statistical Foundations of In-Context Learning",
+    "Optimization and Training Dynamics of In-Context Learning",
+    "Generalization, Learnability, and Minimax Theory of In-Context Learning",
+    "Learning Theory of Autoregressive Chain-of-Thought",
+    "Curricula, Scratchpads, and Length Generalization for Reasoning",
+  ]) assert.match(text, new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
+
+  for (const heading of [
+    "Part I: Bayesian and frequentist interpretations",
+    "Part II: Information-theoretic rates and universal priors",
+    "Part I: Population optima and single-step training",
+    "Part II: Softmax dynamics and multi-step learned optimization",
+    "Part I: PAC learnability and stability",
+    "Part II: Algorithm selection and minimax rates",
+    "Part I: Formal frameworks and tight sample complexity",
+    "Part II: Statistical benefits and training dynamics",
+    "Part I: Learning barriers and curriculum design",
+    "Part II: Adaptive curriculum and length extrapolation",
+  ]) assert.match(text, new RegExp(heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
+
+  for (const title of [
+    "An Information-Theoretic Analysis of In-Context Learning",
+    "Universal Priors: Solving Empirical Bayes via Bayesian Inference and Pretraining",
+    "Can Looped Transformers Learn to Implement Multi-step Gradient Descent for In-context Learning?",
+    "From Sparse Dependence to Sparse Attention: Unveiling How Chain-of-Thought Enhances Transformer Sample Efficiency",
+    "Training Nonlinear Transformers for Chain-of-Thought Inference: A Theoretical Generalization Analysis",
+    "Learning to Reason with Curriculum I: Provable Benefits of Autocurriculum",
+  ]) assert.match(text, new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
+
+  assert.match(
+    text,
+    /foundational representational, mechanistic, and adjacent theory papers that support the seminar's learning-theory core/i,
+  );
+  assert.doesNotMatch(
+    text,
+    /Memory and Bayesian Theories of In-Context Learning|In-Context Learning as Optimization|Generalization and Algorithm Selection in In-Context Learning|Optimal In-Context Learning and Chain-of-Thought Theory|Reasoning Generalization and Misspecified Next-Token Prediction/i,
+  );
+
   assert.doesNotMatch(html, /TODO_INSTRUCTOR_/i);
   assert.doesNotMatch(text, /Assignment Screening|assignment-screening|automated screening software/i);
   assert.doesNotMatch(text, /45 minutes, including questions|one or two paper presentations|40 scheduled paper slots|approximately 25 individual project presentations|final two three-hour meetings|22 solo presentation slots|14 co-presented slots|9 × 4|25 × 2|8 × 2|two 170-minute meetings provide|presentations use 325 minutes|meeting uses 156 minutes|meeting uses 169 minutes/i);
@@ -158,6 +197,13 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(html, /openreview\.net\/forum\?id=De4FYqjFueZ/);
   assert.match(html, /v202\/giannou23a\.html/);
   assert.match(html, /v235\/huang24d\.html/);
+  assert.match(html, /v235\/jeon24a\.html/);
+  assert.match(html, /v336\/cannella26a\.html/);
+  assert.match(html, /v235\/gatmiry24b\.html/);
+  assert.match(html, /fa6d4d2020aac4bd8f7cdb2771fc1ae2-Abstract-Conference\.html/);
+  assert.match(html, /b295b3a940706f431076c86b78907757-Abstract-Conference\.html/);
+  assert.match(html, /v336\/rajaraman26a\.html/);
+  assert.match(html, /arxiv\.org\/abs\/2502\.12465/);
 });
 
 test("course data preserves the schedule arithmetic, readings, and user-confirmed policies", async () => {
@@ -177,14 +223,29 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     "October 30, 2026", "November 6, 2026", "November 13, 2026",
     "November 20, 2026", "November 27, 2026", "December 4, 2026",
   ]);
+  assert.deepEqual(
+    courseSchedule.slice(5, 10).map(({ week, title }) => [week, title]),
+    [
+      [6, "Bayesian and Statistical Foundations of In-Context Learning"],
+      [7, "Optimization and Training Dynamics of In-Context Learning"],
+      [8, "Generalization, Learnability, and Minimax Theory of In-Context Learning"],
+      [9, "Learning Theory of Autoregressive Chain-of-Thought"],
+      [10, "Curricula, Scratchpads, and Length Generalization for Reasoning"],
+    ],
+  );
+  assert.match(courseSchedule[5].guidingQuestion, /Bayesian or empirical-Bayes prediction/i);
+  assert.match(courseSchedule[6].guidingQuestion, /gradient-based pretraining actually converge/i);
+  assert.match(courseSchedule[7].guidingQuestion, /generalize across examples and tasks/i);
+  assert.match(courseSchedule[8].guidingQuestion, /observed or latent reasoning traces/i);
+  assert.match(courseSchedule[9].guidingQuestion, /adaptive data selection, and self-training/i);
   assert.ok(courseSchedule.slice(0, 10).every((week) => week.papers.length === 4));
   assert.equal(courseSchedule.slice(1, 10).flatMap((week) => week.papers).length, 36);
   assert.ok(courseSchedule.slice(10).every((week) => week.papers.length === 0));
   assert.equal(scheduledPapers.length, 40);
-  assert.equal(additionalReadings.length, 10);
-  assert.equal(allPapers.length, 50);
-  assert.equal(new Set(allPapers.map((paper) => paper.title)).size, 50);
-  assert.equal(new Set(allPapers.map((paper) => paper.link)).size, 50);
+  assert.equal(additionalReadings.length, 16);
+  assert.equal(allPapers.length, 56);
+  assert.equal(new Set(allPapers.map((paper) => paper.title)).size, 56);
+  assert.equal(new Set(allPapers.map((paper) => paper.link)).size, 56);
 
   assert.deepEqual(assessment.map(({ component, weight }) => [component, weight]), [
     ["Course project", "40%"], ["Paper-presentation work", "40%"], ["Class participation", "20%"],
@@ -330,14 +391,50 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     assert.ok(!scheduledTitles.includes(title));
   }
 
-  for (const week of courseSchedule) {
-    for (const subtopic of week.subtopics ?? []) {
-      for (const title of subtopic.paperTitles) {
-        assert.equal(week.papers.filter((paper) => paper.title === title).length, 1, `Week ${week.week} subtopic reference must resolve exactly once: ${title}`);
-      }
-    }
+  const newlyRequiredTitles = [
+    "An Information-Theoretic Analysis of In-Context Learning",
+    "Universal Priors: Solving Empirical Bayes via Bayesian Inference and Pretraining",
+    "Can Looped Transformers Learn to Implement Multi-step Gradient Descent for In-context Learning?",
+    "From Sparse Dependence to Sparse Attention: Unveiling How Chain-of-Thought Enhances Transformer Sample Efficiency",
+    "Training Nonlinear Transformers for Chain-of-Thought Inference: A Theoretical Generalization Analysis",
+    "Learning to Reason with Curriculum I: Provable Benefits of Autocurriculum",
+  ];
+  const movedToAdditionalTitles = [
+    "Hopfield Networks Is All You Need",
+    "Birth of a Transformer: A Memory Viewpoint",
+    "What Learning Algorithm Is In-Context Learning? Investigations with Linear Models",
+    "Transformers Learn In-Context by Gradient Descent",
+    "Chain of Thought Empowers Transformers to Solve Inherently Serial Problems",
+    "Computational-Statistical Tradeoffs at the Next-Token Prediction Barrier: Autoregressive and Imitation Learning under Misspecification",
+  ];
+  const scheduledTitleSet = new Set(scheduledTitles);
+  const additionalTitleSet = new Set(additionalTitles);
+
+  for (const title of newlyRequiredTitles) {
+    assert.equal(scheduledTitleSet.has(title), true, `${title} must be a scheduled paper`);
+    assert.equal(additionalTitleSet.has(title), false, `${title} must not be duplicated in additional readings`);
   }
-  for (const weekNumber of [2, 5]) {
+  for (const title of movedToAdditionalTitles) {
+    assert.equal(scheduledTitleSet.has(title), false, `${title} must not remain in the required schedule`);
+    assert.equal(additionalTitleSet.has(title), true, `${title} must be retained as an additional reading`);
+  }
+
+  for (const week of courseSchedule.filter((candidate) => candidate.subtopics?.length)) {
+    const groupedTitles = week.subtopics.flatMap((subtopic) => subtopic.paperTitles);
+    const weekPaperTitles = week.papers.map((paper) => paper.title);
+
+    assert.deepEqual(
+      groupedTitles,
+      weekPaperTitles,
+      `Week ${week.week} subtopic order must exactly match its paper order`,
+    );
+    assert.equal(
+      new Set(groupedTitles).size,
+      weekPaperTitles.length,
+      `Week ${week.week} must assign every paper to exactly one subtopic`,
+    );
+  }
+  for (const weekNumber of [2, 5, 6, 7, 8, 9, 10]) {
     const week = courseSchedule.find(({ week }) => week === weekNumber);
     assert.equal(week.subtopics.length, 2);
     assert.equal(new Set(week.subtopics.flatMap((subtopic) => subtopic.paperTitles)).size, 4);
@@ -413,6 +510,78 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     "Infinite Attention: NNGP and NTK for Deep Attention Networks",
     "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
   ]) assert.ok(!weekFive.papers.some(({ title }) => title === removedTitle));
+
+  const expectedPapersByWeek = new Map([
+    [
+      6,
+      [
+        "An Explanation of In-Context Learning as Implicit Bayesian Inference",
+        "Statistical Foundations of Prior-Data Fitted Networks",
+        "An Information-Theoretic Analysis of In-Context Learning",
+        "Universal Priors: Solving Empirical Bayes via Bayesian Inference and Pretraining",
+      ],
+    ],
+    [
+      7,
+      [
+        "One Step of Gradient Descent Is Provably the Optimal In-Context Learner with One Layer of Linear Self-Attention",
+        "Trained Transformers Learn Linear Models In-Context",
+        "In-Context Convergence of Transformers",
+        "Can Looped Transformers Learn to Implement Multi-step Gradient Descent for In-context Learning?",
+      ],
+    ],
+    [
+      8,
+      [
+        "The Learnability of In-Context Learning",
+        "Transformers as Algorithms: Generalization and Stability in In-Context Learning",
+        "Transformers as Statisticians: Provable In-Context Learning with In-Context Algorithm Selection",
+        "Transformers Are Minimax Optimal Nonparametric In-Context Learners",
+      ],
+    ],
+    [
+      9,
+      [
+        "A Theory of Learning with Autoregressive Chain of Thought",
+        "Tight Sample Complexity of Transformers",
+        "From Sparse Dependence to Sparse Attention: Unveiling How Chain-of-Thought Enhances Transformer Sample Efficiency",
+        "Training Nonlinear Transformers for Chain-of-Thought Inference: A Theoretical Generalization Analysis",
+      ],
+    ],
+    [
+      10,
+      [
+        "How Far Can Transformers Reason? The Globality Barrier and Inductive Scratchpad",
+        "Learning Compositional Functions with Transformers from Easy-to-Hard Data",
+        "Learning to Reason with Curriculum I: Provable Benefits of Autocurriculum",
+        "Transformers Provably Learn Chain-of-Thought Reasoning with Length Generalization",
+      ],
+    ],
+  ]);
+
+  for (const [weekNumber, expectedTitles] of expectedPapersByWeek) {
+    const week = courseSchedule.find((candidate) => candidate.week === weekNumber);
+    assert.ok(week, `Week ${weekNumber} must exist`);
+    assert.deepEqual(
+      week.papers.map((paper) => paper.title),
+      expectedTitles,
+      `Week ${weekNumber} must contain the intended papers in the intended order`,
+    );
+  }
+
+  const linkByTitle = new Map(allPapers.map((paper) => [paper.title, paper.link]));
+  assert.equal(
+    linkByTitle.get("Computational-Statistical Tradeoffs at the Next-Token Prediction Barrier: Autoregressive and Imitation Learning under Misspecification"),
+    "https://arxiv.org/abs/2502.12465",
+  );
+  assert.equal(
+    linkByTitle.get("Universal Priors: Solving Empirical Bayes via Bayesian Inference and Pretraining"),
+    "https://proceedings.mlr.press/v336/cannella26a.html",
+  );
+  assert.equal(
+    linkByTitle.get("Learning to Reason with Curriculum I: Provable Benefits of Autocurriculum"),
+    "https://proceedings.mlr.press/v336/rajaraman26a.html",
+  );
 
   const serializedData = JSON.stringify(data);
   assert.doesNotMatch(serializedData, /TODO_INSTRUCTOR_|"impact"\s*:|subweights?|assignment.?screening/i);
