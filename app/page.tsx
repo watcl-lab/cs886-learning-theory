@@ -432,8 +432,9 @@ export default function Home() {
         <section id="additional-readings" aria-labelledby="additional-readings-heading">
           <h2 id="additional-readings-heading">Suggested Additional Readings and Project Starting Points</h2>
           <p>
-            These readings extend the main themes of the seminar and may provide useful starting points for projects.
-            They are not scheduled paper presentations.
+            These readings include foundational representational, mechanistic, and adjacent theory papers that support
+            the seminar&apos;s learning-theory core, as well as possible project starting points. They are not scheduled
+            paper presentations.
           </p>
           <PaperList papers={additionalReadings} />
         </section>

@@ -593,150 +593,209 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 6,
     date: "October 23, 2026",
-    title: "Memory and Bayesian Theories of In-Context Learning",
+    title: "Bayesian and Statistical Foundations of In-Context Learning",
     guidingQuestion:
-      "How does training form attention-based memories, and when does in-context learning approximate latent-task inference?",
+      "When does next-token pretraining induce Bayesian or empirical-Bayes prediction, and how do task diversity, context length, and distribution shift control the resulting error?",
     topicFocus:
-      "Hopfield retrieval, memory formation, implicit Bayesian inference, and statistical consistency.",
+      "Latent-concept inference, frequentist consistency, information-theoretic error decomposition, universal priors, and empirical-Bayes adaptation.",
+    subtopics: [
+      {
+        title: "Part I: Bayesian and frequentist interpretations",
+        description:
+          "How pretrained sequence predictors can be understood as latent-task inference procedures and when those procedures are statistically consistent.",
+        paperTitles: [
+          "An Explanation of In-Context Learning as Implicit Bayesian Inference",
+          "Statistical Foundations of Prior-Data Fitted Networks",
+        ],
+      },
+      {
+        title: "Part II: Information-theoretic rates and universal priors",
+        description:
+          "How prediction error depends on the number and length of training sequences, and how a fixed pretraining prior can adapt to unknown test distributions.",
+        paperTitles: [
+          "An Information-Theoretic Analysis of In-Context Learning",
+          "Universal Priors: Solving Empirical Bayes via Bayesian Inference and Pretraining",
+        ],
+      },
+    ],
     papers: [
-      paper(
-        "Hubert Ramsauer et al.",
-        "Hopfield Networks Is All You Need",
-        "ICLR 2021",
-        "The landmark bridge: identifies modern Hopfield retrieval with the attention update and supplies an energy-based memory interpretation.",
-        "https://openreview.net/forum?id=tL89RnzIiCd",
-      ),
-      paper(
-        "Alberto Bietti, Vivien Cabannes, Diane Bouchacourt, Herve Jegou, and Leon Bottou",
-        "Birth of a Transformer: A Memory Viewpoint",
-        "NeurIPS 2023",
-        "Analyzes the stages by which gradient training forms key-query memories and token associations in a shallow transformer.",
-        "https://arxiv.org/abs/2306.00802",
-      ),
       paper(
         "Sang Michael Xie, Aditi Raghunathan, Percy Liang, and Tengyu Ma",
         "An Explanation of In-Context Learning as Implicit Bayesian Inference",
         "ICLR 2022",
-        "Shows that sequence modeling on a mixture of latent concepts can produce approximate Bayesian task inference at test time.",
+        "Under a latent-concept mixture model, proves conditions under which next-token pretraining yields approximate Bayesian inference over concepts at test time despite a mismatch between pretraining sequences and in-context prompts.",
         "https://openreview.net/forum?id=RdJVFCHjUMI",
       ),
       paper(
         "Thomas Nagler",
         "Statistical Foundations of Prior-Data Fitted Networks",
         "ICML 2023",
-        "Gives a frequentist theory for transformer-based prior-data fitted networks, separating variance reduction from localization bias.",
+        "Develops a frequentist theory of prior-data fitted networks, separating variance reduction from localization bias and identifying conditions under which the pretrained predictor is statistically consistent.",
         "https://proceedings.mlr.press/v202/nagler23a.html",
+      ),
+      paper(
+        "Hong Jun Jeon, Jason D. Lee, Qi Lei, and Benjamin Van Roy",
+        "An Information-Theoretic Analysis of In-Context Learning",
+        "ICML 2024",
+        "Decomposes Bayes prediction error into meta-learning and within-task terms and derives how the error decreases with both the number of training sequences and their lengths without the mixing-time assumptions used by earlier analyses.",
+        "https://proceedings.mlr.press/v235/jeon24a.html",
+      ),
+      paper(
+        "Nick Cannella, Anzo Teh, Yanjun Han, and Yury Polyanskiy",
+        "Universal Priors: Solving Empirical Bayes via Bayesian Inference and Pretraining",
+        "COLT 2026",
+        "For Poisson empirical Bayes, proves that universal pretraining priors achieve near-optimal regret uniformly over test distributions and explains length generalization through fractional-posterior inference.",
+        "https://proceedings.mlr.press/v336/cannella26a.html",
       ),
     ],
   },
   {
     week: 7,
     date: "October 30, 2026",
-    title: "In-Context Learning as Optimization",
+    title: "Optimization and Training Dynamics of In-Context Learning",
     guidingQuestion:
-      "Which learning algorithm is implemented in a transformer forward pass, and can gradient pretraining provably produce it?",
+      "Which in-context algorithms minimize the pretraining objective, and under what assumptions does gradient-based pretraining actually converge to those solutions?",
     topicFocus:
-      "Algorithm identification, implicit gradient descent, end-to-end training, and optimal one-step learners.",
+      "Population-risk optima, gradient-flow convergence, softmax-attention dynamics, stagewise learning, and multi-step learned optimization.",
+    subtopics: [
+      {
+        title: "Part I: Population optima and single-step training",
+        description:
+          "How one-layer linear self-attention encodes gradient-like prediction rules and when gradient-based training reaches globally optimal in-context predictors.",
+        paperTitles: [
+          "One Step of Gradient Descent Is Provably the Optimal In-Context Learner with One Layer of Linear Self-Attention",
+          "Trained Transformers Learn Linear Models In-Context",
+        ],
+      },
+      {
+        title: "Part II: Softmax dynamics and multi-step learned optimization",
+        description:
+          "How nonlinear attention learns in stages and how looped transformers can provably acquire multi-step preconditioned gradient descent.",
+        paperTitles: [
+          "In-Context Convergence of Transformers",
+          "Can Looped Transformers Learn to Implement Multi-step Gradient Descent for In-context Learning?",
+        ],
+      },
+    ],
     papers: [
       paper(
-        "Ekin Akyurek, Dale Schuurmans, Jacob Andreas, Tengyu Ma, and Denny Zhou",
-        "What Learning Algorithm Is In-Context Learning? Investigations with Linear Models",
-        "ICLR 2023",
-        "Compares trained transformers with least-squares, gradient-based, and Bayesian estimators to identify the algorithm implemented in context.",
-        "https://openreview.net/forum?id=0g0X4H8yN4I",
-      ),
-      paper(
-        "Johannes von Oswald et al.",
-        "Transformers Learn In-Context by Gradient Descent",
-        "ICML 2023",
-        "Constructs self-attention layers that implement gradient updates and shows trained transformers discover closely related solutions.",
-        "https://proceedings.mlr.press/v202/von-oswald23a.html",
+        "Arvind V. Mahankali, Tatsunori Hashimoto, and Tengyu Ma",
+        "One Step of Gradient Descent Is Provably the Optimal In-Context Learner with One Layer of Linear Self-Attention",
+        "ICLR 2024",
+        "Characterizes global population-risk minimizers of one-layer linear self-attention, showing that isotropic linear tasks yield one gradient step and non-isotropic tasks yield an appropriately preconditioned step.",
+        "https://openreview.net/forum?id=8p3fu56lKc",
       ),
       paper(
         "Ruiqi Zhang, Spencer Frei, and Peter L. Bartlett",
         "Trained Transformers Learn Linear Models In-Context",
         "JMLR 2024",
-        "Proves that gradient descent on a trained linear transformer converges to an in-context linear predictor with controlled risk.",
+        "Proves gradient-flow convergence for a one-layer linear transformer, derives controlled in-context prediction risk, and analyzes how the learned predictor behaves under distribution shift.",
         "https://www.jmlr.org/papers/v25/23-1042.html",
       ),
       paper(
-        "Arvind V. Mahankali, Tatsunori Hashimoto, and Tengyu Ma",
-        "One Step of Gradient Descent Is Provably the Optimal In-Context Learner with One Layer of Linear Self-Attention",
-        "ICLR 2024",
-        "Characterizes the global optimum of one-layer linear self-attention and proves its equivalence to a single gradient step under the model.",
-        "https://openreview.net/forum?id=8p3fu56lKc",
+        "Yu Huang, Yuan Cheng, and Yingbin Liang",
+        "In-Context Convergence of Transformers",
+        "ICML 2024",
+        "Proves finite-time convergence of gradient descent for a one-layer softmax-attention model on structured in-context regression and characterizes stagewise learning when features occur at imbalanced frequencies.",
+        "https://proceedings.mlr.press/v235/huang24d.html",
+      ),
+      paper(
+        "Khashayar Gatmiry, Nikunj Saunshi, Sashank J. Reddi, Stefanie Jegelka, and Sanjiv Kumar",
+        "Can Looped Transformers Learn to Implement Multi-step Gradient Descent for In-context Learning?",
+        "ICML 2024",
+        "Shows that the population optimum of a linear looped transformer implements multi-step preconditioned gradient descent and proves fast gradient-flow convergence through a gradient-dominance argument despite nonconvexity.",
+        "https://proceedings.mlr.press/v235/gatmiry24b.html",
       ),
     ],
   },
   {
     week: 8,
     date: "November 6, 2026",
-    title: "Generalization and Algorithm Selection in In-Context Learning",
+    title: "Generalization, Learnability, and Minimax Theory of In-Context Learning",
     guidingQuestion:
-      "How many tasks and examples are needed for in-context learning, and how can a transformer choose algorithms and representations?",
+      "How do pretrained in-context learners generalize across examples and tasks, and which statistical rates can transformer-based learners attain?",
     topicFocus:
-      "Stability, PAC learnability, in-context algorithm selection, and tight sample complexity.",
+      "PAC learnability, algorithmic stability, task transfer, in-context algorithm selection, and minimax nonparametric rates.",
+    subtopics: [
+      {
+        title: "Part I: PAC learnability and stability",
+        description:
+          "Formal learning frameworks and generalization guarantees for pretraining followed by frozen-weight in-context adaptation.",
+        paperTitles: [
+          "The Learnability of In-Context Learning",
+          "Transformers as Algorithms: Generalization and Stability in In-Context Learning",
+        ],
+      },
+      {
+        title: "Part II: Algorithm selection and minimax rates",
+        description:
+          "How transformers can select among statistical procedures in context and attain optimal rates over rich function classes.",
+        paperTitles: [
+          "Transformers as Statisticians: Provable In-Context Learning with In-Context Algorithm Selection",
+          "Transformers Are Minimax Optimal Nonparametric In-Context Learners",
+        ],
+      },
+    ],
     papers: [
-      paper(
-        "Yingcong Li, M. Emrullah Ildiz, Dimitris Papailiopoulos, and Samet Oymak",
-        "Transformers as Algorithms: Generalization and Stability in In-Context Learning",
-        "ICML 2023",
-        "Treats a transformer as an algorithm operating on the prompt and derives generalization guarantees through stability.",
-        "https://proceedings.mlr.press/v202/li23l.html",
-      ),
       paper(
         "Noam Wies, Yoav Levine, and Amnon Shashua",
         "The Learnability of In-Context Learning",
         "NeurIPS 2023",
-        "Introduces a PAC framework for pretraining followed by frozen-weight in-context adaptation and proves finite sample-complexity results.",
+        "Introduces a PAC-style framework for pretraining followed by frozen-weight in-context adaptation and proves finite sample-complexity guarantees for latent-task mixtures.",
         "https://proceedings.neurips.cc/paper_files/paper/2023/hash/73950f0eb4ac0925dc71ba2406893320-Abstract-Conference.html",
+      ),
+      paper(
+        "Yingcong Li, M. Emrullah Ildiz, Dimitris Papailiopoulos, and Samet Oymak",
+        "Transformers as Algorithms: Generalization and Stability in In-Context Learning",
+        "ICML 2023",
+        "Treats the transformer as an algorithm operating on a prompt and derives excess-risk and task-transfer guarantees through algorithmic stability for independent examples and dynamical trajectories.",
+        "https://proceedings.mlr.press/v202/li23l.html",
       ),
       paper(
         "Yu Bai, Fan Chen, Huan Wang, Caiming Xiong, and Song Mei",
         "Transformers as Statisticians: Provable In-Context Learning with In-Context Algorithm Selection",
         "NeurIPS 2023",
-        "Constructs transformers that implement regression and classification procedures and select algorithms through in-context validation.",
+        "Constructs transformers that implement regression and classification procedures, select among algorithms through in-context validation, and achieve formal statistical guarantees with polynomial pretraining requirements.",
         "https://proceedings.neurips.cc/paper_files/paper/2023/hash/b2e63e36c57e153b9015fece2352a9f9-Abstract-Conference.html",
       ),
       paper(
-        "Chenxiao Yang, Nathan Srebro, and Zhiyuan Li",
-        "Tight Sample Complexity of Transformers",
-        "COLT 2026",
-        "Tightly characterizes the VC dimension and sample complexity of depth-L transformers, including chain-of-thought learning, with nearly matching upper and lower bounds.",
-        "https://proceedings.mlr.press/v336/yang26a.html",
+        "Juno Kim, Tai Nakamaki, and Taiji Suzuki",
+        "Transformers Are Minimax Optimal Nonparametric In-Context Learners",
+        "NeurIPS 2024",
+        "Derives approximation and generalization bounds for nonparametric in-context regression, separates pretraining and within-context generalization gaps, and establishes minimax-optimal rates over rich function classes.",
+        "https://proceedings.neurips.cc/paper_files/paper/2024/hash/c11daad0a48ea5f3c5c6390c7b060720-Abstract-Conference.html",
       ),
     ],
   },
   {
     week: 9,
     date: "November 13, 2026",
-    title: "Optimal In-Context Learning and Chain-of-Thought Theory",
+    title: "Learning Theory of Autoregressive Chain-of-Thought",
     guidingQuestion:
-      "What statistical rates can in-context learning achieve, and how do reasoning tokens change computational power and learnability?",
+      "How do observed or latent reasoning traces change sample complexity, computational complexity, optimization, and generalization?",
     topicFocus:
-      "Training convergence, minimax rates, serial computation, and autoregressive chain-of-thought learnability.",
+      "Observed and latent chains of thought, VC dimension, sample complexity, sparse dependence, nonlinear-attention training, and robustness to task and data shift.",
+    subtopics: [
+      {
+        title: "Part I: Formal frameworks and tight sample complexity",
+        description:
+          "General learning models for autoregressive reasoning traces and nearly matching capacity bounds for transformer chain-of-thought learning.",
+        paperTitles: [
+          "A Theory of Learning with Autoregressive Chain of Thought",
+          "Tight Sample Complexity of Transformers",
+        ],
+      },
+      {
+        title: "Part II: Statistical benefits and training dynamics",
+        description:
+          "When intermediate reasoning steps improve sample efficiency and when gradient training of nonlinear attention produces a generalizing chain-of-thought predictor.",
+        paperTitles: [
+          "From Sparse Dependence to Sparse Attention: Unveiling How Chain-of-Thought Enhances Transformer Sample Efficiency",
+          "Training Nonlinear Transformers for Chain-of-Thought Inference: A Theoretical Generalization Analysis",
+        ],
+      },
+    ],
     papers: [
-      paper(
-        "Yu Huang, Yuan Cheng, and Yingbin Liang",
-        "In-Context Convergence of Transformers",
-        "ICML 2024",
-        "Proves convergence of gradient training for linear-attention in-context regression under explicit distributional assumptions.",
-        "https://proceedings.mlr.press/v235/huang24d.html",
-      ),
-      paper(
-        "Juno Kim, Tai Nakamaki, and Taiji Suzuki",
-        "Transformers Are Minimax Optimal Nonparametric In-Context Learners",
-        "NeurIPS 2024",
-        "Constructs transformer in-context estimators attaining minimax rates over nonparametric function classes.",
-        "https://proceedings.neurips.cc/paper_files/paper/2024/hash/c11daad0a48ea5f3c5c6390c7b060720-Abstract-Conference.html",
-      ),
-      paper(
-        "Zhiyuan Li, Hong Liu, Denny Zhou, and Tengyu Ma",
-        "Chain of Thought Empowers Transformers to Solve Inherently Serial Problems",
-        "ICLR 2024",
-        "Proves that generated intermediate tokens allow bounded-depth transformers to solve inherently serial tasks that direct prediction cannot efficiently solve.",
-        "https://proceedings.iclr.cc/paper_files/paper/2024/hash/3309b4112c9f04a993f2bbdd0274bba1-Abstract-Conference.html",
-      ),
       paper(
         "Nirmit Joshi, Gal Vardi, Adam Block, Surbhi Goel, Zhiyuan Li, Theodor Misiakiewicz, and Nathan Srebro",
         "A Theory of Learning with Autoregressive Chain of Thought",
@@ -744,43 +803,84 @@ export const courseSchedule: readonly CourseWeek[] = [
         "Formalizes learning with observed and latent chains of thought, derives sample and computational complexity from properties such as VC dimension, and shows how time invariance can remove dependence on chain length from sample complexity.",
         "https://proceedings.mlr.press/v291/joshi25a.html",
       ),
+      paper(
+        "Chenxiao Yang, Nathan Srebro, and Zhiyuan Li",
+        "Tight Sample Complexity of Transformers",
+        "COLT 2026",
+        "Tightly characterizes the VC dimension and sample complexity of depth-L transformers, including teacher-forced chain-of-thought learning, with nearly matching upper and lower bounds.",
+        "https://proceedings.mlr.press/v336/yang26a.html",
+      ),
+      paper(
+        "Kaiyue Wen, Huaqing Zhang, Hongzhou Lin, and Jingzhao Zhang",
+        "From Sparse Dependence to Sparse Attention: Unveiling How Chain-of-Thought Enhances Transformer Sample Efficiency",
+        "ICLR 2025",
+        "In a parity-learning model under the paper's training setup, proves that chain-of-thought enables polynomial-sample learning where direct prediction requires exponentially many samples and explains the gain through sparse sequential dependence and sparse attention.",
+        "https://proceedings.iclr.cc/paper_files/paper/2025/hash/fa6d4d2020aac4bd8f7cdb2771fc1ae2-Abstract-Conference.html",
+      ),
+      paper(
+        "Hongkang Li, Songtao Lu, Pin-Yu Chen, Xiaodong Cui, and Meng Wang",
+        "Training Nonlinear Transformers for Chain-of-Thought Inference: A Theoretical Generalization Analysis",
+        "ICLR 2025",
+        "Quantifies the samples and iterations needed to train nonlinear attention for chain-of-thought inference and proves generalization to unseen tasks under data shift and imperfect or noisy reasoning demonstrations.",
+        "https://proceedings.iclr.cc/paper_files/paper/2025/hash/b295b3a940706f431076c86b78907757-Abstract-Conference.html",
+      ),
     ],
   },
   {
     week: 10,
     date: "November 20, 2026",
-    title: "Reasoning Generalization and Misspecified Next-Token Prediction",
+    title: "Curricula, Scratchpads, and Length Generalization for Reasoning",
     guidingQuestion:
-      "When are scratchpads or easy-to-hard curricula necessary for reasoning, and how do length generalization and misspecification shape next-token prediction?",
+      "Which forms of intermediate supervision, adaptive data selection, and self-training make compositional reasoning learnable and transferable to harder or longer instances?",
     topicFocus:
-      "Globality barriers, curriculum lower bounds, misspecification tradeoffs, and length generalization.",
+      "Globality barriers, scratchpad design, statistical-query lower bounds, easy-to-hard curricula, autocurriculum, recursive self-training, and length extrapolation.",
+    subtopics: [
+      {
+        title: "Part I: Learning barriers and curriculum design",
+        description:
+          "Why direct or hard-only training can fail and how structured scratchpads or easy-to-hard data can overcome formal learning barriers.",
+        paperTitles: [
+          "How Far Can Transformers Reason? The Globality Barrier and Inductive Scratchpad",
+          "Learning Compositional Functions with Transformers from Easy-to-Hard Data",
+        ],
+      },
+      {
+        title: "Part II: Adaptive curriculum and length extrapolation",
+        description:
+          "How adaptive problem selection and recursive self-training reduce supervision costs and extend reasoning to harder or longer instances.",
+        paperTitles: [
+          "Learning to Reason with Curriculum I: Provable Benefits of Autocurriculum",
+          "Transformers Provably Learn Chain-of-Thought Reasoning with Length Generalization",
+        ],
+      },
+    ],
     papers: [
       paper(
         "Emmanuel Abbe, Samy Bengio, Aryo Lotfi, Colin Sandon, and Omid Saremi",
         "How Far Can Transformers Reason? The Globality Barrier and Inductive Scratchpad",
         "NeurIPS 2024",
-        "Introduces a globality barrier for learning certain reasoning tasks and proves how structured scratchpads can overcome it.",
+        "Formalizes a globality measure for reasoning tasks, develops learning barriers under the paper's stated assumptions, and analyzes how increasingly structured scratchpads can change the learnability of global functions.",
         "https://proceedings.neurips.cc/paper_files/paper/2024/hash/3107e4bdb658c79053d7ef59cbc804dd-Abstract-Conference.html",
       ),
       paper(
         "Zixuan Wang, Eshaan Nichani, Alberto Bietti, Alex Damian, Daniel Hsu, Jason D. Lee, and Denny Wu",
         "Learning Compositional Functions with Transformers from Easy-to-Hard Data",
         "COLT 2025",
-        "Proves an exponential statistical-query lower bound for learning a compositional task from hard instances alone, while gradient descent on an O(log k)-depth transformer learns it with polynomial resources from suitable easy-to-hard or mixed curricula.",
+        "Proves an exponential statistical-query lower bound for hard-only data and polynomial sample and runtime guarantees for gradient descent on an O(log k)-depth transformer under suitable easy-to-hard or mixed curricula.",
         "https://proceedings.mlr.press/v291/wang25a.html",
       ),
       paper(
-        "Dhruv Rohatgi, Adam Block, Audrey Huang, Akshay Krishnamurthy, and Dylan J. Foster",
-        "Computational-Statistical Tradeoffs at the Next-Token Prediction Barrier: Autoregressive and Imitation Learning under Misspecification",
-        "COLT 2025 extended abstract",
-        "Shows that next-token-prediction-style objectives incur an Ω(H) approximation barrier under misspecification, while stronger procedures expose explicit tradeoffs between information, computation, and sequence-length-dependent error amplification.",
-        "https://proceedings.mlr.press/v291/rohatgi25a.html",
+        "Nived Rajaraman, Audrey Huang, Miro Dudik, Rob Schapire, Dylan Foster, and Akshay Krishnamurthy",
+        "Learning to Reason with Curriculum I: Provable Benefits of Autocurriculum",
+        "COLT 2026",
+        "Proves that adaptive problem selection can require exponentially fewer supervised reasoning demonstrations than non-adaptive fine-tuning and can decouple reinforcement-learning compute from reference-model quality after a burn-in phase.",
+        "https://proceedings.mlr.press/v336/rajaraman26a.html",
       ),
       paper(
         "Yu Huang, Zixin Wen, Aarti Singh, Yuejie Chi, and Yuxin Chen",
         "Transformers Provably Learn Chain-of-Thought Reasoning with Length Generalization",
         "NeurIPS 2025",
-        "Proves optimization and length-generalization guarantees for transformers trained on structured state-tracking tasks, and analyzes attention concentration and recursive self-training.",
+        "Proves optimization and length-generalization guarantees for transformers trained on structured state-tracking tasks and analyzes attention concentration and recursive self-training beyond the original training lengths.",
         "https://proceedings.neurips.cc/paper_files/paper/2025/hash/b86a195e70f27017c514fa0e5f80595f-Abstract-Conference.html",
       ),
     ],
@@ -806,6 +906,48 @@ export const courseSchedule: readonly CourseWeek[] = [
 ];
 
 export const additionalReadings: readonly CoursePaper[] = [
+  paper(
+    "Hubert Ramsauer et al.",
+    "Hopfield Networks Is All You Need",
+    "ICLR 2021",
+    "Foundational associative-memory theory: proves modern Hopfield retrieval and storage results and identifies the transformer attention update with a Hopfield retrieval step. It is useful background for Week 6 but is not a core statistical-learning paper about pretraining or generalization.",
+    "https://openreview.net/forum?id=tL89RnzIiCd",
+  ),
+  paper(
+    "Alberto Bietti, Vivien Cabannes, Diane Bouchacourt, Herve Jegou, and Leon Bottou",
+    "Birth of a Transformer: A Memory Viewpoint",
+    "NeurIPS 2023",
+    "A mechanistic theory and empirical study of how a simplified transformer develops global bigram memories and an induction-head mechanism. Its supplement contains an idealized population-gradient result, but it does not establish general finite-sample or end-to-end training guarantees.",
+    "https://proceedings.neurips.cc/paper_files/paper/2023/hash/0561738a239a995c8cd2ef0e50cfa4fd-Abstract-Conference.html",
+  ),
+  paper(
+    "Ekin Akyurek, Dale Schuurmans, Jacob Andreas, Tengyu Ma, and Denny Zhou",
+    "What Learning Algorithm Is In-Context Learning? Investigations with Linear Models",
+    "ICLR 2023",
+    "A foundational construction and empirical algorithm-identification paper: proves that transformers can represent several linear-learning procedures and shows that trained models resemble them, without proving that pretraining converges to those constructions.",
+    "https://openreview.net/forum?id=0g0X4H8yN4I",
+  ),
+  paper(
+    "Johannes Von Oswald, Eyvind Niklasson, Ettore Randazzo, Joao Sacramento, Alexander Mordvintsev, Andrey Zhmoginov, and Max Vladymyrov",
+    "Transformers Learn In-Context by Gradient Descent",
+    "ICML 2023",
+    "A foundational representational and mechanistic precursor: constructs linear self-attention weights that implement a gradient update and empirically compares trained transformers with that construction, but does not prove convergence of ordinary pretraining to it.",
+    "https://proceedings.mlr.press/v202/von-oswald23a.html",
+  ),
+  paper(
+    "Zhiyuan Li, Hong Liu, Denny Zhou, and Tengyu Ma",
+    "Chain of Thought Empowers Transformers to Solve Inherently Serial Problems",
+    "ICLR 2024",
+    "Computational-expressivity theory showing how autoregressive reasoning tokens allow bounded-depth transformers to serialize circuit computation. It is valuable background for Weeks 9–10 but does not prove that gradient-based training learns the construction.",
+    "https://proceedings.iclr.cc/paper_files/paper/2024/hash/3309b4112c9f04a993f2bbdd0274bba1-Abstract-Conference.html",
+  ),
+  paper(
+    "Dhruv Rohatgi, Adam Block, Audrey Huang, Akshay Krishnamurthy, and Dylan J. Foster",
+    "Computational-Statistical Tradeoffs at the Next-Token Prediction Barrier: Autoregressive and Imitation Learning under Misspecification",
+    "COLT 2025",
+    "Studies error amplification and computational-statistical tradeoffs for autoregressive and imitation learning under model misspecification. It is strong adjacent learning theory, but it is separate from the curriculum, scratchpad, and length-generalization narrative of Week 10.",
+    "https://arxiv.org/abs/2502.12465",
+  ),
   paper(
     "Sadhika Malladi et al.",
     "A Kernel-Based View of Language Model Fine-Tuning",
