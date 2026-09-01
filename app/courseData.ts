@@ -18,6 +18,7 @@ export type CourseWeek = {
   title: string;
   guidingQuestion: string;
   topicFocus: string;
+  connection?: string;
   presentationNote?: string;
   papers: readonly CoursePaper[];
   subtopics?: readonly CourseSubtopic[];
@@ -245,7 +246,10 @@ const projectTalkMinutes = 10;
 const projectQuestionMinutes = 2;
 const projectTransitionMinutes = 1;
 const projectPresentationMinutes = projectTalkMinutes + projectQuestionMinutes + projectTransitionMinutes;
-const projectPresentationsByMeeting = [12, 13] as const;
+const projectPresentationsByMeeting = [13, 12] as const;
+const finalProjectSynthesisMinutes =
+  courseFacts.meetingDurationMinutes
+  - projectPresentationsByMeeting[1] * projectPresentationMinutes;
 const projectPresentationMeetingCount = projectPresentationsByMeeting.length;
 const totalProjectPresentationMinutes =
   courseFacts.expectedProjectPresentations * projectPresentationMinutes;
@@ -265,11 +269,40 @@ export const projectPresentationPlan = {
   totalPresentationMinutes: totalProjectPresentationMinutes,
   totalAvailableMinutes: totalProjectMeetingMinutes,
   remainingMinutes: totalProjectMeetingMinutes - totalProjectPresentationMinutes,
+  finalSynthesisMinutes: finalProjectSynthesisMinutes,
 } as const;
 
 export const projectPresentation = {
   introduction:
-    `Weeks 11–12 are reserved for ${courseFacts.expectedProjectPresentations} individual project presentations. Week 11 will have ${projectPresentationsByMeeting[0]} presentations, and Week 12 will have ${projectPresentationsByMeeting[1]}. Each presentation has a ${projectPresentationMinutes}-minute slot: a ${projectTalkMinutes}-minute talk, ${projectQuestionMinutes} minutes of questions, and a ${projectTransitionMinutes}-minute transition. Timing will be strict. Project presentations do not count toward the two required paper presentations.`,
+    `Weeks 11–12 are reserved for ${courseFacts.expectedProjectPresentations} individual project presentations. Week 11 will have ${projectPresentationsByMeeting[0]} presentations, and Week 12 will have ${projectPresentationsByMeeting[1]}. Each presentation has a ${projectPresentationMinutes}-minute slot: a ${projectTalkMinutes}-minute talk, ${projectQuestionMinutes} minutes of questions, and a ${projectTransitionMinutes}-minute transition. Timing will be strict. Project presentations do not count toward the two required paper presentations. The final meeting reserves ${finalProjectSynthesisMinutes} minutes for course synthesis and open problems.`,
+  orderingPrinciple:
+    "Presentations will be ordered thematically rather than alphabetically, randomly, by sign-up time, or by perceived project quality.",
+  weekThemes: [
+    {
+      week: 11,
+      title: "Foundations, Architecture, and Learning",
+      presentationCount: projectPresentationsByMeeting[0],
+      themes: [
+        "Exact learning and certification.",
+        "Trainability and signal propagation.",
+        "Expressivity and computational complexity.",
+        "Self-attention learnability.",
+        "Early in-context-learning theory.",
+      ],
+    },
+    {
+      week: 12,
+      title: "In-Context Learning, Reasoning, and Open Problems",
+      presentationCount: projectPresentationsByMeeting[1],
+      themes: [
+        "In-context-learning optimization and generalization.",
+        "Autoregressive chain-of-thought.",
+        "Curricula and scratchpads.",
+        "Length generalization.",
+        "Empirical tests of theoretical predictions.",
+      ],
+    },
+  ],
   requirements: [
     "The precise research question and its connection to the course.",
     "The existing theoretical result, conjecture, or limitation being extended or examined.",
@@ -280,6 +313,8 @@ export const projectPresentation = {
   ],
   guidance:
     "For empirical projects, plots and tables should be chosen to test the stated theoretical prediction rather than merely summarize benchmark performance. For theoretical projects, the talk should state the result with its quantifiers and parameter dependence, and should explain the main proof idea or obstruction.",
+  closingSynthesis:
+    `The final ${finalProjectSynthesisMinutes} minutes of Week 12 will synthesize which assumptions repeatedly enabled positive results, which barriers persisted across models, which theoretical predictions were supported or challenged by the projects, and which open problems appear most tractable.`,
 } as const;
 
 const lateGracePeriodHours = 48;
@@ -346,9 +381,9 @@ function paper(
 export const projectPresentationSchedule = {
   weeks: "11–12",
   dates: "November 27 and December 4, 2026",
-  title: "Project Presentations",
+  title: "Project Presentations and Course Synthesis",
   centralQuestion:
-    "What did the projects establish, and which theoretical questions remain open?",
+    "What did the projects establish across the course's major themes, and which theoretical questions remain open?",
 } as const;
 
 // Week 1 is instructor-led. Weeks 2–10 contain student paper presentations.
@@ -418,28 +453,30 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 2,
     date: "September 18, 2026",
-    title: "Trainability, Signal Propagation, and Infinite-Width Theory of Transformers",
+    title: "Theoretical Foundations of Transformer Trainability: Initialization, Width, and Depth",
+    connection:
+      "Week 1 established exact learning results in idealized neural regimes; Week 2 asks which architectural conditions make deep transformer training stable enough for such learning to occur.",
     guidingQuestion:
-      "How do normalization, residual structure, depth, width, and the number of attention heads determine whether transformer representations and gradients remain stable and whether training admits a tractable limiting theory?",
+      "How do normalization, width, number of attention heads, residual structure, and depth determine the behavior of transformer representations and gradients at initialization and during early training?",
     topicFocus:
-      "Pre-LN versus Post-LN, token uniformity, rank collapse, vanishing query and key gradients, residual scaling, and Gaussian-process and neural-tangent-kernel limits.",
+      "Pre-LN versus Post-LN, initialization-time gradient scaling, Gaussian-process and neural-tangent-kernel limits, infinite-head Gaussianity, depth-induced token uniformity, vanishing query and key gradients, and residual scaling.",
     subtopics: [
       {
-        title: "Part I: Normalization and architectural degeneration",
+        title: "Part I: Initialization, normalization, and infinite-width limits",
         description:
-          "How normalization placement affects initial gradients and why pure self-attention degenerates without residual pathways or feed-forward blocks.",
+          "How normalization placement shapes initial gradients and when width and head-count limits yield tractable Gaussian-process and neural-tangent-kernel descriptions of attention.",
         paperTitles: [
           "On Layer Normalization in the Transformer Architecture",
-          "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
+          "Infinite Attention: NNGP and NTK for Deep Attention Networks",
         ],
       },
       {
-        title: "Part II: Rank collapse and infinite-width training limits",
+        title: "Part II: Depth-induced rank collapse and gradient failure",
         description:
-          "How rank collapse disrupts gradient propagation and how infinite-width and infinite-head limits characterize initialization and kernel-regime training.",
+          "How repeated attention layers collapse token representations, how that collapse causes query and key gradients to vanish, and how residual structure and scaling mitigate the pathology.",
         paperTitles: [
+          "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
           "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
-          "Infinite Attention: NNGP and NTK for Deep Attention Networks",
         ],
       },
     ],
@@ -450,6 +487,13 @@ export const courseSchedule: readonly CourseWeek[] = [
         "ICML 2020",
         "Uses mean-field analysis at initialization to show that Post-LN produces large expected gradients near the output while Pre-LN yields better-behaved initial gradients, providing a theoretical explanation for warmup sensitivity under the paper's model.",
         "https://proceedings.mlr.press/v119/xiong20b.html",
+      ),
+      paper(
+        "Jiri Hron, Yasaman Bahri, Jascha Sohl-Dickstein, and Roman Novak",
+        "Infinite Attention: NNGP and NTK for Deep Attention Networks",
+        "ICML 2020",
+        "Establishes rigorous neural-network Gaussian-process and neural-tangent-kernel limits for deep attention networks, shows that standard single-head attention need not become Gaussian at infinite width while multi-head attention converges to a Gaussian process as the number of heads grows, and analyzes positional encodings and layer normalization.",
+        "https://proceedings.mlr.press/v119/hron20a.html",
       ),
       paper(
         "Yihe Dong, Jean-Baptiste Cordonnier, and Andreas Loukas",
@@ -465,18 +509,13 @@ export const courseSchedule: readonly CourseWeek[] = [
         "Proves that token-rank collapse causes query and key gradients to vanish at initialization, analyzes gradient imbalances across query, key, and value parameters, and derives depth-dependent residual scaling that preserves signal propagation.",
         "https://proceedings.neurips.cc/paper_files/paper/2022/hash/ae0cba715b60c4052359b3d52a2cff7f-Abstract-Conference.html",
       ),
-      paper(
-        "Jiri Hron, Yasaman Bahri, Jascha Sohl-Dickstein, and Roman Novak",
-        "Infinite Attention: NNGP and NTK for Deep Attention Networks",
-        "ICML 2020",
-        "Establishes rigorous neural-network Gaussian-process and neural-tangent-kernel limits for deep attention networks, shows that standard single-head attention need not become Gaussian at infinite width while multi-head attention converges to a Gaussian process as the number of heads grows, and analyzes positional encodings and layer normalization.",
-        "https://proceedings.mlr.press/v119/hron20a.html",
-      ),
     ],
   },
   {
     week: 3,
     date: "September 25, 2026",
+    connection:
+      "Stable optimization does not determine what a transformer can represent; Week 3 separates trainability from representational and computational expressivity.",
     title: "Expressivity, Formal Languages, and Circuit Classes",
     guidingQuestion:
       "How can universal approximation and Turing completeness coexist with exact formal-language and circuit upper bounds, and which assumptions about depth, precision, masking, recurrence, and positional information explain the difference?",
@@ -536,6 +575,8 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 4,
     date: "October 2, 2026",
+    connection:
+      "Expressibility does not imply computational efficiency; Week 4 studies the depth, parallelism, precision, and running time needed to realize transformer computations.",
     title: "Parallel and Fine-Grained Complexity of Transformers",
     guidingQuestion:
       "How do depth, precision, parallel communication, entry magnitudes, and approximation error determine what transformers and self-attention can compute efficiently?",
@@ -554,7 +595,7 @@ export const courseSchedule: readonly CourseWeek[] = [
       {
         title: "Part II: Fine-grained complexity of attention",
         description:
-          "When exact or approximate attention requires quadratic time and when bounded entries permit almost-linear approximation.",
+          "After Part I studies the parallel computational power of the complete transformer architecture, Part II zooms in on its principal computational primitive and asks when exact or approximate attention can be evaluated faster than quadratic time.",
         paperTitles: [
           "On the Computational Complexity of Self-Attention",
           "Fast Attention Requires Bounded Entries",
@@ -595,25 +636,27 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 5,
     date: "October 9, 2026",
-    title: "Learnability and Inductive Bias of Self-Attention",
+    title: "Sparse Structure and Token Selection in Self-Attention",
+    connection:
+      "Efficient representation does not imply learnability from finite data; Week 5 studies the statistical and optimization biases through which attention discovers relevant tokens.",
     guidingQuestion:
-      "When can self-attention learn sparse, task-relevant structure from finite data, and what biases gradient-based training toward particular tokens and solutions?",
+      "Why does self-attention favor sparse dependencies, and how does gradient-based training discover, combine, and select task-relevant tokens?",
     topicFocus:
-      "Norm-based sample complexity, model identifiability, implicit max-margin bias, sparse token selection, and out-of-distribution length generalization.",
+      "Norm-based sample complexity, SGD-driven token composition, implicit max-margin bias, sparse token selection, architectural separation, and out-of-distribution length generalization.",
     subtopics: [
       {
-        title: "Part I: Statistical learnability and model identification",
+        title: "Part I: Statistical bias and emergent token composition",
         description:
-          "How the norm structure of self-attention, identifiability conditions, and data coverage govern finite-sample learning.",
+          "Why bounded-norm self-attention favors sparse dependencies and how SGD turns initially uniform attention into a stable combination of discriminative tokens.",
         paperTitles: [
           "Inductive Biases and Variable Creation in Self-Attention Mechanisms",
-          "From Self-Attention to Markov Models: Unveiling the Dynamics of Generative Transformers",
+          "Scan and Snap: Understanding Training Dynamics and Token Composition in 1-layer Transformer",
         ],
       },
       {
-        title: "Part II: Optimization bias and learned token selection",
+        title: "Part II: Margin maximization and provable token-selection learning",
         description:
-          "How gradient-based training selects relevant tokens, approaches max-margin solutions, and supports length generalization.",
+          "How gradient descent selects locally optimal tokens through a max-margin bias and when a one-layer transformer provably learns a sparse selector that extrapolates to longer contexts.",
         paperTitles: [
           "Max-Margin Token Selection in Attention Mechanism",
           "Transformers Provably Learn Sparse Token Selection While Fully-Connected Nets Cannot",
@@ -629,11 +672,11 @@ export const courseSchedule: readonly CourseWeek[] = [
         "https://proceedings.mlr.press/v162/edelman22a.html",
       ),
       paper(
-        "Muhammed Emrullah Ildiz, Yixiao Huang, Yingcong Li, Ankit Singh Rawat, and Samet Oymak",
-        "From Self-Attention to Markov Models: Unveiling the Dynamics of Generative Transformers",
-        "ICML 2024",
-        "Connects one-layer generative self-attention to context-conditioned Markov models and establishes identifiability, coverage, consistency, and finite-sample guarantees under the paper's teacher-student and trajectory settings.",
-        "https://proceedings.mlr.press/v235/ildiz24a.html",
+        "Yuandong Tian, Yiping Wang, Beidi Chen, and Simon S. Du",
+        "Scan and Snap: Understanding Training Dynamics and Token Composition in 1-layer Transformer",
+        "NeurIPS 2023",
+        "Under no-positional-encoding, long-sequence, and decoder-timescale assumptions, rigorously analyzes SGD for one-layer next-token prediction and shows a scan-and-snap dynamic in which attention increasingly favors distinct, high-co-occurrence tokens while downweighting common or lower-co-occurrence tokens, then decelerates after a learning-rate-controlled phase transition, leaving an almost fixed rather than one-hot token mixture.",
+        "https://proceedings.neurips.cc/paper_files/paper/2023/hash/e359ebe56ba306b674e8952349c6049e-Abstract-Conference.html",
       ),
       paper(
         "Davoud Ataee Tarzanagh, Yingcong Li, Xuechen Zhang, and Samet Oymak",
@@ -654,27 +697,29 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 6,
     date: "October 23, 2026",
-    title: "Bayesian and Statistical Foundations of In-Context Learning",
+    title: "Statistical Foundations of Pretrained In-Context Prediction",
+    connection:
+      "After studying how attention learns token relationships, Week 6 asks what statistical inference procedure the resulting prompt-conditioned predictor implements.",
     guidingQuestion:
-      "When does next-token pretraining induce Bayesian or empirical-Bayes prediction, and how do task diversity, context length, and distribution shift control the resulting error?",
+      "When can pretrained sequence predictors be interpreted as Bayesian, frequentist, or empirical-Bayes procedures, and how do pretraining data and context length control their prediction error?",
     topicFocus:
-      "Latent-concept inference, frequentist consistency, information-theoretic error decomposition, universal priors, and empirical-Bayes adaptation.",
+      "Latent-concept Bayesian inference, information-theoretic error rates, frequentist consistency, universal priors, and empirical-Bayes adaptation.",
     subtopics: [
       {
-        title: "Part I: Bayesian and frequentist interpretations",
+        title: "Part I: Bayesian interpretation and information-theoretic rates",
         description:
-          "How pretrained sequence predictors can be understood as latent-task inference procedures and when those procedures are statistically consistent.",
+          "When next-token prediction approximates latent-task Bayesian inference and how meta-learning and within-task prediction errors decay with the number and length of training sequences.",
         paperTitles: [
           "An Explanation of In-Context Learning as Implicit Bayesian Inference",
-          "Statistical Foundations of Prior-Data Fitted Networks",
+          "An Information-Theoretic Analysis of In-Context Learning",
         ],
       },
       {
-        title: "Part II: Information-theoretic rates and universal priors",
+        title: "Part II: Frequentist consistency and empirical-Bayes adaptation",
         description:
-          "How prediction error depends on the number and length of training sequences, and how a fixed pretraining prior can adapt to unknown test distributions.",
+          "How pretrained predictors can be analyzed from a frequentist viewpoint and how universal priors adapt nearly optimally to unknown test distributions in an empirical-Bayes setting.",
         paperTitles: [
-          "An Information-Theoretic Analysis of In-Context Learning",
+          "Statistical Foundations of Prior-Data Fitted Networks",
           "Universal Priors: Solving Empirical Bayes via Bayesian Inference and Pretraining",
         ],
       },
@@ -688,18 +733,18 @@ export const courseSchedule: readonly CourseWeek[] = [
         "https://openreview.net/forum?id=RdJVFCHjUMI",
       ),
       paper(
-        "Thomas Nagler",
-        "Statistical Foundations of Prior-Data Fitted Networks",
-        "ICML 2023",
-        "Develops a frequentist theory of prior-data fitted networks, separating variance reduction from localization bias and identifying conditions under which the pretrained predictor is statistically consistent.",
-        "https://proceedings.mlr.press/v202/nagler23a.html",
-      ),
-      paper(
         "Hong Jun Jeon, Jason D. Lee, Qi Lei, and Benjamin Van Roy",
         "An Information-Theoretic Analysis of In-Context Learning",
         "ICML 2024",
         "Decomposes Bayes prediction error into meta-learning and within-task terms and derives how the error decreases with both the number of training sequences and their lengths without the mixing-time assumptions used by earlier analyses.",
         "https://proceedings.mlr.press/v235/jeon24a.html",
+      ),
+      paper(
+        "Thomas Nagler",
+        "Statistical Foundations of Prior-Data Fitted Networks",
+        "ICML 2023",
+        "Develops a frequentist theory of prior-data fitted networks, separating variance reduction from localization bias and identifying conditions under which the pretrained predictor is statistically consistent.",
+        "https://proceedings.mlr.press/v202/nagler23a.html",
       ),
       paper(
         "Nick Cannella, Anzo Teh, Yanjun Han, and Yury Polyanskiy",
@@ -713,6 +758,8 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 7,
     date: "October 30, 2026",
+    connection:
+      "A statistical description of an ideal in-context predictor does not show that pretraining finds it; Week 7 analyzes population optima and optimization dynamics.",
     title: "Optimization and Training Dynamics of In-Context Learning",
     guidingQuestion:
       "Which in-context algorithms minimize the pretraining objective, and under what assumptions does gradient-based pretraining actually converge to those solutions?",
@@ -772,6 +819,8 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 8,
     date: "November 6, 2026",
+    connection:
+      "Convergence to an in-context algorithm does not by itself guarantee generalization; Week 8 studies finite-sample learnability and optimal statistical rates.",
     title: "Generalization, Learnability, and Minimax Theory of In-Context Learning",
     guidingQuestion:
       "How do pretrained in-context learners generalize across examples and tasks, and which statistical rates can transformer-based learners attain?",
@@ -831,6 +880,8 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 9,
     date: "November 13, 2026",
+    connection:
+      "Standard in-context learning produces an answer in one forward computation; Week 9 asks how learning changes when the model generates a sequence of intermediate reasoning steps.",
     title: "Learning Theory of Autoregressive Chain-of-Thought",
     guidingQuestion:
       "How do observed or latent reasoning traces change sample complexity, computational complexity, optimization, and generalization?",
@@ -890,6 +941,8 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 10,
     date: "November 20, 2026",
+    connection:
+      "Once reasoning traces can be learned, Week 10 asks which scratchpads, curricula, and self-training procedures make them effective on harder and longer problems.",
     title: "Curricula, Scratchpads, and Length Generalization for Reasoning",
     guidingQuestion:
       "Which forms of intermediate supervision, adaptive data selection, and self-training make compositional reasoning learnable and transferable to harder or longer instances?",
@@ -949,19 +1002,21 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 11,
     date: "November 27, 2026",
-    title: "Project Presentations",
-    guidingQuestion: projectPresentationSchedule.centralQuestion,
+    title: "Project Presentations I: Foundations, Architecture, and Learning",
+    guidingQuestion:
+      "What do the projects establish about exact learning, trainability, expressivity, computational complexity, and self-attention learning?",
     topicFocus:
-      "Final-project presentations and course synthesis. There are no assigned paper presentations during these meetings.",
+      "Thirteen project presentations grouped around exact learning and certification, trainability and signal propagation, expressivity and computational complexity, self-attention learnability, and early in-context-learning theory.",
     papers: [],
   },
   {
     week: 12,
     date: "December 4, 2026",
-    title: "Project Presentations",
-    guidingQuestion: projectPresentationSchedule.centralQuestion,
+    title: "Project Presentations II: In-Context Learning, Reasoning, and Open Problems",
+    guidingQuestion:
+      "What do the projects establish about in-context learning and reasoning, and which theoretical questions remain open?",
     topicFocus:
-      "Final-project presentations and course synthesis. There are no assigned paper presentations during these meetings.",
+      "Twelve project presentations grouped around in-context-learning optimization and generalization, chain-of-thought, curricula and scratchpads, length generalization, and empirical tests of theoretical predictions, followed by a final course synthesis.",
     papers: [],
   },
 ];
@@ -1001,6 +1056,13 @@ export const additionalReadings: readonly CoursePaper[] = [
     "ICML 2023",
     "Constructs explicit weights for a looped transformer that implements an explicit instruction-set architecture, memory access, branching, nonlinear operations, linear algebra, and backpropagation. It is a strong programmable-computation result but not a theorem that the program or weights are learned from data.",
     "https://proceedings.mlr.press/v202/giannou23a.html",
+  ),
+  paper(
+    "Muhammed Emrullah Ildiz, Yixiao Huang, Yingcong Li, Ankit Singh Rawat, and Samet Oymak",
+    "From Self-Attention to Markov Models: Unveiling the Dynamics of Generative Transformers",
+    "ICML 2024",
+    "Maps one-layer generative self-attention to a context-conditioned Markov chain, gives coverage conditions for consistent latent-model estimation and finite-sample guarantees under IID prompt-output data, and separately analyzes a single autoregressive trajectory, characterizing a winner-token distribution-collapse phenomenon. It is strong complementary theory, but its generative model-identification story is separate from Week 5's focused narrative on sparse token selection.",
+    "https://proceedings.mlr.press/v235/ildiz24a.html",
   ),
   paper(
     "Hubert Ramsauer et al.",

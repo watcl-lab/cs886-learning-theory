@@ -67,11 +67,6 @@ function WeekPaperList({ week }: { week: CourseWeek }) {
 
 export default function Home() {
   const paperWeeks = courseSchedule.filter((week) => week.papers.length > 0);
-  const projectWeeks = courseSchedule.filter((week) => week.papers.length === 0);
-  const firstProjectWeek = projectWeeks[0];
-  const lastProjectWeek = projectWeeks.at(-1);
-  const projectWeekLabel = `${firstProjectWeek.week}–${lastProjectWeek?.week ?? firstProjectWeek.week}`;
-  const projectDateLabel = projectWeeks.map((week) => week.date).join(" and ");
 
   return (
     <>
@@ -203,22 +198,20 @@ export default function Home() {
                   </tr>
                 </thead>
                 <tbody>
-                  {paperWeeks.map((week) => (
+                  {courseSchedule.map((week) => (
                     <tr key={week.week}>
                       <td>{week.week}</td>
                       <td>{week.date}</td>
                       <td>
-                        <a href={`#week-${week.week}`}>{week.title}</a>
+                        {week.papers.length > 0 ? (
+                          <a href={`#week-${week.week}`}>{week.title}</a>
+                        ) : (
+                          week.title
+                        )}
                       </td>
                       <td>{week.guidingQuestion}</td>
                     </tr>
                   ))}
-                  <tr>
-                    <td>{projectWeekLabel}</td>
-                    <td>{projectDateLabel}</td>
-                    <td>{firstProjectWeek.title}</td>
-                    <td>{firstProjectWeek.guidingQuestion}</td>
-                  </tr>
                 </tbody>
               </table>
             </div>
@@ -226,30 +219,24 @@ export default function Home() {
 
           <div className="schedule-mobile" aria-label="Topics at a glance">
             <ol className="mobile-schedule">
-              {paperWeeks.map((week) => (
+              {courseSchedule.map((week) => (
                 <li key={week.week}>
                   <div className="mobile-schedule-header">
                     <span className="mobile-schedule-week">Week {week.week}</span>
                     <span className="mobile-schedule-date">{week.date}</span>
                   </div>
                   <p className="mobile-schedule-topic">
-                    <a href={`#week-${week.week}`}>{week.title}</a>
+                    {week.papers.length > 0 ? (
+                      <a href={`#week-${week.week}`}>{week.title}</a>
+                    ) : (
+                      week.title
+                    )}
                   </p>
                   <p className="mobile-schedule-question">
                     <strong>Central question:</strong> {week.guidingQuestion}
                   </p>
                 </li>
               ))}
-              <li>
-                <div className="mobile-schedule-header">
-                  <span className="mobile-schedule-week">Weeks {projectWeekLabel}</span>
-                  <span className="mobile-schedule-date">{projectDateLabel}</span>
-                </div>
-                <p className="mobile-schedule-topic">{firstProjectWeek.title}</p>
-                <p className="mobile-schedule-question">
-                  <strong>Central question:</strong> {firstProjectWeek.guidingQuestion}
-                </p>
-              </li>
             </ol>
           </div>
         </section>
@@ -269,6 +256,11 @@ export default function Home() {
                 </span>
                 {week.title}
               </h3>
+              {week.connection ? (
+                <p className="week-connection">
+                  <strong>Connection to the previous week.</strong> {week.connection}
+                </p>
+              ) : null}
               <p className="guiding-question">
                 <strong>Central question.</strong> {week.guidingQuestion}
               </p>
@@ -385,6 +377,25 @@ export default function Home() {
         >
           <h2 id="project-presentation-requirements-heading">Project Presentation Requirements</h2>
           <p>{projectPresentation.introduction}</p>
+
+          <h3>Presentation Order and Themes</h3>
+          <p>{projectPresentation.orderingPrinciple}</p>
+          <ol>
+            {projectPresentation.weekThemes.map((theme) => (
+              <li key={theme.week}>
+                <strong>
+                  Week {theme.week}: {theme.title}.
+                </strong>{" "}
+                {theme.presentationCount} presentations, organized around:
+                <ul>
+                  {theme.themes.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ol>
+
           <p>Every presentation should include:</p>
           <ol>
             {projectPresentation.requirements.map((requirement) => (
@@ -392,6 +403,7 @@ export default function Home() {
             ))}
           </ol>
           <p>{projectPresentation.guidance}</p>
+          <p>{projectPresentation.closingSynthesis}</p>
         </section>
 
         <section id="assessment" aria-labelledby="assessment-heading">
