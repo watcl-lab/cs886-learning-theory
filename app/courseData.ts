@@ -418,11 +418,11 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 2,
     date: "September 18, 2026",
-    title: "Trainability and Signal Propagation in Deep Transformers",
+    title: "Trainability, Signal Propagation, and Infinite-Width Theory of Transformers",
     guidingQuestion:
-      "How do normalization, residual structure, initialization, and rank collapse determine whether representations and gradients remain stable as transformer depth grows?",
+      "How do normalization, residual structure, depth, width, and the number of attention heads determine whether transformer representations and gradients remain stable and whether training admits a tractable limiting theory?",
     topicFocus:
-      "Pre-LN versus Post-LN, token uniformity, rank collapse, vanishing query and key gradients, residual scaling, and forward-backward moment propagation.",
+      "Pre-LN versus Post-LN, token uniformity, rank collapse, vanishing query and key gradients, residual scaling, and Gaussian-process and neural-tangent-kernel limits.",
     subtopics: [
       {
         title: "Part I: Normalization and architectural degeneration",
@@ -434,12 +434,12 @@ export const courseSchedule: readonly CourseWeek[] = [
         ],
       },
       {
-        title: "Part II: Rank collapse and stable depth scaling",
+        title: "Part II: Rank collapse and infinite-width training limits",
         description:
-          "How rank collapse affects optimization and how depth-dependent scaling can preserve forward and backward signals in very deep transformers.",
+          "How rank collapse disrupts gradient propagation and how infinite-width and infinite-head limits characterize initialization and kernel-regime training.",
         paperTitles: [
           "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
-          "Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models",
+          "Infinite Attention: NNGP and NTK for Deep Attention Networks",
         ],
       },
     ],
@@ -466,11 +466,11 @@ export const courseSchedule: readonly CourseWeek[] = [
         "https://proceedings.neurips.cc/paper_files/paper/2022/hash/ae0cba715b60c4052359b3d52a2cff7f-Abstract-Conference.html",
       ),
       paper(
-        "Akhil Kedia, Mohd Abbas Zaidi, Sushil Khyalia, Jungho Jung, Harshith Goka, and Haejun Lee",
-        "Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models",
-        "ICML 2024",
-        "Develops end-to-end formulas for forward and backward signal moments in deep transformers, uses them to analyze exploding or vanishing gradients, rank collapse, and large attention scores, and derives the DeepScaleLM scaling prescription.",
-        "https://proceedings.mlr.press/v235/kedia24a.html",
+        "Jiri Hron, Yasaman Bahri, Jascha Sohl-Dickstein, and Roman Novak",
+        "Infinite Attention: NNGP and NTK for Deep Attention Networks",
+        "ICML 2020",
+        "Establishes rigorous neural-network Gaussian-process and neural-tangent-kernel limits for deep attention networks, shows that standard single-head attention need not become Gaussian at infinite width while multi-head attention converges to a Gaussian process as the number of heads grows, and analyzes positional encodings and layer normalization.",
+        "https://proceedings.mlr.press/v119/hron20a.html",
       ),
     ],
   },
@@ -973,6 +973,13 @@ export const additionalReadings: readonly CoursePaper[] = [
     "ICML 2020",
     "Proposes T-Fixup using a simplified analysis of depth-dependent update scaling and validates that the initialization can train very deep encoder-decoder transformers without warmup or layer normalization. It is useful practical background for Week 2 but is not one of the core signal-propagation theorem papers.",
     "https://proceedings.mlr.press/v119/huang20f.html",
+  ),
+  paper(
+    "Akhil Kedia, Mohd Abbas Zaidi, Sushil Khyalia, Jungho Jung, Harshith Goka, and Haejun Lee",
+    "Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models",
+    "ICML 2024",
+    "Combines end-to-end forward and backward signal-moment calculations with the DeepScaleLM scaling prescription and extensive empirical validation for very deep language-model transformers. It complements Week 2's theorem-centered core with a broader theory-and-method treatment of stable scaling.",
+    "https://proceedings.mlr.press/v235/kedia24a.html",
   ),
   paper(
     "Michael Hahn",

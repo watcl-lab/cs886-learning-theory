@@ -149,7 +149,7 @@ test("server-renders the corrected course content and operational policies", asy
 
   for (const title of [
     "Exact Algorithmic Learning, Certification, and Hardness",
-    "Trainability and Signal Propagation in Deep Transformers",
+    "Trainability, Signal Propagation, and Infinite-Width Theory of Transformers",
     "Expressivity, Formal Languages, and Circuit Classes",
     "Parallel and Fine-Grained Complexity of Transformers",
   ]) assert.match(text, new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
@@ -158,7 +158,7 @@ test("server-renders the corrected course content and operational policies", asy
     "Part I: Exact execution learned from examples",
     "Part II: Hardness of exact learning and certification",
     "Part I: Normalization and architectural degeneration",
-    "Part II: Rank collapse and stable depth scaling",
+    "Part II: Rank collapse and infinite-width training limits",
     "Part I: Positive expressivity and computational universality",
     "Part II: Exact characterizations and upper bounds",
     "Part I: Parallel depth and communication",
@@ -168,7 +168,7 @@ test("server-renders the corrected course content and operational policies", asy
   for (const title of [
     "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
     "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
-    "Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models",
+    "Infinite Attention: NNGP and NTK for Deep Attention Networks",
     "Transformers, Parallel Computation, and Logarithmic Depth",
   ]) assert.match(text, new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
 
@@ -176,7 +176,7 @@ test("server-renders the corrected course content and operational policies", asy
   assert.doesNotMatch(text, /Learning-theory focus:/i);
   assert.doesNotMatch(
     text,
-    /Trainability, Expressivity, and Approximation|Formal Languages, Logic, and Circuit Complexity|Computational Limits and Programmable Transformers/i,
+    /Trainability and Signal Propagation in Deep Transformers|Trainability, Expressivity, and Approximation|Formal Languages, Logic, and Circuit Complexity|Computational Limits and Programmable Transformers/i,
   );
 
   for (const title of [
@@ -242,6 +242,7 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(html, /v119\/xiong20b\.html/);
   assert.match(html, /v139\/dong21a\.html/);
   assert.match(html, /ae0cba715b60c4052359b3d52a2cff7f-Abstract-Conference\.html/);
+  assert.match(html, /v119\/hron20a\.html/);
   assert.match(html, /v235\/kedia24a\.html/);
   assert.match(html, /2023\.tacl-1\.31/);
   assert.match(html, /v235\/sanford24a\.html/);
@@ -269,14 +270,18 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     courseSchedule.slice(0, 5).map(({ week, title }) => [week, title]),
     [
       [1, "Exact Algorithmic Learning, Certification, and Hardness"],
-      [2, "Trainability and Signal Propagation in Deep Transformers"],
+      [2, "Trainability, Signal Propagation, and Infinite-Width Theory of Transformers"],
       [3, "Expressivity, Formal Languages, and Circuit Classes"],
       [4, "Parallel and Fine-Grained Complexity of Transformers"],
       [5, "Learnability and Inductive Bias of Self-Attention"],
     ],
   );
   assert.match(courseSchedule[0].guidingQuestion, /behavioral certification provably hard/i);
-  assert.match(courseSchedule[1].guidingQuestion, /normalization, residual structure, initialization, and rank collapse/i);
+  assert.match(
+    courseSchedule[1].guidingQuestion,
+    /normalization, residual structure, depth, width, and the number of attention heads/i,
+  );
+  assert.match(courseSchedule[1].guidingQuestion, /tractable limiting theory/i);
   assert.match(courseSchedule[2].guidingQuestion, /universal approximation and Turing completeness coexist/i);
   assert.match(courseSchedule[3].guidingQuestion, /depth, precision, parallel communication, entry magnitudes/i);
   assert.match(courseSchedule[4].guidingQuestion, /sparse, task-relevant structure from finite data/i);
@@ -299,10 +304,10 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(courseSchedule.slice(1, 10).flatMap((week) => week.papers).length, 36);
   assert.ok(courseSchedule.slice(10).every((week) => week.papers.length === 0));
   assert.equal(scheduledPapers.length, 40);
-  assert.equal(additionalReadings.length, 20);
-  assert.equal(allPapers.length, 60);
-  assert.equal(new Set(allPapers.map((paper) => paper.title)).size, 60);
-  assert.equal(new Set(allPapers.map((paper) => paper.link)).size, 60);
+  assert.equal(additionalReadings.length, 21);
+  assert.equal(allPapers.length, 61);
+  assert.equal(new Set(allPapers.map((paper) => paper.title)).size, 61);
+  assert.equal(new Set(allPapers.map((paper) => paper.link)).size, 61);
 
   assert.deepEqual(assessment.map(({ component, weight }) => [component, weight]), [
     ["Course project", "40%"], ["Paper-presentation work", "40%"], ["Class participation", "20%"],
@@ -453,7 +458,7 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   const newlyRequiredTitles = [
     "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
     "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
-    "Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models",
+    "Infinite Attention: NNGP and NTK for Deep Attention Networks",
     "Transformers, Parallel Computation, and Logarithmic Depth",
     "An Information-Theoretic Analysis of In-Context Learning",
     "Universal Priors: Solving Empirical Bayes via Bayesian Inference and Pretraining",
@@ -464,6 +469,7 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   ];
   const movedToAdditionalTitles = [
     "Improving Transformer Optimization Through Better Initialization",
+    "Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models",
     "Theoretical Limitations of Self-Attention in Neural Sequence Models",
     "Transformers Learn Shortcuts to Automata",
     "Looped Transformers as Programmable Computers",
@@ -476,6 +482,10 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   ];
   const scheduledTitleSet = new Set(scheduledTitles);
   const additionalTitleSet = new Set(additionalTitles);
+  assert.deepEqual(additionalTitles.slice(0, 2), [
+    "Improving Transformer Optimization Through Better Initialization",
+    "Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models",
+  ]);
 
   for (const title of newlyRequiredTitles) {
     assert.equal(scheduledTitleSet.has(title), true, `${title} must be a scheduled paper`);
@@ -511,10 +521,43 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     "On Layer Normalization in the Transformer Architecture",
     "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
     "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
-    "Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models",
+    "Infinite Attention: NNGP and NTK for Deep Attention Networks",
   ]);
+  assert.equal(
+    weekTwo.title,
+    "Trainability, Signal Propagation, and Infinite-Width Theory of Transformers",
+  );
   assert.match(weekTwo.topicFocus, /rank collapse/i);
-  assert.match(weekTwo.topicFocus, /forward-backward moment propagation/i);
+  assert.match(weekTwo.topicFocus, /Gaussian-process and neural-tangent-kernel limits/i);
+  assert.equal(weekTwo.subtopics[1].title, "Part II: Rank collapse and infinite-width training limits");
+  assert.match(weekTwo.subtopics[1].description, /infinite-width and infinite-head limits/i);
+  assert.match(weekTwo.subtopics[1].description, /kernel-regime training/i);
+
+  const weekTwoTitleSet = new Set(weekTwo.papers.map((paper) => paper.title));
+  assert.equal(weekTwoTitleSet.has("Infinite Attention: NNGP and NTK for Deep Attention Networks"), true);
+  assert.equal(
+    weekTwoTitleSet.has("Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models"),
+    false,
+  );
+  assert.equal(additionalTitleSet.has("Infinite Attention: NNGP and NTK for Deep Attention Networks"), false);
+  assert.equal(
+    additionalTitleSet.has("Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models"),
+    true,
+  );
+
+  const weekTwoByTitle = new Map(weekTwo.papers.map((paper) => [paper.title, paper.presentationFocus]));
+  assert.match(
+    weekTwoByTitle.get("Infinite Attention: NNGP and NTK for Deep Attention Networks"),
+    /neural-network Gaussian-process and neural-tangent-kernel limits/i,
+  );
+  assert.match(
+    weekTwoByTitle.get("Infinite Attention: NNGP and NTK for Deep Attention Networks"),
+    /single-head attention need not become Gaussian/i,
+  );
+  assert.match(
+    weekTwoByTitle.get("Infinite Attention: NNGP and NTK for Deep Attention Networks"),
+    /multi-head attention converges to a Gaussian process/i,
+  );
 
   const weekThree = courseSchedule.find(({ week }) => week === 3);
   assert.deepEqual(weekThree.papers.map((paper) => paper.title), [
@@ -624,7 +667,7 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
         "On Layer Normalization in the Transformer Architecture",
         "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
         "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
-        "Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models",
+        "Infinite Attention: NNGP and NTK for Deep Attention Networks",
       ],
     ],
     [
@@ -735,6 +778,10 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(
     linkByTitle.get("Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse"),
     "https://proceedings.neurips.cc/paper_files/paper/2022/hash/ae0cba715b60c4052359b3d52a2cff7f-Abstract-Conference.html",
+  );
+  assert.equal(
+    linkByTitle.get("Infinite Attention: NNGP and NTK for Deep Attention Networks"),
+    "https://proceedings.mlr.press/v119/hron20a.html",
   );
   assert.equal(
     linkByTitle.get("Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models"),
