@@ -3,6 +3,7 @@ import {
   assessment,
   courseDescription,
   courseFacts,
+  courseModules,
   courseProject,
   courseSchedule,
   generativeAiPolicy,
@@ -17,6 +18,7 @@ import {
   projectPresentation,
   readingExpectations,
   universityPolicies,
+  weeklySynthesisQuestions,
   type CoursePaper,
   type CourseWeek,
 } from "./courseData";
@@ -55,7 +57,7 @@ function WeekPaperList({ week }: { week: CourseWeek }) {
 
         return (
           <div className="subtopic" key={subtopic.title}>
-            <h4 className="subtopic-label">{subtopic.title}</h4>
+            <h5 className="subtopic-label">{subtopic.title}</h5>
             <p className="subtopic-description">{subtopic.description}</p>
             <PaperList papers={papers} />
           </div>
@@ -66,7 +68,31 @@ function WeekPaperList({ week }: { week: CourseWeek }) {
 }
 
 export default function Home() {
-  const paperWeeks = courseSchedule.filter((week) => week.papers.length > 0);
+  const weekByNumber = new Map(
+    courseSchedule.map((week) => [week.week, week] as const),
+  );
+
+  const scheduleModules = courseModules.map((module) => ({
+    ...module,
+    weeks: module.weekNumbers.map((weekNumber) => {
+      const week = weekByNumber.get(weekNumber);
+
+      if (!week) {
+        throw new Error(
+          `Course module ${module.id} references missing Week ${weekNumber}.`,
+        );
+      }
+
+      return week;
+    }),
+  }));
+
+  const readingModules = scheduleModules
+    .map((module) => ({
+      ...module,
+      weeks: module.weeks.filter((week) => week.papers.length > 0),
+    }))
+    .filter((module) => module.weeks.length > 0);
 
   return (
     <>
@@ -197,47 +223,81 @@ export default function Home() {
                     <th scope="col">Central question</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {courseSchedule.map((week) => (
-                    <tr key={week.week}>
-                      <td>{week.week}</td>
-                      <td>{week.date}</td>
-                      <td>
-                        {week.papers.length > 0 ? (
-                          <a href={`#week-${week.week}`}>{week.title}</a>
-                        ) : (
-                          week.title
-                        )}
-                      </td>
-                      <td>{week.guidingQuestion}</td>
+                {scheduleModules.map((module) => (
+                  <tbody className="schedule-module-group" key={module.id}>
+                    <tr className="schedule-module-row">
+                      <th colSpan={4} scope="rowgroup">
+                        <span className="schedule-module-label">{module.label}</span>
+                        <span className="schedule-module-title">{module.title}</span>
+                        <span className="schedule-module-description">
+                          {module.description}
+                        </span>
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
+                    {module.weeks.map((week) => (
+                      <tr key={week.week}>
+                        <td>{week.week}</td>
+                        <td>{week.date}</td>
+                        <td>
+                          {week.papers.length > 0 ? (
+                            <a href={`#week-${week.week}`}>{week.title}</a>
+                          ) : (
+                            week.title
+                          )}
+                        </td>
+                        <td>{week.guidingQuestion}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                ))}
               </table>
             </div>
           </div>
 
           <div className="schedule-mobile" aria-label="Topics at a glance">
-            <ol className="mobile-schedule">
-              {courseSchedule.map((week) => (
-                <li key={week.week}>
-                  <div className="mobile-schedule-header">
-                    <span className="mobile-schedule-week">Week {week.week}</span>
-                    <span className="mobile-schedule-date">{week.date}</span>
-                  </div>
-                  <p className="mobile-schedule-topic">
-                    {week.papers.length > 0 ? (
-                      <a href={`#week-${week.week}`}>{week.title}</a>
-                    ) : (
-                      week.title
-                    )}
+            {scheduleModules.map((module) => (
+              <section
+                className="mobile-schedule-module"
+                aria-labelledby={`mobile-module-${module.id}`}
+                key={module.id}
+              >
+                <header className="mobile-module-header">
+                  <p className="mobile-module-label">{module.label}</p>
+                  <h3
+                    className="mobile-module-title"
+                    id={`mobile-module-${module.id}`}
+                  >
+                    {module.title}
+                  </h3>
+                  <p className="mobile-module-description">
+                    {module.description}
                   </p>
-                  <p className="mobile-schedule-question">
-                    <strong>Central question:</strong> {week.guidingQuestion}
-                  </p>
-                </li>
-              ))}
-            </ol>
+                </header>
+                <ol className="mobile-schedule">
+                  {module.weeks.map((week) => (
+                    <li key={week.week}>
+                      <div className="mobile-schedule-header">
+                        <span className="mobile-schedule-week">
+                          Week {week.week}
+                        </span>
+                        <span className="mobile-schedule-date">{week.date}</span>
+                      </div>
+                      <p className="mobile-schedule-topic">
+                        {week.papers.length > 0 ? (
+                          <a href={`#week-${week.week}`}>{week.title}</a>
+                        ) : (
+                          week.title
+                        )}
+                      </p>
+                      <p className="mobile-schedule-question">
+                        <strong>Central question:</strong>{" "}
+                        {week.guidingQuestion}
+                      </p>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            ))}
           </div>
         </section>
 
@@ -248,35 +308,58 @@ export default function Home() {
 
         <section id="detailed-schedule" aria-labelledby="detailed-schedule-heading">
           <h2 id="detailed-schedule-heading">Detailed Paper Schedule</h2>
-          {paperWeeks.map((week) => (
-            <article className="week" id={`week-${week.week}`} key={week.week}>
-              <h3>
-                <span className="week-number">
-                  Week {String(week.week).padStart(2, "0")} · {week.date}
-                </span>
-                {week.title}
-              </h3>
-              {week.connection ? (
-                <p className="week-connection">
-                  <strong>Connection to the previous week.</strong> {week.connection}
+          {readingModules.map((module) => (
+            <section
+              className="detailed-module"
+              aria-labelledby={`detailed-module-${module.id}`}
+              key={module.id}
+            >
+              <header className="detailed-module-header">
+                <p className="detailed-module-label">{module.label}</p>
+                <h3 id={`detailed-module-${module.id}`}>{module.title}</h3>
+                <p className="detailed-module-description">
+                  {module.description}
                 </p>
-              ) : null}
-              <p className="guiding-question">
-                <strong>Central question.</strong> {week.guidingQuestion}
-              </p>
-              <p className="topic-focus">
-                <strong>Topic focus.</strong> {week.topicFocus}
-              </p>
-              {week.presentationNote ? (
-                <p className="topic-focus">
-                  <strong>Presentation plan.</strong> {week.presentationNote}
-                </p>
-              ) : null}
-              <WeekPaperList week={week} />
-              <a className="back-to-schedule" href="#schedule">
-                Back to schedule
-              </a>
-            </article>
+              </header>
+
+              {module.weeks.map((week) => (
+                <article
+                  className="week"
+                  id={`week-${week.week}`}
+                  key={week.week}
+                >
+                  <h4 className="week-title">
+                    <span className="week-number">
+                      Week {String(week.week).padStart(2, "0")} · {week.date}
+                    </span>
+                    {week.title}
+                  </h4>
+                  {week.connection ? (
+                    <p className="week-connection">
+                      <strong>Connection to the previous week.</strong>{" "}
+                      {week.connection}
+                    </p>
+                  ) : null}
+                  <p className="guiding-question">
+                    <strong>Central question.</strong>{" "}
+                    {week.guidingQuestion}
+                  </p>
+                  <p className="topic-focus">
+                    <strong>Topic focus.</strong> {week.topicFocus}
+                  </p>
+                  {week.presentationNote ? (
+                    <p className="topic-focus">
+                      <strong>Presentation plan.</strong>{" "}
+                      {week.presentationNote}
+                    </p>
+                  ) : null}
+                  <WeekPaperList week={week} />
+                  <a className="back-to-schedule" href="#schedule">
+                    Back to schedule
+                  </a>
+                </article>
+              ))}
+            </section>
           ))}
         </section>
 
@@ -288,11 +371,23 @@ export default function Home() {
           <h3>Meeting Format</h3>
           <ul className="meeting-format">
             {meetingFormat.map((item) => (
-              <li key={item.duration}>
+              <li key={item.activity}>
                 <strong>{item.duration}:</strong> {item.activity}
               </li>
             ))}
           </ul>
+
+          <h3>Weekly Cross-Paper Synthesis</h3>
+          <p>
+            Every reading meeting ends with a structured synthesis. The class
+            will use the following questions to connect the four papers and
+            motivate the next week:
+          </p>
+          <ol>
+            {weeklySynthesisQuestions.map((question) => (
+              <li key={question}>{question}</li>
+            ))}
+          </ol>
 
           <h3>Presentation</h3>
           <ol>

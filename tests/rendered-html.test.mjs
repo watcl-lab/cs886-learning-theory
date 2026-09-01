@@ -49,8 +49,9 @@ test("server-renders the corrected course content and operational policies", asy
   const text = textContent(html);
 
   assert.match(html, /<title>CS 886: Learning Theory for Modern AI (?:--|–|—) Fall 2026<\/title>/i);
-  assert.match(text, /how transformers and large language models learn, what they can compute, how they generalize, and why they sometimes fail/i);
-  assert.match(text, /main schedule places particular emphasis on the theory of in-context learning and reasoning/i);
+  assert.match(text, /what they can represent and compute, how efficiently they can compute it/i);
+  assert.match(text, /course begins with an instructor-led case study in exact algorithmic learning, certification, and hardness/i);
+  assert.match(text, /remaining schedule is organized as a cumulative sequence/i);
   assert.match(text, /Recommended background/i);
   assert.match(text, /No textbook is required/i);
   assert.match(text, /Note for non-theory students/i);
@@ -64,7 +65,7 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /Scheduled seminar meetings:?\s*September 11.{0,3}December 4, 2026/i);
   assert.match(text, /University class period:?\s*September 9.{0,3}December 8, 2026/i);
   assert.match(text, /No class on October 16, 2026/i);
-  assert.match(text, /Last updated:?\s*August 31, 2026/i);
+  assert.match(text, /Last updated:?\s*September 1, 2026/i);
   assert.match(text, /Exact Algorithmic Learning, Certification, and Hardness/i);
   for (const title of [
     "Certification from Examples is Hard for Circuits and Transformers under Minimal Overparametrization",
@@ -90,13 +91,32 @@ test("server-renders the corrected course content and operational policies", asy
     "University Policies and Supports",
   ]) assert.match(text, new RegExp(heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
 
+  for (const moduleTitle of [
+    "Exact Algorithmic Learning and Hardness",
+    "Transformer Capacity, Computation, and Learning",
+    "Theory of In-Context Learning",
+    "Theory of Reasoning",
+    "Projects and Synthesis",
+  ]) assert.match(text, new RegExp(moduleTitle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
+  for (const moduleDescription of [
+    "A motivating case study contrasting exact learning of discrete algorithms with statistical-query and certification hardness.",
+    "From representational power and formal limitations to computational resources, trainability, and finite-sample learning of attention.",
+    "Statistical targets and benchmarks, optimization and training dynamics, and finite-sample generalization with optimal rates.",
+    "Learning with autoregressive reasoning traces, followed by scratchpads, curricula, self-training, and length extrapolation.",
+    "Thematically organized project presentations culminating in a synthesis of results, recurring assumptions, barriers, and open problems.",
+  ]) assert.match(text, new RegExp(moduleDescription.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
+  assert.equal((html.match(/class="schedule-module-row"/g) ?? []).length, 5);
+  assert.equal((html.match(/class="mobile-schedule-module"/g) ?? []).length, 5);
+  assert.equal((html.match(/class="detailed-module"/g) ?? []).length, 4);
+
   assert.match(text, /Week 1 is instructor-led: the instructor will present all four papers/i);
   assert.match(text, /does not count toward students' presentation workload/i);
   assert.match(text, /Student paper presentations run from Week 2 through Week 10/i);
   assert.match(text, /with 4 paper presentations each week/i);
+  assert.match(text, /Each reading meeting begins with instructor framing and ends with a cross-paper synthesis/i);
   assert.match(text, /Each student will give 2 paper presentations: one solo presentation and one shared presentation/i);
   assert.match(text, /25 papers will have a solo presenter, 8 will be presented by pairs, and 3 will be presented by teams of three/i);
-  assert.match(text, /Students sharing a paper divide the 30-minute presentation/i);
+  assert.match(text, /Students sharing a paper divide the 25-minute presentation/i);
   assert.match(text, /must each make a substantive contribution/i);
   assert.match(text, /project presentation is separate and does not count toward these two paper presentations/i);
   assert.match(text, /Exact paper assignments will be announced after enrollment is confirmed/i);
@@ -107,10 +127,19 @@ test("server-renders the corrected course content and operational policies", asy
     text,
     /Biases and Optimization of Self-Attention|The Lipschitz Constant of Self-Attention|The Implicit Bias of Gradient Descent on Separable Data/i,
   );
-  assert.match(text, /30 minutes\s*:?\s*presentation/i);
-  assert.match(text, /12 minutes\s*:?\s*discussion and questions/i);
-  assert.doesNotMatch(text, /5 minutes\s*:?\s*open questions and discussion|2 minutes\s*:?\s*transition/i);
-  assert.doesNotMatch(text, /designated discussant|lead presentation|lead presenter|complete presentation slot|short break and a concluding synthesis/i);
+  assert.match(text, /5 minutes\s*:?\s*Instructor framing/i);
+  assert.match(text, /25-minute presentation/i);
+  assert.match(text, /10 minutes of discussion and questions/i);
+  assert.match(text, /1-minute transition/i);
+  assert.match(text, /10 minutes\s*:?\s*Break/i);
+  assert.match(text, /11 minutes\s*:?\s*Cross-paper synthesis/i);
+  assert.match(text, /Weekly Cross-Paper Synthesis/i);
+  assert.match(text, /What conclusion can be drawn only after considering all four papers together/i);
+  assert.match(text, /How does this paper fit the week's story/i);
+  assert.match(text, /Prepare one concise comparison slide for the weekly synthesis/i);
+  assert.doesNotMatch(text, /30-minute presentation/i);
+  assert.doesNotMatch(text, /12 minutes\s*:?\s*discussion and questions/i);
+  assert.doesNotMatch(text, /designated discussant|lead presentation|lead presenter|complete presentation slot/i);
   assert.match(text, /10-minute talk/i);
   assert.match(text, /2 minutes of questions/i);
   assert.match(text, /1-minute transition/i);
@@ -167,9 +196,9 @@ test("server-renders the corrected course content and operational policies", asy
 
   for (const title of [
     "Exact Algorithmic Learning, Certification, and Hardness",
-    "Theoretical Foundations of Transformer Trainability: Initialization, Width, and Depth",
     "Expressivity, Formal Languages, and Circuit Classes",
     "Parallel and Fine-Grained Complexity of Transformers",
+    "Transformer Trainability: Initialization, Width, and Depth",
   ]) assert.match(text, new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
 
   for (const heading of [
@@ -198,9 +227,9 @@ test("server-renders the corrected course content and operational policies", asy
   );
 
   for (const title of [
-    "Statistical Foundations of Pretrained In-Context Prediction",
+    "Statistical Targets and Benchmarks for In-Context Prediction",
     "Optimization and Training Dynamics of In-Context Learning",
-    "Generalization, Learnability, and Minimax Theory of In-Context Learning",
+    "Finite-Sample Generalization and Minimax Optimality of In-Context Learning",
     "Learning Theory of Autoregressive Chain-of-Thought",
     "Curricula, Scratchpads, and Length Generalization for Reasoning",
   ]) assert.match(text, new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
@@ -210,7 +239,7 @@ test("server-renders the corrected course content and operational policies", asy
     "Part II: Frequentist consistency and empirical-Bayes adaptation",
     "Part I: Population optima and single-step training",
     "Part II: Softmax dynamics and multi-step learned optimization",
-    "Part I: PAC learnability and stability",
+    "Part I: Finite-sample learnability and stability",
     "Part II: Algorithm selection and minimax rates",
     "Part I: Formal frameworks and tight sample complexity",
     "Part II: Statistical benefits and training dynamics",
@@ -220,13 +249,17 @@ test("server-renders the corrected course content and operational policies", asy
 
   assert.match(
     text,
-    /When can pretrained sequence predictors be interpreted as Bayesian, frequentist, or empirical-Bayes procedures/i,
+    /Which Bayesian, frequentist, and empirical-Bayes predictors provide useful targets for in-context learning/i,
   );
   assert.match(text, /Connection to the previous week\./i);
   assert.equal((html.match(/class="week-connection"/gi) ?? []).length, 9);
-  assert.match(text, /Stable optimization does not determine what a transformer can represent/i);
-  assert.match(text, /Efficient representation does not imply learnability from finite data/i);
-  assert.match(text, /Convergence to an in-context algorithm does not by itself guarantee generalization/i);
+  assert.match(text, /Week 2 steps back to ask what transformer architectures can represent at all/i);
+  assert.match(text, /Week 3 asks what computational resources/i);
+  assert.match(text, /Efficiently representable transformer computations are useful only if training remains stable/i);
+  assert.match(text, /Stable signals and gradients do not guarantee that training discovers task-relevant structure/i);
+  assert.match(text, /Week 8 turns from optimization to finite-sample generalization/i);
+  assert.match(text, /Revisiting Week 5's sparse-dependence theme/i);
+  assert.match(text, /returning to Week 1's contrast between structured positive results and learning hardness/i);
   assert.match(
     text,
     /After Part I studies the parallel computational power of the complete transformer architecture/i,
@@ -234,6 +267,10 @@ test("server-renders the corrected course content and operational policies", asy
   assert.doesNotMatch(
     text,
     /Learnability and Inductive Bias of Self-Attention|Bayesian and Statistical Foundations of In-Context Learning/i,
+  );
+  assert.doesNotMatch(
+    text,
+    /Theoretical Foundations of Transformer Trainability: Initialization, Width, and Depth|Statistical Foundations of Pretrained In-Context Prediction|Generalization, Learnability, and Minimax Theory of In-Context Learning/i,
   );
   assert.doesNotMatch(
     text,
@@ -292,9 +329,10 @@ test("server-renders the corrected course content and operational policies", asy
 test("course data preserves the schedule arithmetic, readings, and user-confirmed policies", async () => {
   const data = await loadCourseData();
   const {
-    additionalReadings, assessment, courseFacts, courseProject, courseSchedule,
+    additionalReadings, assessment, courseFacts, courseModules, courseProject, courseSchedule,
     generativeAiPolicy, lateWorkPolicy, navigationItems, paperPresentationPlan,
-    projectDeadlines, projectPresentationPlan, projectPresentationSchedule, universityPolicies,
+    projectDeadlines, projectPresentation, projectPresentationPlan, projectPresentationSchedule,
+    universityPolicies, weeklySynthesisQuestions,
   } = data;
   const scheduledPapers = courseSchedule.flatMap((week) => week.papers);
   const allPapers = [...scheduledPapers, ...additionalReadings];
@@ -310,34 +348,36 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     courseSchedule.slice(0, 5).map(({ week, title }) => [week, title]),
     [
       [1, "Exact Algorithmic Learning, Certification, and Hardness"],
-      [2, "Theoretical Foundations of Transformer Trainability: Initialization, Width, and Depth"],
-      [3, "Expressivity, Formal Languages, and Circuit Classes"],
-      [4, "Parallel and Fine-Grained Complexity of Transformers"],
+      [2, "Expressivity, Formal Languages, and Circuit Classes"],
+      [3, "Parallel and Fine-Grained Complexity of Transformers"],
+      [4, "Transformer Trainability: Initialization, Width, and Depth"],
       [5, "Sparse Structure and Token Selection in Self-Attention"],
     ],
   );
   assert.match(courseSchedule[0].guidingQuestion, /behavioral certification provably hard/i);
   assert.match(
     courseSchedule[1].guidingQuestion,
-    /normalization, width, number of attention heads, residual structure, and depth/i,
+    /universal approximation and Turing completeness coexist/i,
   );
-  assert.match(courseSchedule[1].guidingQuestion, /initialization and during early training/i);
-  assert.match(courseSchedule[2].guidingQuestion, /universal approximation and Turing completeness coexist/i);
-  assert.match(courseSchedule[3].guidingQuestion, /depth, precision, parallel communication, entry magnitudes/i);
+  assert.match(courseSchedule[1].guidingQuestion, /depth, precision, masking, recurrence, and positional information/i);
+  assert.match(courseSchedule[2].guidingQuestion, /depth, precision, parallel communication, entry magnitudes/i);
+  assert.match(courseSchedule[3].guidingQuestion, /normalization, width, number of attention heads, residual structure, and depth/i);
+  assert.match(courseSchedule[3].guidingQuestion, /initialization and during early training/i);
   assert.match(courseSchedule[4].guidingQuestion, /favor sparse dependencies/i);
   assert.deepEqual(
     courseSchedule.slice(5, 10).map(({ week, title }) => [week, title]),
     [
-      [6, "Statistical Foundations of Pretrained In-Context Prediction"],
+      [6, "Statistical Targets and Benchmarks for In-Context Prediction"],
       [7, "Optimization and Training Dynamics of In-Context Learning"],
-      [8, "Generalization, Learnability, and Minimax Theory of In-Context Learning"],
+      [8, "Finite-Sample Generalization and Minimax Optimality of In-Context Learning"],
       [9, "Learning Theory of Autoregressive Chain-of-Thought"],
       [10, "Curricula, Scratchpads, and Length Generalization for Reasoning"],
     ],
   );
-  assert.match(courseSchedule[5].guidingQuestion, /Bayesian, frequentist, or empirical-Bayes procedures/i);
+  assert.match(courseSchedule[5].guidingQuestion, /Bayesian, frequentist, and empirical-Bayes predictors/i);
+  assert.match(courseSchedule[5].guidingQuestion, /idealized prediction error/i);
   assert.match(courseSchedule[6].guidingQuestion, /gradient-based pretraining actually converge/i);
-  assert.match(courseSchedule[7].guidingQuestion, /generalize across examples and tasks/i);
+  assert.match(courseSchedule[7].guidingQuestion, /how many tasks and prompt examples/i);
   assert.match(courseSchedule[8].guidingQuestion, /observed or latent reasoning traces/i);
   assert.match(courseSchedule[9].guidingQuestion, /adaptive data selection, and self-training/i);
   assert.ok(courseSchedule.slice(0, 10).every((week) => week.papers.length === 4));
@@ -348,6 +388,53 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(allPapers.length, 62);
   assert.equal(new Set(allPapers.map((paper) => paper.title)).size, 62);
   assert.equal(new Set(allPapers.map((paper) => paper.link)).size, 62);
+
+  assert.deepEqual(
+    courseModules.map(({ id, label, title, weekNumbers }) => ({
+      id,
+      label,
+      title,
+      weekNumbers: [...weekNumbers],
+    })),
+    [
+      {
+        id: "opening-case-study",
+        label: "Instructor-led opening case study",
+        title: "Exact Algorithmic Learning and Hardness",
+        weekNumbers: [1],
+      },
+      {
+        id: "transformer-foundations",
+        label: "Module I",
+        title: "Transformer Capacity, Computation, and Learning",
+        weekNumbers: [2, 3, 4, 5],
+      },
+      {
+        id: "in-context-learning",
+        label: "Module II",
+        title: "Theory of In-Context Learning",
+        weekNumbers: [6, 7, 8],
+      },
+      {
+        id: "reasoning",
+        label: "Module III",
+        title: "Theory of Reasoning",
+        weekNumbers: [9, 10],
+      },
+      {
+        id: "projects-and-synthesis",
+        label: "Module IV",
+        title: "Projects and Synthesis",
+        weekNumbers: [11, 12],
+      },
+    ],
+  );
+  const moduleWeekNumbers = courseModules.flatMap((module) => module.weekNumbers);
+  assert.deepEqual(moduleWeekNumbers, Array.from({ length: 12 }, (_, index) => index + 1));
+  assert.equal(new Set(moduleWeekNumbers).size, 12);
+  assert.equal(new Set(courseModules.map(({ id }) => id)).size, courseModules.length);
+  assert.ok(courseModules.every(({ description }) => description.length > 0));
+  assert.ok(courseSchedule.every((week) => !("module" in week)));
 
   assert.deepEqual(assessment.map(({ component, weight }) => [component, weight]), [
     ["Course project", "40%"], ["Paper-presentation work", "40%"], ["Class participation", "20%"],
@@ -389,7 +476,7 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(courseFacts.meetingDurationMinutes, 170);
   assert.equal(courseFacts.plannedEnrollment, 25);
   assert.equal(courseFacts.expectedProjectPresentations, 25);
-  assert.equal(courseFacts.lastUpdated, "August 31, 2026");
+  assert.equal(courseFacts.lastUpdated, "September 1, 2026");
   for (const key of ["officeHours", "meetingLocation", "coursePlatform", "officialOutlineUrl"]) assert.equal(courseFacts[key], "TBA");
 
   assert.equal(paperPresentationPlan.instructorLedWeek, 1);
@@ -415,11 +502,46 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
       + 3 * paperPresentationPlan.threePersonPaperPresentationSlots,
     paperPresentationPlan.studentPaperPresentationAssignments,
   );
-  assert.equal(paperPresentationPlan.paperPresentationMinutes, 30);
-  assert.equal(paperPresentationPlan.paperDiscussionMinutes, 12);
-  assert.equal(paperPresentationPlan.minutesPerPaper, 42);
-  assert.equal(paperPresentationPlan.scheduledPaperMinutesPerMeeting, 168);
-  assert.ok(paperPresentationPlan.scheduledPaperMinutesPerMeeting <= courseFacts.meetingDurationMinutes);
+  assert.equal(paperPresentationPlan.openingFramingMinutes, 5);
+  assert.equal(paperPresentationPlan.paperPresentationMinutes, 25);
+  assert.equal(paperPresentationPlan.paperDiscussionMinutes, 10);
+  assert.equal(paperPresentationPlan.paperTransitionMinutes, 1);
+  assert.equal(paperPresentationPlan.paperSlotMinutes, 36);
+  assert.equal(
+    paperPresentationPlan.paperSlotMinutes,
+    paperPresentationPlan.paperPresentationMinutes
+      + paperPresentationPlan.paperDiscussionMinutes
+      + paperPresentationPlan.paperTransitionMinutes,
+  );
+  assert.equal(paperPresentationPlan.papersPerHalf, 2);
+  assert.equal(paperPresentationPlan.halfMeetingPaperMinutes, 72);
+  assert.equal(
+    paperPresentationPlan.halfMeetingPaperMinutes,
+    paperPresentationPlan.papersPerHalf * paperPresentationPlan.paperSlotMinutes,
+  );
+  assert.equal(paperPresentationPlan.midMeetingBreakMinutes, 10);
+  assert.equal(paperPresentationPlan.weeklySynthesisMinutes, 11);
+  assert.equal(paperPresentationPlan.scheduledPaperMinutesPerMeeting, 144);
+  assert.equal(
+    paperPresentationPlan.scheduledPaperMinutesPerMeeting,
+    paperPresentationPlan.papersPerMeeting * paperPresentationPlan.paperSlotMinutes,
+  );
+  assert.equal(paperPresentationPlan.totalPlannedMeetingMinutes, 170);
+  assert.equal(
+    paperPresentationPlan.totalPlannedMeetingMinutes,
+    paperPresentationPlan.openingFramingMinutes
+      + paperPresentationPlan.scheduledPaperMinutesPerMeeting
+      + paperPresentationPlan.midMeetingBreakMinutes
+      + paperPresentationPlan.weeklySynthesisMinutes,
+  );
+  assert.equal(paperPresentationPlan.totalPlannedMeetingMinutes, courseFacts.meetingDurationMinutes);
+
+  assert.equal(weeklySynthesisQuestions.length, 5);
+  assert.match(
+    weeklySynthesisQuestions[0],
+    /representation, computational complexity, trainability, optimization, learnability, or generalization/i,
+  );
+  assert.match(weeklySynthesisQuestions.at(-1), /motivates the following week/i);
 
   assert.equal(projectPresentationPlan.presentationCount, 25);
   assert.equal(projectPresentationPlan.meetingCount, 2);
@@ -536,6 +658,20 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     additionalTitles.indexOf("Looped Transformers as Programmable Computers") + 1,
   );
 
+  const additionalByTitle = new Map(additionalReadings.map((paper) => [paper.title, paper]));
+  assert.match(
+    additionalByTitle.get("Improving Transformer Optimization Through Better Initialization").presentationFocus,
+    /background for Week 4/i,
+  );
+  assert.match(
+    additionalByTitle.get("Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models").presentationFocus,
+    /complements Week 4's theorem-centered core/i,
+  );
+  assert.match(
+    additionalByTitle.get("Theoretical Limitations of Self-Attention in Neural Sequence Models").presentationFocus,
+    /supports Week 2/i,
+  );
+
   for (const title of newlyRequiredTitles) {
     assert.equal(scheduledTitleSet.has(title), true, `${title} must be a scheduled paper`);
     assert.equal(additionalTitleSet.has(title), false, `${title} must not be duplicated in additional readings`);
@@ -567,40 +703,52 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   }
   const weekTwo = courseSchedule.find(({ week }) => week === 2);
   assert.deepEqual(weekTwo.papers.map((paper) => paper.title), [
-    "On Layer Normalization in the Transformer Architecture",
-    "Infinite Attention: NNGP and NTK for Deep Attention Networks",
-    "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
-    "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
+    "Are Transformers Universal Approximators of Sequence-to-Sequence Functions?",
+    "Attention Is Turing Complete",
+    "Masked Hard-Attention Transformers Recognize Exactly the Star-Free Languages",
+    "Saturated Transformers Are Constant-Depth Threshold Circuits",
   ]);
-  assert.equal(
-    weekTwo.title,
-    "Theoretical Foundations of Transformer Trainability: Initialization, Width, and Depth",
-  );
-  assert.match(weekTwo.topicFocus, /initialization-time gradient scaling/i);
-  assert.match(weekTwo.topicFocus, /Gaussian-process and neural-tangent-kernel limits/i);
-  assert.match(weekTwo.topicFocus, /depth-induced token uniformity/i);
-  assert.match(weekTwo.topicFocus, /vanishing query and key gradients/i);
-  assert.equal(
-    weekTwo.subtopics[0].title,
-    "Part I: Initialization, normalization, and infinite-width limits",
-  );
-  assert.deepEqual([...weekTwo.subtopics[0].paperTitles], [
-    "On Layer Normalization in the Transformer Architecture",
-    "Infinite Attention: NNGP and NTK for Deep Attention Networks",
-  ]);
-  assert.equal(
-    weekTwo.subtopics[1].title,
-    "Part II: Depth-induced rank collapse and gradient failure",
-  );
-  assert.deepEqual([...weekTwo.subtopics[1].paperTitles], [
-    "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
-    "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
-  ]);
+  assert.match(weekTwo.guidingQuestion, /universal approximation and Turing completeness coexist/i);
+  assert.match(weekTwo.guidingQuestion, /depth, precision, masking, recurrence, and positional information/i);
 
-  const weekTwoTitleSet = new Set(weekTwo.papers.map((paper) => paper.title));
-  assert.equal(weekTwoTitleSet.has("Infinite Attention: NNGP and NTK for Deep Attention Networks"), true);
+  const weekThree = courseSchedule.find(({ week }) => week === 3);
+  assert.deepEqual(weekThree.papers.map((paper) => paper.title), [
+    "The Parallelism Tradeoff: Limitations of Log-Precision Transformers",
+    "Transformers, Parallel Computation, and Logarithmic Depth",
+    "On the Computational Complexity of Self-Attention",
+    "Fast Attention Requires Bounded Entries",
+  ]);
+  assert.match(weekThree.topicFocus, /Threshold-circuit simulation/i);
+  assert.match(weekThree.topicFocus, /Massively Parallel Computation/i);
+  assert.match(weekThree.topicFocus, /SETH-based lower bounds/i);
+  assert.doesNotMatch(weekThree.topicFocus, /automata shortcuts|programmable looped computation|RASP/i);
+  assert.match(weekThree.subtopics[0].description, /Building on Week 2's threshold-circuit upper bound/i);
+  assert.match(
+    weekThree.subtopics[1].description,
+    /After Part I studies the parallel computational power of the complete transformer architecture/i,
+  );
+  assert.match(weekThree.subtopics[1].description, /zooms in on its principal computational primitive/i);
+  assert.match(weekThree.subtopics[1].description, /faster than quadratic time/i);
+
+  const weekFour = courseSchedule.find(({ week }) => week === 4);
+  assert.deepEqual(weekFour.papers.map((paper) => paper.title), [
+    "On Layer Normalization in the Transformer Architecture",
+    "Infinite Attention: NNGP and NTK for Deep Attention Networks",
+    "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
+    "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
+  ]);
+  assert.equal(weekFour.title, "Transformer Trainability: Initialization, Width, and Depth");
+  assert.match(weekFour.topicFocus, /initialization-time gradient scaling/i);
+  assert.match(weekFour.topicFocus, /Gaussian-process and neural-tangent-kernel limits/i);
+  assert.match(weekFour.topicFocus, /depth-induced token uniformity/i);
+  assert.match(weekFour.topicFocus, /vanishing query and key gradients/i);
+  assert.equal(weekFour.subtopics[0].title, "Part I: Initialization, normalization, and infinite-width limits");
+  assert.equal(weekFour.subtopics[1].title, "Part II: Depth-induced rank collapse and gradient failure");
+
+  const weekFourTitleSet = new Set(weekFour.papers.map((paper) => paper.title));
+  assert.equal(weekFourTitleSet.has("Infinite Attention: NNGP and NTK for Deep Attention Networks"), true);
   assert.equal(
-    weekTwoTitleSet.has("Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models"),
+    weekFourTitleSet.has("Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models"),
     false,
   );
   assert.equal(additionalTitleSet.has("Infinite Attention: NNGP and NTK for Deep Attention Networks"), false);
@@ -609,47 +757,19 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     true,
   );
 
-  const weekTwoByTitle = new Map(weekTwo.papers.map((paper) => [paper.title, paper.presentationFocus]));
+  const weekFourByTitle = new Map(weekFour.papers.map((paper) => [paper.title, paper.presentationFocus]));
   assert.match(
-    weekTwoByTitle.get("Infinite Attention: NNGP and NTK for Deep Attention Networks"),
+    weekFourByTitle.get("Infinite Attention: NNGP and NTK for Deep Attention Networks"),
     /neural-network Gaussian-process and neural-tangent-kernel limits/i,
   );
   assert.match(
-    weekTwoByTitle.get("Infinite Attention: NNGP and NTK for Deep Attention Networks"),
+    weekFourByTitle.get("Infinite Attention: NNGP and NTK for Deep Attention Networks"),
     /single-head attention need not become Gaussian/i,
   );
   assert.match(
-    weekTwoByTitle.get("Infinite Attention: NNGP and NTK for Deep Attention Networks"),
+    weekFourByTitle.get("Infinite Attention: NNGP and NTK for Deep Attention Networks"),
     /multi-head attention converges to a Gaussian process/i,
   );
-
-  const weekThree = courseSchedule.find(({ week }) => week === 3);
-  assert.deepEqual(weekThree.papers.map((paper) => paper.title), [
-    "Are Transformers Universal Approximators of Sequence-to-Sequence Functions?",
-    "Attention Is Turing Complete",
-    "Masked Hard-Attention Transformers Recognize Exactly the Star-Free Languages",
-    "Saturated Transformers Are Constant-Depth Threshold Circuits",
-  ]);
-  assert.match(weekThree.guidingQuestion, /universal approximation and Turing completeness coexist/i);
-  assert.match(weekThree.guidingQuestion, /depth, precision, masking, recurrence, and positional information/i);
-
-  const weekFour = courseSchedule.find(({ week }) => week === 4);
-  assert.deepEqual(weekFour.papers.map((paper) => paper.title), [
-    "The Parallelism Tradeoff: Limitations of Log-Precision Transformers",
-    "Transformers, Parallel Computation, and Logarithmic Depth",
-    "On the Computational Complexity of Self-Attention",
-    "Fast Attention Requires Bounded Entries",
-  ]);
-  assert.match(weekFour.topicFocus, /Threshold-circuit simulation/i);
-  assert.match(weekFour.topicFocus, /Massively Parallel Computation/i);
-  assert.match(weekFour.topicFocus, /SETH-based lower bounds/i);
-  assert.doesNotMatch(weekFour.topicFocus, /automata shortcuts|programmable looped computation|RASP/i);
-  assert.match(
-    weekFour.subtopics[1].description,
-    /After Part I studies the parallel computational power of the complete transformer architecture/i,
-  );
-  assert.match(weekFour.subtopics[1].description, /zooms in on its principal computational primitive/i);
-  assert.match(weekFour.subtopics[1].description, /faster than quadratic time/i);
 
   const weekFive = courseSchedule.find(({ week }) => week === 5);
   assert.equal(weekFive.date, "October 9, 2026");
@@ -734,7 +854,9 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   ]) assert.ok(!weekFive.papers.some(({ title }) => title === removedTitle));
 
   const weekSix = courseSchedule.find(({ week }) => week === 6);
-  assert.equal(weekSix.title, "Statistical Foundations of Pretrained In-Context Prediction");
+  assert.equal(weekSix.title, "Statistical Targets and Benchmarks for In-Context Prediction");
+  assert.match(weekSix.guidingQuestion, /Bayesian, frequentist, and empirical-Bayes predictors/i);
+  assert.match(weekSix.guidingQuestion, /idealized prediction error/i);
   assert.deepEqual(weekSix.papers.map((paper) => paper.title), [
     "An Explanation of In-Context Learning as Implicit Bayesian Inference",
     "An Information-Theoretic Analysis of In-Context Learning",
@@ -750,42 +872,59 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     "Part II: Frequentist consistency and empirical-Bayes adaptation",
   );
 
+  const weekEight = courseSchedule.find(({ week }) => week === 8);
+  assert.equal(
+    weekEight.title,
+    "Finite-Sample Generalization and Minimax Optimality of In-Context Learning",
+  );
+  assert.match(weekEight.guidingQuestion, /how many tasks and prompt examples/i);
+  assert.equal(weekEight.subtopics[0].title, "Part I: Finite-sample learnability and stability");
+
+  const weekNine = courseSchedule.find(({ week }) => week === 9);
+  assert.match(weekNine.subtopics[1].description, /Revisiting Week 5's sparse-dependence theme/i);
+
+  const weekTen = courseSchedule.find(({ week }) => week === 10);
+  assert.match(
+    weekTen.connection,
+    /returning to Week 1's contrast between structured positive results and learning hardness/i,
+  );
+
   const expectedConnections = new Map([
     [
       2,
-      "Week 1 established exact learning results in idealized neural regimes; Week 2 asks which architectural conditions make deep transformer training stable enough for such learning to occur.",
+      "Week 1 showed that exact algorithmic behavior can be learned in carefully structured regimes. Week 2 steps back to ask what transformer architectures can represent at all, and why different assumptions yield universality, Turing completeness, or severe formal limitations.",
     ],
     [
       3,
-      "Stable optimization does not determine what a transformer can represent; Week 3 separates trainability from representational and computational expressivity.",
+      "Week 2 characterized what transformers can represent under different architectural and numerical assumptions. Week 3 asks what computational resources—depth, precision, parallel communication, and running time—are required to realize those representations.",
     ],
     [
       4,
-      "Expressibility does not imply computational efficiency; Week 4 studies the depth, parallelism, precision, and running time needed to realize transformer computations.",
+      "Efficiently representable transformer computations are useful only if training remains stable. Week 4 studies how normalization, width, head count, residual structure, and depth govern representations and gradients.",
     ],
     [
       5,
-      "Efficient representation does not imply learnability from finite data; Week 5 studies the statistical and optimization biases through which attention discovers relevant tokens.",
+      "Stable signals and gradients do not guarantee that training discovers task-relevant structure. Week 5 studies the statistical and optimization biases that drive attention toward sparse, informative tokens.",
     ],
     [
       6,
-      "After studying how attention learns token relationships, Week 6 asks what statistical inference procedure the resulting prompt-conditioned predictor implements.",
+      "Week 5 studied how training organizes attention around informative tokens. Week 6 asks what statistical inference procedure emerges when those learned attention mechanisms operate over an entire prompt.",
     ],
     [
       7,
-      "A statistical description of an ideal in-context predictor does not show that pretraining finds it; Week 7 analyzes population optima and optimization dynamics.",
+      "Week 6 identified ideal statistical targets and benchmarks for prompt-conditioned prediction. Week 7 asks whether transformer pretraining reaches such predictors and which optimization dynamics produce them.",
     ],
     [
       8,
-      "Convergence to an in-context algorithm does not by itself guarantee generalization; Week 8 studies finite-sample learnability and optimal statistical rates.",
+      "Week 7 analyzed how training reaches in-context algorithms. Week 8 turns from optimization to finite-sample generalization, task transfer, algorithm selection, and minimax rates.",
     ],
     [
       9,
-      "Standard in-context learning produces an answer in one forward computation; Week 9 asks how learning changes when the model generates a sequence of intermediate reasoning steps.",
+      "Week 8 studied direct prompt-to-prediction generalization. Week 9 asks how the learning problem changes when the model generates intermediate reasoning traces autoregressively.",
     ],
     [
       10,
-      "Once reasoning traces can be learned, Week 10 asks which scratchpads, curricula, and self-training procedures make them effective on harder and longer problems.",
+      "Week 9 established how reasoning traces change learnability. Week 10 asks which scratchpads, curricula, and self-training procedures overcome barriers on harder or longer problems, returning to Week 1's contrast between structured positive results and learning hardness.",
     ],
   ]);
 
@@ -801,8 +940,15 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     weekEleven.title,
     "Project Presentations I: Foundations, Architecture, and Learning",
   );
-  assert.match(weekEleven.guidingQuestion, /exact learning, trainability, expressivity/i);
+  assert.match(weekEleven.guidingQuestion, /exact learning, expressivity, computational complexity, trainability/i);
   assert.match(weekEleven.topicFocus, /Thirteen project presentations/i);
+  assert.deepEqual([...projectPresentation.weekThemes[0].themes], [
+    "Exact learning and certification.",
+    "Expressivity and formal limitations.",
+    "Parallel and fine-grained computational complexity.",
+    "Trainability and signal propagation.",
+    "Self-attention learnability and early in-context-learning theory.",
+  ]);
   assert.equal(
     weekTwelve.title,
     "Project Presentations II: In-Context Learning, Reasoning, and Open Problems",
@@ -839,15 +985,6 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     [
       2,
       [
-        "On Layer Normalization in the Transformer Architecture",
-        "Infinite Attention: NNGP and NTK for Deep Attention Networks",
-        "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
-        "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
-      ],
-    ],
-    [
-      3,
-      [
         "Are Transformers Universal Approximators of Sequence-to-Sequence Functions?",
         "Attention Is Turing Complete",
         "Masked Hard-Attention Transformers Recognize Exactly the Star-Free Languages",
@@ -855,12 +992,21 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
       ],
     ],
     [
-      4,
+      3,
       [
         "The Parallelism Tradeoff: Limitations of Log-Precision Transformers",
         "Transformers, Parallel Computation, and Logarithmic Depth",
         "On the Computational Complexity of Self-Attention",
         "Fast Attention Requires Bounded Entries",
+      ],
+    ],
+    [
+      4,
+      [
+        "On Layer Normalization in the Transformer Architecture",
+        "Infinite Attention: NNGP and NTK for Deep Attention Networks",
+        "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
+        "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
       ],
     ],
     [
@@ -1001,7 +1147,7 @@ test("rendered structure has valid navigation, meaningful paper links, and acces
   assert.equal((html.match(/<h1\b/gi) ?? []).length, 1);
   const tableHeaders = [...html.matchAll(/<th\b([^>]*)>/gi)];
   assert.ok(tableHeaders.length > 0);
-  assert.ok(tableHeaders.every((match) => /\bscope="(?:col|row)"/i.test(match[1])));
+  assert.ok(tableHeaders.every((match) => /\bscope="(?:col|row|rowgroup)"/i.test(match[1])));
   const labelledSections = [...html.matchAll(/<section\b[^>]*aria-labelledby="([^"]+)"[^>]*>/gi)];
   assert.ok(labelledSections.length >= 10);
   for (const [, headingId] of labelledSections) assert.ok(ids.includes(headingId));
@@ -1010,16 +1156,66 @@ test("rendered structure has valid navigation, meaningful paper links, and acces
   assert.match(html, /<ol\b[^>]*class="[^"]*(?:mobile-schedule|schedule-mobile)[^"]*"/i);
   assert.match(html, /class="[^"]*back-to-schedule[^"]*"[^>]*href="#schedule"/i);
 
-  const topicsTableBody = html.match(/<table\b[^>]*class="[^"]*topics-table[^"]*"[^>]*>[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/i)?.[1];
-  assert.ok(topicsTableBody);
-  assert.equal((topicsTableBody.match(/<tr\b/gi) ?? []).length, 12);
-  const mobileSchedule = html.match(/<ol\b[^>]*class="[^"]*mobile-schedule[^"]*"[^>]*>([\s\S]*?)<\/ol>/i)?.[1];
-  assert.ok(mobileSchedule);
-  assert.equal((mobileSchedule.match(/<li\b/gi) ?? []).length, 12);
+  const desktopModuleGroups = [
+    ...html.matchAll(/<tbody\b[^>]*class="schedule-module-group"[^>]*>([\s\S]*?)<\/tbody>/gi),
+  ].map((match) => match[1]);
+  assert.equal(desktopModuleGroups.length, 5);
+  assert.deepEqual(
+    desktopModuleGroups.map((group) => (group.match(/<tr\b/gi) ?? []).length - 1),
+    [1, 4, 3, 2, 2],
+  );
+  assert.equal(
+    desktopModuleGroups.reduce(
+      (total, group) => total + (group.match(/<tr\b/gi) ?? []).length - 1,
+      0,
+    ),
+    12,
+  );
+  assert.ok(
+    desktopModuleGroups.every(
+      (group) => /class="schedule-module-row"/i.test(group)
+        && /scope="rowgroup"/i.test(group)
+        && /colspan="4"/i.test(group),
+    ),
+  );
+
+  const mobileModuleGroups = [
+    ...html.matchAll(/<section\b[^>]*class="mobile-schedule-module"[^>]*>([\s\S]*?)<\/section>/gi),
+  ].map((match) => match[1]);
+  assert.equal(mobileModuleGroups.length, 5);
+  assert.deepEqual(
+    mobileModuleGroups.map((group) => (group.match(/<li\b/gi) ?? []).length),
+    [1, 4, 3, 2, 2],
+  );
+  assert.equal(
+    mobileModuleGroups.reduce((total, group) => total + (group.match(/<li\b/gi) ?? []).length, 0),
+    12,
+  );
+
+  const detailedModuleGroups = [
+    ...html.matchAll(/<section\b[^>]*class="detailed-module"[^>]*>([\s\S]*?)<\/section>/gi),
+  ].map((match) => match[1]);
+  assert.equal(detailedModuleGroups.length, 4);
+  assert.deepEqual(
+    detailedModuleGroups.map((group) => (group.match(/<article\b[^>]*class="week"/gi) ?? []).length),
+    [1, 4, 3, 2],
+  );
+  assert.equal((html.match(/<h4\b[^>]*class="week-title"/gi) ?? []).length, 10);
+  assert.equal((html.match(/<h5\b[^>]*class="subtopic-label"/gi) ?? []).length, 20);
+  assert.doesNotMatch(html, /<h3\b[^>]*class="week-title"|<h4\b[^>]*class="subtopic-label"/i);
+
+  const meetingFormatHtml = html.match(
+    /<ul\b[^>]*class="meeting-format"[^>]*>([\s\S]*?)<\/ul>/i,
+  )?.[1];
+  assert.ok(meetingFormatHtml);
+  const meetingDurations = [...meetingFormatHtml.matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi)]
+    .map((match) => Number.parseInt(textContent(match[1]).match(/^(\d+) minutes/)?.[1] ?? "", 10));
+  assert.deepEqual(meetingDurations, [5, 72, 10, 72, 11]);
+  assert.equal(meetingDurations.reduce((total, minutes) => total + minutes, 0), 170);
   for (const weekNumber of Array.from({ length: 10 }, (_, index) => index + 1)) {
     assert.equal((html.match(new RegExp(`href="#week-${weekNumber}"`, "g")) ?? []).length, 2);
   }
-  assert.doesNotMatch(html, /href="#week-(?:11|12)"/i);
+  assert.doesNotMatch(html, /href="#week-(?:11|12)"|id="week-(?:11|12)"/i);
 
   const anchors = [...html.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi)].map(([, href, content]) => ({ href: decodeHtml(href), text: textContent(content) }));
   const allPapers = [...courseSchedule.flatMap((week) => week.papers), ...additionalReadings];
@@ -1045,6 +1241,10 @@ test("source preserves the restrained responsive style and required metadata", a
   assert.doesNotMatch(css, /linear-gradient|radial-gradient|backdrop-filter/i);
   assert.match(css, /@media\s*\(max-width:\s*640px\)/i);
   assert.match(css, /schedule-(?:mobile|desktop)|mobile-schedule/i);
+  assert.match(css, /schedule-module-row/i);
+  assert.match(css, /mobile-schedule-module/i);
+  assert.match(css, /detailed-module/i);
+  assert.match(css, /h4,\s*\n?h5\s*\{/i);
   assert.match(css, /scroll-margin-top/i);
   assert.match(css, /@media\s+print/i);
   assert.match(css, /prefers-reduced-motion/i);

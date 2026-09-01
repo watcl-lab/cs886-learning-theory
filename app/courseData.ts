@@ -12,6 +12,14 @@ export type CourseSubtopic = {
   paperTitles: readonly string[];
 };
 
+export type CourseModule = {
+  id: string;
+  label: string;
+  title: string;
+  description: string;
+  weekNumbers: readonly number[];
+};
+
 export type CourseWeek = {
   week: number;
   date: string;
@@ -56,7 +64,7 @@ export const courseFacts = {
   projectMeetings: "Weeks 11–12",
   plannedEnrollment: 25,
   expectedProjectPresentations: 25,
-  lastUpdated: "August 31, 2026",
+  lastUpdated: "September 1, 2026",
 } as const;
 
 export const courseSummary =
@@ -64,8 +72,8 @@ export const courseSummary =
 
 export const courseDescription = {
   paragraphs: [
-    "Learning Theory for Modern AI is a graduate research seminar about how transformers and large language models learn, what they can compute, how they generalize, and why they sometimes fail. Through theoretical papers, we will study exact learning, self-attention, optimization, expressivity, computational limitations, in-context learning, and reasoning.",
-    "The main schedule places particular emphasis on the theory of in-context learning and reasoning. Additional readings connect the central themes to efficient fine-tuning, preference learning, hallucination, watermarking, and other current topics. The course culminates in an individual research project that may develop a new theoretical result or rigorously test an existing theoretical prediction.",
+    "Learning Theory for Modern AI is a graduate research seminar about how transformers and large language models learn, what they can represent and compute, how efficiently they can compute it, how they generalize, and why they sometimes fail. The course begins with an instructor-led case study in exact algorithmic learning, certification, and hardness.",
+    "The remaining schedule is organized as a cumulative sequence: transformer expressivity and formal limitations; parallel and fine-grained computational complexity; trainability and signal propagation; finite-sample learning of self-attention; statistical, optimization, and generalization theories of in-context learning; and the learning theory of autoregressive reasoning, curricula, and length extrapolation. The course culminates in an individual research project that may develop a new theoretical result or rigorously test an existing theoretical prediction.",
   ],
   recommendedBackground:
     "Students should have mathematical maturity and working knowledge of probability, linear algebra, optimization, and introductory machine learning. Prior familiarity with transformers is helpful but not required.",
@@ -96,12 +104,49 @@ export const learningOutcomes = [
 export const readingExpectations =
   "For every scheduled paper, all students should read at least the abstract, introduction, formal setup, main theorem or principal result, and discussion or limitations. The presenter or presenting team is responsible for the proof details and appendices needed to explain the result accurately. Students are not expected to read every technical appendix of all four weekly papers.";
 
-const paperPresentationMinutes = 30;
-const paperDiscussionMinutes = 12;
+const openingFramingMinutes = 5;
+const paperPresentationMinutes = 25;
+const paperDiscussionMinutes = 10;
+const paperTransitionMinutes = 1;
+const midMeetingBreakMinutes = 10;
+const weeklySynthesisMinutes = 11;
+const paperSlotMinutes =
+  paperPresentationMinutes + paperDiscussionMinutes + paperTransitionMinutes;
+const papersPerHalf = courseFacts.scheduledPapersPerMeeting / 2;
+const halfMeetingPaperMinutes = papersPerHalf * paperSlotMinutes;
+const scheduledPaperMinutesPerMeeting =
+  courseFacts.scheduledPapersPerMeeting * paperSlotMinutes;
+const totalPlannedMeetingMinutes =
+  openingFramingMinutes
+  + scheduledPaperMinutesPerMeeting
+  + midMeetingBreakMinutes
+  + weeklySynthesisMinutes;
 
 export const meetingFormat = [
-  { duration: `${paperPresentationMinutes} minutes`, activity: "Presentation" },
-  { duration: `${paperDiscussionMinutes} minutes`, activity: "Discussion and questions" },
+  {
+    duration: `${openingFramingMinutes} minutes`,
+    activity:
+      "Instructor framing: connection to the previous week, the current week's central question, and the relationship among the four papers",
+  },
+  {
+    duration: `${halfMeetingPaperMinutes} minutes`,
+    activity:
+      `Papers 1–2; each paper receives a ${paperPresentationMinutes}-minute presentation, ${paperDiscussionMinutes} minutes of discussion and questions, and a ${paperTransitionMinutes}-minute transition`,
+  },
+  {
+    duration: `${midMeetingBreakMinutes} minutes`,
+    activity: "Break",
+  },
+  {
+    duration: `${halfMeetingPaperMinutes} minutes`,
+    activity:
+      `Papers 3–4; each paper receives a ${paperPresentationMinutes}-minute presentation, ${paperDiscussionMinutes} minutes of discussion and questions, and a ${paperTransitionMinutes}-minute transition`,
+  },
+  {
+    duration: `${weeklySynthesisMinutes} minutes`,
+    activity:
+      "Cross-paper synthesis: compare assumptions and result types, identify the week's main conclusion, and motivate the following week",
+  },
 ] as const;
 
 const instructorLedWeek = 1;
@@ -136,15 +181,21 @@ export const paperPresentationPlan = {
   sharedPaperPresentationAssignments,
   pairedPaperPresentationSlots,
   threePersonPaperPresentationSlots,
+  openingFramingMinutes,
   paperPresentationMinutes,
   paperDiscussionMinutes,
-  minutesPerPaper: paperPresentationMinutes + paperDiscussionMinutes,
-  scheduledPaperMinutesPerMeeting:
-    courseFacts.scheduledPapersPerMeeting * (paperPresentationMinutes + paperDiscussionMinutes),
+  paperTransitionMinutes,
+  paperSlotMinutes,
+  papersPerHalf,
+  halfMeetingPaperMinutes,
+  midMeetingBreakMinutes,
+  weeklySynthesisMinutes,
+  scheduledPaperMinutesPerMeeting,
+  totalPlannedMeetingMinutes,
 } as const;
 
 export const presentationGuidance =
-  `Week ${instructorLedWeek} is instructor-led: the instructor will present all four papers, and that week does not count toward students' presentation workload. Student paper presentations run from Week ${firstStudentPresentationWeek} through Week ${lastStudentPresentationWeek}, with ${courseFacts.scheduledPapersPerMeeting} paper presentations each week.`;
+  `Week ${instructorLedWeek} is instructor-led: the instructor will present all four papers, and that week does not count toward students' presentation workload. Student paper presentations run from Week ${firstStudentPresentationWeek} through Week ${lastStudentPresentationWeek}, with ${courseFacts.scheduledPapersPerMeeting} paper presentations each week. Each reading meeting begins with instructor framing and ends with a cross-paper synthesis that connects the week's conclusions to the following week.`;
 
 export const presentationWorkload =
   `Each student will give ${minimumPaperPresentationsPerStudent} paper presentations: one solo presentation and one shared presentation. ${soloPaperPresentationSlots} papers will have a solo presenter, ${pairedPaperPresentationSlots} will be presented by pairs, and ${threePersonPaperPresentationSlots} will be presented by teams of three. Students sharing a paper divide the ${paperPresentationMinutes}-minute presentation and must each make a substantive contribution. The required project presentation is separate and does not count toward these two paper presentations. Exact paper assignments will be announced after enrollment is confirmed.`;
@@ -153,12 +204,22 @@ export const presentationRequirements = [
   "What is the formal problem? State the data-generating process, hypothesis or architecture class, loss, training rule, and test criterion.",
   "What kind of result is obtained? Distinguish representation, optimization, learnability, generalization, and computational-complexity claims.",
   "What is the main theorem? State it precisely enough that the dependence on dimension, sample size, sequence length, width, depth, and conditioning is visible.",
+  "How does this paper fit the week's story? Coordinate with the other presenters, use common notation where practical, avoid repeating shared background, and state explicitly whether the paper strengthens, limits, contrasts with, or changes assumptions from the preceding paper.",
   "What is the proof mechanism? Is the main tool stability, concentration, kernelization, mean-field dynamics, margin maximization, circuit complexity, communication complexity, or an explicit transformer construction?",
   "Which assumption carries the result? Examples include Gaussian tasks, linear attention, population loss, infinite width, bounded precision, realizability, or synthetic data.",
   "How close is the theorem to a modern LLM? Identify exactly which architectural or statistical features are omitted.",
   "What would falsify or materially strengthen the claim? End with a concrete lower bound, counterexample, experiment, or theorem.",
   "Distinguish carefully between what the paper proves, what its experiments suggest, and what the authors conjecture or claim informally.",
+  "Prepare one concise comparison slide for the weekly synthesis, listing the paper's result type, decisive assumptions, principal guarantee or lower bound, and relationship to the adjacent papers.",
   "End with one precise limitation and one concrete theorem, counterexample, or experiment that would materially strengthen or challenge the paper.",
+] as const;
+
+export const weeklySynthesisQuestions = [
+  "What result type did each paper establish: representation, computational complexity, trainability, optimization, learnability, or generalization?",
+  "Which assumptions changed from paper to paper, and which assumption carried the strongest conclusion?",
+  "Did a later paper strengthen an earlier result, explain a mechanism behind it, provide a limitation, or study a genuinely different regime?",
+  "What conclusion can be drawn only after considering all four papers together?",
+  "Which unresolved question motivates the following week?",
 ] as const;
 
 export const assessment = [
@@ -284,10 +345,10 @@ export const projectPresentation = {
       presentationCount: projectPresentationsByMeeting[0],
       themes: [
         "Exact learning and certification.",
+        "Expressivity and formal limitations.",
+        "Parallel and fine-grained computational complexity.",
         "Trainability and signal propagation.",
-        "Expressivity and computational complexity.",
-        "Self-attention learnability.",
-        "Early in-context-learning theory.",
+        "Self-attention learnability and early in-context-learning theory.",
       ],
     },
     {
@@ -386,6 +447,49 @@ export const projectPresentationSchedule = {
     "What did the projects establish across the course's major themes, and which theoretical questions remain open?",
 } as const;
 
+export const courseModules: readonly CourseModule[] = [
+  {
+    id: "opening-case-study",
+    label: "Instructor-led opening case study",
+    title: "Exact Algorithmic Learning and Hardness",
+    description:
+      "A motivating case study contrasting exact learning of discrete algorithms with statistical-query and certification hardness.",
+    weekNumbers: [1],
+  },
+  {
+    id: "transformer-foundations",
+    label: "Module I",
+    title: "Transformer Capacity, Computation, and Learning",
+    description:
+      "From representational power and formal limitations to computational resources, trainability, and finite-sample learning of attention.",
+    weekNumbers: [2, 3, 4, 5],
+  },
+  {
+    id: "in-context-learning",
+    label: "Module II",
+    title: "Theory of In-Context Learning",
+    description:
+      "Statistical targets and benchmarks, optimization and training dynamics, and finite-sample generalization with optimal rates.",
+    weekNumbers: [6, 7, 8],
+  },
+  {
+    id: "reasoning",
+    label: "Module III",
+    title: "Theory of Reasoning",
+    description:
+      "Learning with autoregressive reasoning traces, followed by scratchpads, curricula, self-training, and length extrapolation.",
+    weekNumbers: [9, 10],
+  },
+  {
+    id: "projects-and-synthesis",
+    label: "Module IV",
+    title: "Projects and Synthesis",
+    description:
+      "Thematically organized project presentations culminating in a synthesis of results, recurring assumptions, barriers, and open problems.",
+    weekNumbers: [11, 12],
+  },
+] as const;
+
 // Week 1 is instructor-led. Weeks 2–10 contain student paper presentations.
 // Weeks 11–12 are reserved for project presentations and contain no readings.
 export const courseSchedule: readonly CourseWeek[] = [
@@ -453,69 +557,8 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 2,
     date: "September 18, 2026",
-    title: "Theoretical Foundations of Transformer Trainability: Initialization, Width, and Depth",
     connection:
-      "Week 1 established exact learning results in idealized neural regimes; Week 2 asks which architectural conditions make deep transformer training stable enough for such learning to occur.",
-    guidingQuestion:
-      "How do normalization, width, number of attention heads, residual structure, and depth determine the behavior of transformer representations and gradients at initialization and during early training?",
-    topicFocus:
-      "Pre-LN versus Post-LN, initialization-time gradient scaling, Gaussian-process and neural-tangent-kernel limits, infinite-head Gaussianity, depth-induced token uniformity, vanishing query and key gradients, and residual scaling.",
-    subtopics: [
-      {
-        title: "Part I: Initialization, normalization, and infinite-width limits",
-        description:
-          "How normalization placement shapes initial gradients and when width and head-count limits yield tractable Gaussian-process and neural-tangent-kernel descriptions of attention.",
-        paperTitles: [
-          "On Layer Normalization in the Transformer Architecture",
-          "Infinite Attention: NNGP and NTK for Deep Attention Networks",
-        ],
-      },
-      {
-        title: "Part II: Depth-induced rank collapse and gradient failure",
-        description:
-          "How repeated attention layers collapse token representations, how that collapse causes query and key gradients to vanish, and how residual structure and scaling mitigate the pathology.",
-        paperTitles: [
-          "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
-          "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
-        ],
-      },
-    ],
-    papers: [
-      paper(
-        "Ruibin Xiong, Yunchang Yang, Di He, Kai Zheng, Shuxin Zheng, Chen Xing, Huishuai Zhang, Yanyan Lan, Liwei Wang, and Tie-Yan Liu",
-        "On Layer Normalization in the Transformer Architecture",
-        "ICML 2020",
-        "Uses mean-field analysis at initialization to show that Post-LN produces large expected gradients near the output while Pre-LN yields better-behaved initial gradients, providing a theoretical explanation for warmup sensitivity under the paper's model.",
-        "https://proceedings.mlr.press/v119/xiong20b.html",
-      ),
-      paper(
-        "Jiri Hron, Yasaman Bahri, Jascha Sohl-Dickstein, and Roman Novak",
-        "Infinite Attention: NNGP and NTK for Deep Attention Networks",
-        "ICML 2020",
-        "Establishes rigorous neural-network Gaussian-process and neural-tangent-kernel limits for deep attention networks, shows that standard single-head attention need not become Gaussian at infinite width while multi-head attention converges to a Gaussian process as the number of heads grows, and analyzes positional encodings and layer normalization.",
-        "https://proceedings.mlr.press/v119/hron20a.html",
-      ),
-      paper(
-        "Yihe Dong, Jean-Baptiste Cordonnier, and Andreas Loukas",
-        "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
-        "ICML 2021",
-        "Uses a path decomposition to prove that pure self-attention without residual connections or multilayer perceptrons converges doubly exponentially toward rank-one token representations and explains how those architectural components prevent degeneration.",
-        "https://proceedings.mlr.press/v139/dong21a.html",
-      ),
-      paper(
-        "Lorenzo Noci, Sotiris Anagnostidis, Luca Biggio, Antonio Orvieto, Sidak Pal Singh, and Aurelien Lucchi",
-        "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
-        "NeurIPS 2022",
-        "Proves that token-rank collapse causes query and key gradients to vanish at initialization, analyzes gradient imbalances across query, key, and value parameters, and derives depth-dependent residual scaling that preserves signal propagation.",
-        "https://proceedings.neurips.cc/paper_files/paper/2022/hash/ae0cba715b60c4052359b3d52a2cff7f-Abstract-Conference.html",
-      ),
-    ],
-  },
-  {
-    week: 3,
-    date: "September 25, 2026",
-    connection:
-      "Stable optimization does not determine what a transformer can represent; Week 3 separates trainability from representational and computational expressivity.",
+      "Week 1 showed that exact algorithmic behavior can be learned in carefully structured regimes. Week 2 steps back to ask what transformer architectures can represent at all, and why different assumptions yield universality, Turing completeness, or severe formal limitations.",
     title: "Expressivity, Formal Languages, and Circuit Classes",
     guidingQuestion:
       "How can universal approximation and Turing completeness coexist with exact formal-language and circuit upper bounds, and which assumptions about depth, precision, masking, recurrence, and positional information explain the difference?",
@@ -573,10 +616,10 @@ export const courseSchedule: readonly CourseWeek[] = [
     ],
   },
   {
-    week: 4,
-    date: "October 2, 2026",
+    week: 3,
+    date: "September 25, 2026",
     connection:
-      "Expressibility does not imply computational efficiency; Week 4 studies the depth, parallelism, precision, and running time needed to realize transformer computations.",
+      "Week 2 characterized what transformers can represent under different architectural and numerical assumptions. Week 3 asks what computational resources—depth, precision, parallel communication, and running time—are required to realize those representations.",
     title: "Parallel and Fine-Grained Complexity of Transformers",
     guidingQuestion:
       "How do depth, precision, parallel communication, entry magnitudes, and approximation error determine what transformers and self-attention can compute efficiently?",
@@ -586,7 +629,7 @@ export const courseSchedule: readonly CourseWeek[] = [
       {
         title: "Part I: Parallel depth and communication",
         description:
-          "How finite-precision transformers relate to threshold circuits and Massively Parallel Computation, and what logarithmic depth adds beyond constant-depth parallelism.",
+          "Building on Week 2's threshold-circuit upper bound, this part studies broader log-precision transformer simulations, their relationship to Massively Parallel Computation, and what logarithmic depth adds beyond constant-depth parallelism.",
         paperTitles: [
           "The Parallelism Tradeoff: Limitations of Log-Precision Transformers",
           "Transformers, Parallel Computation, and Logarithmic Depth",
@@ -634,11 +677,72 @@ export const courseSchedule: readonly CourseWeek[] = [
     ],
   },
   {
+    week: 4,
+    date: "October 2, 2026",
+    connection:
+      "Efficiently representable transformer computations are useful only if training remains stable. Week 4 studies how normalization, width, head count, residual structure, and depth govern representations and gradients.",
+    title: "Transformer Trainability: Initialization, Width, and Depth",
+    guidingQuestion:
+      "How do normalization, width, number of attention heads, residual structure, and depth determine the behavior of transformer representations and gradients at initialization and during early training?",
+    topicFocus:
+      "Pre-LN versus Post-LN, initialization-time gradient scaling, Gaussian-process and neural-tangent-kernel limits, infinite-head Gaussianity, depth-induced token uniformity, vanishing query and key gradients, and residual scaling.",
+    subtopics: [
+      {
+        title: "Part I: Initialization, normalization, and infinite-width limits",
+        description:
+          "How normalization placement shapes initial gradients and when width and head-count limits yield tractable Gaussian-process and neural-tangent-kernel descriptions of attention.",
+        paperTitles: [
+          "On Layer Normalization in the Transformer Architecture",
+          "Infinite Attention: NNGP and NTK for Deep Attention Networks",
+        ],
+      },
+      {
+        title: "Part II: Depth-induced rank collapse and gradient failure",
+        description:
+          "How repeated attention layers collapse token representations, how that collapse causes query and key gradients to vanish, and how residual structure and scaling mitigate the pathology.",
+        paperTitles: [
+          "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
+          "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
+        ],
+      },
+    ],
+    papers: [
+      paper(
+        "Ruibin Xiong, Yunchang Yang, Di He, Kai Zheng, Shuxin Zheng, Chen Xing, Huishuai Zhang, Yanyan Lan, Liwei Wang, and Tie-Yan Liu",
+        "On Layer Normalization in the Transformer Architecture",
+        "ICML 2020",
+        "Uses mean-field analysis at initialization to show that Post-LN produces large expected gradients near the output while Pre-LN yields better-behaved initial gradients, providing a theoretical explanation for warmup sensitivity under the paper's model.",
+        "https://proceedings.mlr.press/v119/xiong20b.html",
+      ),
+      paper(
+        "Jiri Hron, Yasaman Bahri, Jascha Sohl-Dickstein, and Roman Novak",
+        "Infinite Attention: NNGP and NTK for Deep Attention Networks",
+        "ICML 2020",
+        "Establishes rigorous neural-network Gaussian-process and neural-tangent-kernel limits for deep attention networks, shows that standard single-head attention need not become Gaussian at infinite width while multi-head attention converges to a Gaussian process as the number of heads grows, and analyzes positional encodings and layer normalization.",
+        "https://proceedings.mlr.press/v119/hron20a.html",
+      ),
+      paper(
+        "Yihe Dong, Jean-Baptiste Cordonnier, and Andreas Loukas",
+        "Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth",
+        "ICML 2021",
+        "Uses a path decomposition to prove that pure self-attention without residual connections or multilayer perceptrons converges doubly exponentially toward rank-one token representations and explains how those architectural components prevent degeneration.",
+        "https://proceedings.mlr.press/v139/dong21a.html",
+      ),
+      paper(
+        "Lorenzo Noci, Sotiris Anagnostidis, Luca Biggio, Antonio Orvieto, Sidak Pal Singh, and Aurelien Lucchi",
+        "Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse",
+        "NeurIPS 2022",
+        "Proves that token-rank collapse causes query and key gradients to vanish at initialization, analyzes gradient imbalances across query, key, and value parameters, and derives depth-dependent residual scaling that preserves signal propagation.",
+        "https://proceedings.neurips.cc/paper_files/paper/2022/hash/ae0cba715b60c4052359b3d52a2cff7f-Abstract-Conference.html",
+      ),
+    ],
+  },
+  {
     week: 5,
     date: "October 9, 2026",
     title: "Sparse Structure and Token Selection in Self-Attention",
     connection:
-      "Efficient representation does not imply learnability from finite data; Week 5 studies the statistical and optimization biases through which attention discovers relevant tokens.",
+      "Stable signals and gradients do not guarantee that training discovers task-relevant structure. Week 5 studies the statistical and optimization biases that drive attention toward sparse, informative tokens.",
     guidingQuestion:
       "Why does self-attention favor sparse dependencies, and how does gradient-based training discover, combine, and select task-relevant tokens?",
     topicFocus:
@@ -697,13 +801,13 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 6,
     date: "October 23, 2026",
-    title: "Statistical Foundations of Pretrained In-Context Prediction",
+    title: "Statistical Targets and Benchmarks for In-Context Prediction",
     connection:
-      "After studying how attention learns token relationships, Week 6 asks what statistical inference procedure the resulting prompt-conditioned predictor implements.",
+      "Week 5 studied how training organizes attention around informative tokens. Week 6 asks what statistical inference procedure emerges when those learned attention mechanisms operate over an entire prompt.",
     guidingQuestion:
-      "When can pretrained sequence predictors be interpreted as Bayesian, frequentist, or empirical-Bayes procedures, and how do pretraining data and context length control their prediction error?",
+      "Which Bayesian, frequentist, and empirical-Bayes predictors provide useful targets for in-context learning, and how do pretraining data and context length control their idealized prediction error?",
     topicFocus:
-      "Latent-concept Bayesian inference, information-theoretic error rates, frequentist consistency, universal priors, and empirical-Bayes adaptation.",
+      "Latent-concept Bayesian inference, information-theoretic error decomposition, frequentist consistency, universal priors, and empirical-Bayes adaptation.",
     subtopics: [
       {
         title: "Part I: Bayesian interpretation and information-theoretic rates",
@@ -759,7 +863,7 @@ export const courseSchedule: readonly CourseWeek[] = [
     week: 7,
     date: "October 30, 2026",
     connection:
-      "A statistical description of an ideal in-context predictor does not show that pretraining finds it; Week 7 analyzes population optima and optimization dynamics.",
+      "Week 6 identified ideal statistical targets and benchmarks for prompt-conditioned prediction. Week 7 asks whether transformer pretraining reaches such predictors and which optimization dynamics produce them.",
     title: "Optimization and Training Dynamics of In-Context Learning",
     guidingQuestion:
       "Which in-context algorithms minimize the pretraining objective, and under what assumptions does gradient-based pretraining actually converge to those solutions?",
@@ -820,17 +924,17 @@ export const courseSchedule: readonly CourseWeek[] = [
     week: 8,
     date: "November 6, 2026",
     connection:
-      "Convergence to an in-context algorithm does not by itself guarantee generalization; Week 8 studies finite-sample learnability and optimal statistical rates.",
-    title: "Generalization, Learnability, and Minimax Theory of In-Context Learning",
+      "Week 7 analyzed how training reaches in-context algorithms. Week 8 turns from optimization to finite-sample generalization, task transfer, algorithm selection, and minimax rates.",
+    title: "Finite-Sample Generalization and Minimax Optimality of In-Context Learning",
     guidingQuestion:
-      "How do pretrained in-context learners generalize across examples and tasks, and which statistical rates can transformer-based learners attain?",
+      "Once pretraining has produced an in-context algorithm, how many tasks and prompt examples are needed for it to generalize, adapt, select procedures, and attain optimal statistical rates?",
     topicFocus:
       "PAC learnability, algorithmic stability, task transfer, in-context algorithm selection, and minimax nonparametric rates.",
     subtopics: [
       {
-        title: "Part I: PAC learnability and stability",
+        title: "Part I: Finite-sample learnability and stability",
         description:
-          "Formal learning frameworks and generalization guarantees for pretraining followed by frozen-weight in-context adaptation.",
+          "How finite pretraining-task counts, prompt examples, and algorithmic stability control generalization and transfer for frozen-weight in-context learners.",
         paperTitles: [
           "The Learnability of In-Context Learning",
           "Transformers as Algorithms: Generalization and Stability in In-Context Learning",
@@ -881,7 +985,7 @@ export const courseSchedule: readonly CourseWeek[] = [
     week: 9,
     date: "November 13, 2026",
     connection:
-      "Standard in-context learning produces an answer in one forward computation; Week 9 asks how learning changes when the model generates a sequence of intermediate reasoning steps.",
+      "Week 8 studied direct prompt-to-prediction generalization. Week 9 asks how the learning problem changes when the model generates intermediate reasoning traces autoregressively.",
     title: "Learning Theory of Autoregressive Chain-of-Thought",
     guidingQuestion:
       "How do observed or latent reasoning traces change sample complexity, computational complexity, optimization, and generalization?",
@@ -900,7 +1004,7 @@ export const courseSchedule: readonly CourseWeek[] = [
       {
         title: "Part II: Statistical benefits and training dynamics",
         description:
-          "When intermediate reasoning steps improve sample efficiency and when gradient training of nonlinear attention produces a generalizing chain-of-thought predictor.",
+          "Revisiting Week 5's sparse-dependence theme, this part asks how intermediate reasoning steps reshape the dependencies attention must learn, improve sample efficiency, and support nonlinear training and generalization.",
         paperTitles: [
           "From Sparse Dependence to Sparse Attention: Unveiling How Chain-of-Thought Enhances Transformer Sample Efficiency",
           "Training Nonlinear Transformers for Chain-of-Thought Inference: A Theoretical Generalization Analysis",
@@ -942,7 +1046,7 @@ export const courseSchedule: readonly CourseWeek[] = [
     week: 10,
     date: "November 20, 2026",
     connection:
-      "Once reasoning traces can be learned, Week 10 asks which scratchpads, curricula, and self-training procedures make them effective on harder and longer problems.",
+      "Week 9 established how reasoning traces change learnability. Week 10 asks which scratchpads, curricula, and self-training procedures overcome barriers on harder or longer problems, returning to Week 1's contrast between structured positive results and learning hardness.",
     title: "Curricula, Scratchpads, and Length Generalization for Reasoning",
     guidingQuestion:
       "Which forms of intermediate supervision, adaptive data selection, and self-training make compositional reasoning learnable and transferable to harder or longer instances?",
@@ -1004,9 +1108,9 @@ export const courseSchedule: readonly CourseWeek[] = [
     date: "November 27, 2026",
     title: "Project Presentations I: Foundations, Architecture, and Learning",
     guidingQuestion:
-      "What do the projects establish about exact learning, trainability, expressivity, computational complexity, and self-attention learning?",
+      "What do the projects establish about exact learning, expressivity, computational complexity, trainability, and self-attention learning?",
     topicFocus:
-      "Thirteen project presentations grouped around exact learning and certification, trainability and signal propagation, expressivity and computational complexity, self-attention learnability, and early in-context-learning theory.",
+      "Thirteen project presentations grouped around exact learning and certification, expressivity and formal limitations, parallel and fine-grained computational complexity, trainability and signal propagation, self-attention learnability, and early in-context-learning theory.",
     papers: [],
   },
   {
@@ -1026,21 +1130,21 @@ export const additionalReadings: readonly CoursePaper[] = [
     "Xiao Shi Huang, Felipe Perez, Jimmy Ba, and Maksims Volkovs",
     "Improving Transformer Optimization Through Better Initialization",
     "ICML 2020",
-    "Proposes T-Fixup using a simplified analysis of depth-dependent update scaling and validates that the initialization can train very deep encoder-decoder transformers without warmup or layer normalization. It is useful practical background for Week 2 but is not one of the core signal-propagation theorem papers.",
+    "Proposes T-Fixup using a simplified analysis of depth-dependent update scaling and validates that the initialization can train very deep encoder-decoder transformers without warmup or layer normalization. It is useful practical background for Week 4 but is not one of the core signal-propagation theorem papers.",
     "https://proceedings.mlr.press/v119/huang20f.html",
   ),
   paper(
     "Akhil Kedia, Mohd Abbas Zaidi, Sushil Khyalia, Jungho Jung, Harshith Goka, and Haejun Lee",
     "Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models",
     "ICML 2024",
-    "Combines end-to-end forward and backward signal-moment calculations with the DeepScaleLM scaling prescription and extensive empirical validation for very deep language-model transformers. It complements Week 2's theorem-centered core with a broader theory-and-method treatment of stable scaling.",
+    "Combines end-to-end forward and backward signal-moment calculations with the DeepScaleLM scaling prescription and extensive empirical validation for very deep language-model transformers. It complements Week 4's theorem-centered core with a broader theory-and-method treatment of stable scaling.",
     "https://proceedings.mlr.press/v235/kedia24a.html",
   ),
   paper(
     "Michael Hahn",
     "Theoretical Limitations of Self-Attention in Neural Sequence Models",
     "TACL 2020",
-    "A foundational formal-language lower-bound paper showing limitations of fixed-depth self-attention for periodic and hierarchical languages under its model assumptions. It supports Week 3, while the required schedule uses newer exact characterizations and circuit-class results.",
+    "A foundational formal-language lower-bound paper showing limitations of fixed-depth self-attention for periodic and hierarchical languages under its model assumptions. It supports Week 2, while the required schedule uses newer exact characterizations and circuit-class results.",
     "https://aclanthology.org/2020.tacl-1.11/",
   ),
   paper(
