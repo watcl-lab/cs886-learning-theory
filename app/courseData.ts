@@ -148,12 +148,11 @@ export const learningOutcomes = [
 export const readingExpectations =
   "For every scheduled paper, all students should read at least the abstract, introduction, formal setup, main theorem or principal result, and discussion or limitations. Before class, students should be able to identify the paper's result type and its decisive assumption. The presenter or presenting team is responsible for the proof details and supplementary material needed to explain the result accurately. Students are not expected to read every technical detail in the appendix.";
 
-const openingFramingMinutes = 5;
 const paperPresentationMinutes = 25;
-const paperDiscussionMinutes = 10;
+const paperDiscussionMinutes = 11;
 const paperTransitionMinutes = 1;
 const midMeetingBreakMinutes = 10;
-const weeklySynthesisMinutes = 11;
+const weeklySynthesisMinutes = 12;
 const paperSlotMinutes =
   paperPresentationMinutes + paperDiscussionMinutes + paperTransitionMinutes;
 const papersPerHalf = courseFacts.scheduledPapersPerMeeting / 2;
@@ -161,17 +160,11 @@ const halfMeetingPaperMinutes = papersPerHalf * paperSlotMinutes;
 const scheduledPaperMinutesPerMeeting =
   courseFacts.scheduledPapersPerMeeting * paperSlotMinutes;
 const totalPlannedMeetingMinutes =
-  openingFramingMinutes
-  + scheduledPaperMinutesPerMeeting
+  scheduledPaperMinutesPerMeeting
   + midMeetingBreakMinutes
   + weeklySynthesisMinutes;
 
 export const meetingFormat = [
-  {
-    duration: `${openingFramingMinutes} minutes`,
-    activity:
-      "Instructor framing: connection to the previous week, the current week's central question, and the relationship among the four papers",
-  },
   {
     duration: `${halfMeetingPaperMinutes} minutes`,
     activity:
@@ -225,7 +218,6 @@ export const paperPresentationPlan = {
   sharedPaperPresentationAssignments,
   pairedPaperPresentationSlots,
   threePersonPaperPresentationSlots,
-  openingFramingMinutes,
   paperPresentationMinutes,
   paperDiscussionMinutes,
   paperTransitionMinutes,
@@ -239,7 +231,7 @@ export const paperPresentationPlan = {
 } as const;
 
 export const presentationGuidance =
-  `Week ${instructorLedWeek} is instructor-led: the instructor will present all four papers, and that week does not count toward students' presentation workload. Student paper presentations run from Week ${firstStudentPresentationWeek} through Week ${lastStudentPresentationWeek}, with ${courseFacts.scheduledPapersPerMeeting} paper presentations each week. Each reading meeting begins with instructor framing and ends with a cross-paper synthesis that connects the week's conclusions to the following week.`;
+  `Week ${instructorLedWeek} is instructor-led: the instructor will present all four papers, and that week does not count toward students' presentation workload. Student paper presentations run from Week ${firstStudentPresentationWeek} through Week ${lastStudentPresentationWeek}, with ${courseFacts.scheduledPapersPerMeeting} paper presentations each week. Each reading meeting includes four paper presentations and ends with a cross-paper synthesis that connects the week's conclusions to the following week.`;
 
 export const presentationWorkload =
   `Each student will give ${minimumPaperPresentationsPerStudent} paper presentations: one solo presentation worth 25% of the final grade and one shared presentation worth 15%. ${soloPaperPresentationSlots} papers will have a solo presenter, ${pairedPaperPresentationSlots} will be presented by pairs, and ${threePersonPaperPresentationSlots} will be presented by teams of three. Students sharing a paper divide the ${paperPresentationMinutes}-minute presentation and must each make a substantive contribution. The required project presentation is separate and does not count toward these two paper presentations. The solo and shared presentations will be assigned to Fridays between September 18 and November 20, 2026, excluding October 16. Exact paper assignments will be announced after enrollment is confirmed.`;

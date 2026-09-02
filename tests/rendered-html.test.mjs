@@ -168,7 +168,7 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /does not count toward students' presentation workload/i);
   assert.match(text, /Student paper presentations run from Week 2 through Week 10/i);
   assert.match(text, /with 4 paper presentations each week/i);
-  assert.match(text, /Each reading meeting begins with instructor framing and ends with a cross-paper synthesis/i);
+  assert.match(text, /Each reading meeting includes four paper presentations and ends with a cross-paper synthesis/i);
   assert.match(text, /Each student will give 2 paper presentations: one solo presentation worth 25% of the final grade and one shared presentation worth 15%/i);
   assert.match(text, /25 papers will have a solo presenter, 8 will be presented by pairs, and 3 will be presented by teams of three/i);
   assert.match(text, /Students sharing a paper divide the 25-minute presentation/i);
@@ -183,12 +183,12 @@ test("server-renders the corrected course content and operational policies", asy
     text,
     /Biases and Optimization of Self-Attention|The Lipschitz Constant of Self-Attention|The Implicit Bias of Gradient Descent on Separable Data/i,
   );
-  assert.match(text, /5 minutes\s*:?\s*Instructor framing/i);
+  assert.doesNotMatch(text, /Instructor framing/i);
   assert.match(text, /25-minute presentation/i);
-  assert.match(text, /10 minutes of discussion and questions/i);
+  assert.match(text, /11 minutes of discussion and questions/i);
   assert.match(text, /1-minute transition/i);
   assert.match(text, /10 minutes\s*:?\s*Break/i);
-  assert.match(text, /11 minutes\s*:?\s*Cross-paper synthesis/i);
+  assert.match(text, /12 minutes\s*:?\s*Cross-paper synthesis/i);
   assert.match(text, /Weekly Cross-Paper Synthesis/i);
   assert.match(text, /What conclusion can be drawn only after considering all four papers together/i);
   assert.match(text, /State the formal problem, including the data-generating process/i);
@@ -805,11 +805,11 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
       + 3 * paperPresentationPlan.threePersonPaperPresentationSlots,
     paperPresentationPlan.studentPaperPresentationAssignments,
   );
-  assert.equal(paperPresentationPlan.openingFramingMinutes, 5);
+  assert.equal("openingFramingMinutes" in paperPresentationPlan, false);
   assert.equal(paperPresentationPlan.paperPresentationMinutes, 25);
-  assert.equal(paperPresentationPlan.paperDiscussionMinutes, 10);
+  assert.equal(paperPresentationPlan.paperDiscussionMinutes, 11);
   assert.equal(paperPresentationPlan.paperTransitionMinutes, 1);
-  assert.equal(paperPresentationPlan.paperSlotMinutes, 36);
+  assert.equal(paperPresentationPlan.paperSlotMinutes, 37);
   assert.equal(
     paperPresentationPlan.paperSlotMinutes,
     paperPresentationPlan.paperPresentationMinutes
@@ -817,14 +817,14 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
       + paperPresentationPlan.paperTransitionMinutes,
   );
   assert.equal(paperPresentationPlan.papersPerHalf, 2);
-  assert.equal(paperPresentationPlan.halfMeetingPaperMinutes, 72);
+  assert.equal(paperPresentationPlan.halfMeetingPaperMinutes, 74);
   assert.equal(
     paperPresentationPlan.halfMeetingPaperMinutes,
     paperPresentationPlan.papersPerHalf * paperPresentationPlan.paperSlotMinutes,
   );
   assert.equal(paperPresentationPlan.midMeetingBreakMinutes, 10);
-  assert.equal(paperPresentationPlan.weeklySynthesisMinutes, 11);
-  assert.equal(paperPresentationPlan.scheduledPaperMinutesPerMeeting, 144);
+  assert.equal(paperPresentationPlan.weeklySynthesisMinutes, 12);
+  assert.equal(paperPresentationPlan.scheduledPaperMinutesPerMeeting, 148);
   assert.equal(
     paperPresentationPlan.scheduledPaperMinutesPerMeeting,
     paperPresentationPlan.papersPerMeeting * paperPresentationPlan.paperSlotMinutes,
@@ -832,8 +832,7 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(paperPresentationPlan.totalPlannedMeetingMinutes, 170);
   assert.equal(
     paperPresentationPlan.totalPlannedMeetingMinutes,
-    paperPresentationPlan.openingFramingMinutes
-      + paperPresentationPlan.scheduledPaperMinutesPerMeeting
+    paperPresentationPlan.scheduledPaperMinutesPerMeeting
       + paperPresentationPlan.midMeetingBreakMinutes
       + paperPresentationPlan.weeklySynthesisMinutes,
   );
@@ -1531,7 +1530,7 @@ test("rendered structure has valid navigation, meaningful paper links, and acces
   assert.ok(meetingFormatHtml);
   const meetingDurations = [...meetingFormatHtml.matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi)]
     .map((match) => Number.parseInt(textContent(match[1]).match(/^(\d+) minutes/)?.[1] ?? "", 10));
-  assert.deepEqual(meetingDurations, [5, 72, 10, 72, 11]);
+  assert.deepEqual(meetingDurations, [74, 10, 74, 12]);
   assert.equal(meetingDurations.reduce((total, minutes) => total + minutes, 0), 170);
   for (const weekNumber of Array.from({ length: 10 }, (_, index) => index + 1)) {
     assert.equal((html.match(new RegExp(`href="#week-${weekNumber}"`, "g")) ?? []).length, 2);
