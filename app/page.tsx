@@ -411,7 +411,7 @@ export default function Home() {
           <p>{presentationGuidance}</p>
           <p>{presentationWorkload}</p>
 
-          <h3>Meeting Format</h3>
+          <h3>Student-Presentation Meeting Format</h3>
           <ul className="meeting-format">
             {meetingFormat.map((item) => (
               <li key={item.activity}>
