@@ -83,7 +83,7 @@ export function isPendingCourseFact(value: string) {
 export const courseDescription = {
   paragraphs: [
     "Learning Theory for Modern AI is a graduate research seminar on the theoretical foundations of transformers and large language models. We study what these models can represent and compute, what computational resources they require, when their training dynamics are stable, how they learn and generalize from finite data, and why they fail. The course begins with an instructor-led case study in exact algorithmic learning, certification, and hardness.",
-    "After the opening case study, Module I moves from expressivity and computational complexity to trainability and finite-sample learning of attention. Module II studies statistical targets, optimization, and generalization in in-context learning. Module III studies autoregressive chain-of-thought, curricula, and length generalization. Module IV consists of thematically organized project presentations and course synthesis.",
+    "After the opening case study, Module I moves from expressivity and computational complexity to trainability and finite-sample learning of attention. Module II studies statistical targets, optimization, and generalization in in-context learning. Module III studies autoregressive chain-of-thought, curricula, and length generalization. Module IV is devoted to student project presentations.",
   ],
   recommendedBackground:
     "Students should have mathematical maturity and working knowledge of probability, linear algebra, optimization, algorithms, asymptotic notation, and introductory machine learning. Familiarity with reading proofs is expected. Prior coursework in computational complexity, statistical learning theory, or transformers is helpful but not required.",
@@ -226,41 +226,7 @@ export const presentationRequirements = [
 ] as const;
 
 export const assessmentSummary =
-  "The final grade preserves the 40% paper-presentation, 40% project, and 20% participation structure. The internal breakdown is shown below.";
-
-export const assessment = [
-  {
-    component: "Paper presentation",
-    weight: "40%",
-    standard:
-      "Command of the formal problem, main theorem, proof mechanism, decisive assumptions, limitations, and relationship to the other papers in the week. Evaluation includes responses to questions.",
-  },
-  {
-    component: "Final project report and reproducibility materials",
-    weight: "30%",
-    standard:
-      "A technically substantive written contribution that develops new theory or rigorously tests a formal theoretical prediction, clearly separates known results from the student's contribution, and provides reproducible materials where applicable.",
-  },
-  {
-    component: "Final project presentation",
-    weight: "10%",
-    standard:
-      "A concise individual presentation of the research question, original contribution, methods, main result, strongest limitation, and most important next step.",
-  },
-  {
-    component: "Class participation",
-    weight: "20%",
-    standard:
-      "Preparation across all four weekly papers, constructive questions, accurate comparison of assumptions and result types, and engagement with project presentations. Quality and intellectual contribution matter more than speaking frequency; attendance alone is not sufficient.",
-  },
-] as const;
-
-export const participationPolicy = {
-  evaluation:
-    "Participation is assessed through preparation, constructive questions, comparison of assumptions and result types, and engagement with project presentations. Quality, preparation, and intellectual contribution matter more than speaking frequency; attendance alone is not sufficient.",
-  approvedAbsences:
-    "Approved absences will not by themselves reduce the participation grade. When appropriate, the instructor may arrange an alternative form of engagement, such as a short written comparison of the week's papers.",
-} as const;
+  "The final grade consists of one paper presentation (40%), the required course project (40%), and class participation (20%).";
 
 export const courseProject = {
   introduction:
@@ -286,11 +252,9 @@ export const courseProject = {
   ],
   empiricalStandard:
     "A generic model comparison, benchmark leaderboard, prompt-engineering exercise, or systems implementation is not sufficient by itself.",
-  groupWorkPolicy:
-    "Projects are individual by default. A small-group project requires written approval from the instructor in advance. The final report must state the division of work and include an individual contribution statement. Every student must be able to explain the complete project, individual grades may differ, and a group project must have scope commensurate with the number of participants.",
   deliverables: [
     "A final written report that clearly separates known results from the student's contribution and provides sufficient technical detail to evaluate correctness.",
-    "For empirical projects, reproducible code, configurations, and a clear account of the experimental protocol.",
+    "For empirical projects, reproducible code and configurations.",
     "An individual final presentation during Week 11 or Week 12. The project presentation is assessed as part of the project grade, not as a paper presentation.",
   ],
   evaluationCriteria: [
@@ -334,65 +298,36 @@ export const projectDeadlines = [
   },
 ] as const;
 
-const projectTalkMinutes = 10;
-const projectQuestionMinutes = 2;
-const projectTransitionMinutes = 1;
-const projectPresentationMinutes = projectTalkMinutes + projectQuestionMinutes + projectTransitionMinutes;
 const projectPresentationsByMeeting = [13, 12] as const;
-const finalProjectSynthesisMinutes =
-  courseFacts.meetingDurationMinutes
-  - projectPresentationsByMeeting[1] * projectPresentationMinutes;
+const projectPresentationMinutesByMeeting = [13, 14] as const;
+const projectPresentationUsedMinutesByMeeting = [
+  projectPresentationsByMeeting[0] * projectPresentationMinutesByMeeting[0],
+  projectPresentationsByMeeting[1] * projectPresentationMinutesByMeeting[1],
+] as const;
+const projectPresentationBufferMinutesByMeeting = [
+  courseFacts.meetingDurationMinutes - projectPresentationUsedMinutesByMeeting[0],
+  courseFacts.meetingDurationMinutes - projectPresentationUsedMinutesByMeeting[1],
+] as const;
 const projectPresentationMeetingCount = projectPresentationsByMeeting.length;
 const totalProjectPresentationMinutes =
-  courseFacts.expectedProjectPresentations * projectPresentationMinutes;
+  projectPresentationUsedMinutesByMeeting.reduce((total, minutes) => total + minutes, 0);
 const totalProjectMeetingMinutes = projectPresentationMeetingCount * courseFacts.meetingDurationMinutes;
 
 export const projectPresentationPlan = {
   presentationCount: courseFacts.expectedProjectPresentations,
   meetingCount: projectPresentationMeetingCount,
   presentationsByMeeting: projectPresentationsByMeeting,
-  talkMinutes: projectTalkMinutes,
-  questionMinutes: projectQuestionMinutes,
-  transitionMinutes: projectTransitionMinutes,
-  minutesPerPresentation: projectPresentationMinutes,
-  usedMinutesByMeeting: projectPresentationsByMeeting.map(
-    (count) => count * projectPresentationMinutes,
-  ),
+  minutesPerPresentationByMeeting: projectPresentationMinutesByMeeting,
+  usedMinutesByMeeting: projectPresentationUsedMinutesByMeeting,
+  bufferMinutesByMeeting: projectPresentationBufferMinutesByMeeting,
   totalPresentationMinutes: totalProjectPresentationMinutes,
   totalAvailableMinutes: totalProjectMeetingMinutes,
   remainingMinutes: totalProjectMeetingMinutes - totalProjectPresentationMinutes,
-  finalSynthesisMinutes: finalProjectSynthesisMinutes,
 } as const;
 
 export const projectPresentation = {
   introduction:
-    `Weeks 11–12 are reserved for ${courseFacts.expectedProjectPresentations} individual project presentations. Week 11 will have ${projectPresentationsByMeeting[0]} presentations, and Week 12 will have ${projectPresentationsByMeeting[1]}. Each presentation has a ${projectPresentationMinutes}-minute slot: a ${projectTalkMinutes}-minute talk, ${projectQuestionMinutes} minutes of questions, and a ${projectTransitionMinutes}-minute transition. Timing will be strict. The project presentation does not count toward the required paper presentation. The final meeting reserves ${finalProjectSynthesisMinutes} minutes for course synthesis and open problems.`,
-  orderingPrinciple:
-    "Presentations will be ordered thematically rather than alphabetically, randomly, by sign-up time, or by perceived project quality.",
-  weekThemes: [
-    {
-      week: 11,
-      presentationCount: projectPresentationsByMeeting[0],
-      themes: [
-        "Exact learning and certification.",
-        "Expressivity and formal limitations.",
-        "Parallel and fine-grained computational complexity.",
-        "Trainability and signal propagation.",
-        "Self-attention learnability and early in-context-learning theory.",
-      ],
-    },
-    {
-      week: 12,
-      presentationCount: projectPresentationsByMeeting[1],
-      themes: [
-        "In-context-learning optimization and generalization.",
-        "Autoregressive chain-of-thought.",
-        "Curricula and scratchpads.",
-        "Length generalization.",
-        "Empirical tests of theoretical predictions.",
-      ],
-    },
-  ],
+    `Weeks 11–12 are reserved for ${courseFacts.expectedProjectPresentations} individual project presentations. Week 11 will have ${projectPresentationsByMeeting[0]} presentations, and Week 12 will have ${projectPresentationsByMeeting[1]}. Presentations will be approximately ${projectPresentationMinutesByMeeting[0]}–${projectPresentationMinutesByMeeting[1]} minutes, including questions. The project presentation does not count toward the required paper presentation.`,
   requirements: [
     "The precise research question and its connection to the course.",
     "The existing theoretical result, conjecture, or limitation being extended or examined.",
@@ -403,36 +338,11 @@ export const projectPresentation = {
   ],
   guidance:
     "For empirical projects, plots and tables should be chosen to test the stated theoretical prediction rather than merely summarize benchmark performance. For theoretical projects, the talk should state the result with its quantifiers and parameter dependence, and should explain the main proof idea or obstruction.",
-  closingSynthesis:
-    `The final ${finalProjectSynthesisMinutes} minutes of Week 12 will synthesize which assumptions repeatedly enabled positive results, which barriers persisted across models, which theoretical predictions were supported or challenged by the projects, and which open problems appear most tractable.`,
-} as const;
-
-const lateGracePeriodHours = 48;
-const latePenaltyPercentagePoints = 5;
-const latePenaltyPeriodHours = 24;
-
-export const lateWorkPolicy = {
-  latePolicyConfirmedByInstructor: true,
-  gracePeriodHours: lateGracePeriodHours,
-  penaltyPercentagePoints: latePenaltyPercentagePoints,
-  penaltyPeriodHours: latePenaltyPeriodHours,
-  contactStatement:
-    "Students should contact the instructor as soon as reasonably possible when illness, emergency, or another serious circumstance affects coursework.",
-  presentationPolicy:
-    "An approved missed paper or project presentation will be rescheduled or replaced with an equivalent oral or written task, depending on the remaining course schedule. An unapproved missed presentation normally receives a grade of zero.",
-  participationAbsencePolicy:
-    "Approved absences will not by themselves reduce the participation grade. When appropriate, an alternative form of engagement may be arranged.",
-  graceScopeStatement:
-    "The 48-hour grace period applies only to the final project report and required reproducibility materials. It does not apply to scheduled live paper or project presentations.",
-  scopeStatement: `The final project report and required reproducibility materials have a ${lateGracePeriodHours}-hour grace period. After that grace period, and in the absence of an approved extension, the project-report grade is reduced by ${latePenaltyPercentagePoints} percentage points for each additional ${latePenaltyPeriodHours}-hour period or part thereof.`,
 } as const;
 
 export const generativeAiPolicy = [
-  "Generative-AI tools may be used for coursework in this class unless an assignment states otherwise. Their use must be documented, cited, or acknowledged as appropriate, with enough detail to make the student's own contribution clear.",
+  "Generative-AI tools may be used for coursework in this class.",
   "Students remain fully responsible for the accuracy, originality, and integrity of all submitted work and must be able to explain every mathematical statement, proof step, citation, experimental result, and piece of code. Factual, mathematical, citation, experimental, or coding errors will be graded as errors regardless of whether AI was used.",
-  "Students should retain relevant prompts, notes, sources, research records, and intermediate drafts and may be asked to provide them to demonstrate the development of their work.",
-  "Do not upload confidential, private, unpublished, personal, or third-party-restricted information to external AI systems. University-provided tools should be used where feasible for work involving institutional information.",
-  "Undisclosed use, use outside the conditions stated for an assignment, fabricated references, or submission of generated content that the student cannot explain may be addressed under Policy 71.",
 ] as const;
 
 // Official University policy and support links checked against Waterloo source pages on August 21, 2026.
@@ -485,9 +395,7 @@ function paper(
 export const projectPresentationSchedule = {
   weeks: "11–12",
   dates: "November 27 and December 4, 2026",
-  title: "Project Presentations and Course Synthesis",
-  centralQuestion:
-    "What did the projects establish across the course's major themes, and which theoretical questions remain open?",
+  title: "Project Presentations",
 } as const;
 
 export const courseModules: readonly CourseModule[] = [
@@ -524,7 +432,7 @@ export const courseModules: readonly CourseModule[] = [
     weekNumbers: [9, 10],
   },
   {
-    id: "projects-and-synthesis",
+    id: "projects",
     label: "Module IV",
     title: "Projects",
     weekNumbers: [11, 12],
@@ -1144,18 +1052,12 @@ export const courseSchedule: readonly CourseWeek[] = [
     week: 11,
     date: "November 27, 2026",
     title: "Project Presentations I",
-    topicFocus:
-      "Thirteen project presentations grouped around exact learning and certification, expressivity and formal limitations, parallel and fine-grained computational complexity, trainability and signal propagation, self-attention learnability, and early in-context-learning theory.",
     papers: [],
   },
   {
     week: 12,
     date: "December 4, 2026",
     title: "Project Presentations II",
-    guidingQuestion:
-      "What do the projects establish about in-context learning and reasoning, and which theoretical questions remain open?",
-    topicFocus:
-      "Twelve project presentations grouped around in-context-learning optimization and generalization, chain-of-thought, curricula and scratchpads, length generalization, and empirical tests of theoretical predictions, followed by a final course synthesis.",
     papers: [],
   },
 ];

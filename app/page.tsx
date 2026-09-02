@@ -1,7 +1,6 @@
 import {
   additionalReadingGroups,
   additionalReadings,
-  assessment,
   assessmentSummary,
   courseDescription,
   courseFacts,
@@ -10,11 +9,9 @@ import {
   courseSchedule,
   generativeAiPolicy,
   isPendingCourseFact,
-  lateWorkPolicy,
   learningOutcomes,
   meetingFormat,
   navigationItems,
-  participationPolicy,
   pendingLogistics,
   presentationGuidance,
   presentationRequirements,
@@ -452,9 +449,6 @@ export default function Home() {
           </ol>
           <p>{courseProject.empiricalStandard}</p>
 
-          <h3>Group Work</h3>
-          <p>{courseProject.groupWorkPolicy}</p>
-
           <h3>Project Deliverables</h3>
           <ul>
             {courseProject.deliverables.map((deliverable) => (
@@ -507,24 +501,6 @@ export default function Home() {
           <h2 id="project-presentation-requirements-heading">Project Presentation Requirements</h2>
           <p>{projectPresentation.introduction}</p>
 
-          <h3>Presentation Order and Themes</h3>
-          <p>{projectPresentation.orderingPrinciple}</p>
-          <ol>
-            {projectPresentation.weekThemes.map((theme) => (
-              <li key={theme.week}>
-                <strong>
-                  Week {theme.week}.
-                </strong>{" "}
-                {theme.presentationCount} presentations, organized around:
-                <ul>
-                  {theme.themes.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ol>
-
           <p>Every presentation should include:</p>
           <ol>
             {projectPresentation.requirements.map((requirement) => (
@@ -532,45 +508,11 @@ export default function Home() {
             ))}
           </ol>
           <p>{projectPresentation.guidance}</p>
-          <p>{projectPresentation.closingSynthesis}</p>
         </section>
 
         <section id="assessment" aria-labelledby="assessment-heading">
           <h2 id="assessment-heading">Assessment</h2>
           <p>{assessmentSummary}</p>
-          <div className="table-wrap" role="region" aria-label="Assessment" tabIndex={0}>
-            <table className="assessment-table">
-              <thead>
-                <tr>
-                  <th scope="col">Component</th>
-                  <th scope="col">Weight</th>
-                  <th scope="col">Standard</th>
-                </tr>
-              </thead>
-              <tbody>
-                {assessment.map((item) => (
-                  <tr key={item.component}>
-                    <td>{item.component}</td>
-                    <td>{item.weight}</td>
-                    <td>{item.standard}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <h3>Participation</h3>
-          <p>{participationPolicy.evaluation}</p>
-          <p>{participationPolicy.approvedAbsences}</p>
-        </section>
-
-        <section id="late-work" aria-labelledby="late-work-heading">
-          <h2 id="late-work-heading">Late Work, Missed Work, and Extensions</h2>
-          <p>{lateWorkPolicy.contactStatement}</p>
-          <p>{lateWorkPolicy.presentationPolicy}</p>
-          <p>{lateWorkPolicy.participationAbsencePolicy}</p>
-          <p>{lateWorkPolicy.graceScopeStatement}</p>
-          <p>{lateWorkPolicy.scopeStatement}</p>
         </section>
 
         <section id="generative-ai" aria-labelledby="generative-ai-heading">

@@ -81,7 +81,7 @@ test("server-renders the corrected course content and operational policies", asy
   );
   assert.match(
     text,
-    /Module IV consists of thematically organized project presentations and course synthesis/i,
+    /Module IV is devoted to student project presentations/i,
   );
   assert.match(text, /Recommended preparation/i);
   assert.match(text, /algorithms, asymptotic notation/i);
@@ -137,7 +137,6 @@ test("server-renders the corrected course content and operational policies", asy
     "Project Milestones and Deadlines",
     "Project Presentation Requirements",
     "Assessment",
-    "Late Work, Missed Work, and Extensions",
     "Use of Generative AI",
     "Suggested Additional Readings and Project Starting Points",
     "University Policies and Supports",
@@ -197,53 +196,46 @@ test("server-renders the corrected course content and operational policies", asy
   assert.doesNotMatch(text, /30-minute presentation/i);
   assert.doesNotMatch(text, /12 minutes\s*:?\s*discussion and questions/i);
   assert.doesNotMatch(text, /designated discussant|lead presentation|lead presenter|complete presentation slot/i);
-  assert.match(text, /10-minute talk/i);
-  assert.match(text, /2 minutes of questions/i);
-  assert.match(text, /1-minute transition/i);
   assert.match(text, /25 individual project presentations/i);
   assert.match(text, /Week 11 will have 13 presentations, and Week 12 will have 12/i);
-  assert.match(text, /Each presentation has a 13-minute slot/i);
-  assert.match(text, /Timing will be strict/i);
+  assert.match(text, /Presentations will be approximately 13.{0,3}14 minutes, including questions/i);
+  assert.doesNotMatch(text, /Timing will be strict/i);
   assert.match(text, /The project presentation does not count toward the required paper presentation/i);
-  assert.match(text, /The final meeting reserves 14 minutes for course synthesis and open problems/i);
-  assert.match(text, /Presentation Order and Themes/i);
-  assert.match(
+  assert.doesNotMatch(text, /The final meeting reserves 14 minutes for course synthesis and open problems/i);
+  assert.doesNotMatch(text, /Presentation Order and Themes/i);
+  assert.doesNotMatch(
     text,
     /Presentations will be ordered thematically rather than alphabetically, randomly, by sign-up time, or by perceived project quality/i,
   );
-  assert.match(text, /Week 11\s*\.\s*13 presentations/i);
-  assert.match(text, /Week 12\s*\.\s*12 presentations/i);
-  assert.match(text, /Exact learning and certification/i);
-  assert.match(text, /Autoregressive chain-of-thought/i);
-  assert.match(text, /The final 14 minutes of Week 12 will synthesize/i);
+  assert.doesNotMatch(text, /The final 14 minutes of Week 12 will synthesize/i);
   assert.match(text, /November 26, 2026/);
   assert.match(text, /Project topic approval/i);
   assert.match(text, /October 23, 2026/);
   assert.match(text, /ungraded three-to-five-sentence description/i);
   assert.match(text, /November 27 or December 4, 2026/i);
-  assert.match(text, /48-hour grace period/i);
-  assert.match(text, /approved missed paper or project presentation will be rescheduled or replaced/i);
-  assert.match(text, /unapproved missed presentation normally receives a grade of zero/i);
-  assert.match(text, /does not apply to scheduled live paper or project presentations/i);
-  assert.match(text, /project-report grade is reduced/i);
-  assert.match(text, /(?:five|5) percentage points for each additional 24-hour period/i);
-  assert.match(text, /documented, cited, or acknowledged/i);
+  assert.doesNotMatch(text, /Late Work, Missed Work, and Extensions/i);
+  assert.doesNotMatch(text, /48-hour grace period/i);
+  assert.doesNotMatch(text, /approved missed paper or project presentation will be rescheduled or replaced/i);
+  assert.doesNotMatch(text, /unapproved missed presentation normally receives a grade of zero/i);
+  assert.doesNotMatch(text, /does not apply to scheduled live paper or project presentations/i);
+  assert.doesNotMatch(text, /project-report grade is reduced/i);
+  assert.doesNotMatch(text, /(?:five|5) percentage points for each additional 24-hour period/i);
+  assert.match(text, /Generative-AI tools may be used for coursework in this class\./i);
+  assert.doesNotMatch(text, /unless an assignment states otherwise/i);
+  assert.doesNotMatch(text, /documented, cited, or acknowledged/i);
   assert.match(text, /fully responsible for the accuracy, originality, and integrity/i);
-  assert.match(text, /retain relevant prompts, notes, sources, research records, and intermediate drafts/i);
-  assert.match(text, /confidential, private, unpublished/i);
-  assert.match(text, /may be addressed under Policy 71/i);
+  assert.doesNotMatch(text, /retain relevant prompts, notes, sources, research records, and intermediate drafts/i);
+  assert.doesNotMatch(text, /confidential, private, unpublished/i);
+  assert.doesNotMatch(text, /may be addressed under Policy 71/i);
   assert.doesNotMatch(text, /will result in less marks/i);
-  assert.match(text, /40% paper-presentation, 40% project, and 20% participation/i);
-  for (const component of [
-    "Paper presentation",
-    "Final project report and reproducibility materials",
-    "Final project presentation",
-    "Class participation",
-  ]) assert.match(text, new RegExp(component.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
-  assert.match(text, /Participation/i);
-  assert.match(text, /attendance alone is not sufficient/i);
-  assert.match(text, /Approved absences will not by themselves reduce the participation grade/i);
-  assert.match(text, /Projects are individual by default/i);
+  assert.match(text, /one paper presentation \(40%\), the required course project \(40%\), and class participation \(20%\)/i);
+  assert.doesNotMatch(html, /<table\b[^>]*class="assessment-table"/i);
+  assert.doesNotMatch(html, /<h3>Participation<\/h3>/i);
+  assert.doesNotMatch(text, /attendance alone is not sufficient/i);
+  assert.doesNotMatch(text, /Approved absences will not by themselves reduce the participation grade/i);
+  assert.doesNotMatch(text, /Projects are individual by default/i);
+  assert.match(text, /For empirical projects, reproducible code and configurations\./i);
+  assert.doesNotMatch(text, /clear account of the experimental protocol/i);
   assert.doesNotMatch(text, /Every project must identify at least one course paper, theorem, formal model, or module/i);
   assert.match(text, /The project may stress-test or challenge an existing theoretical claim/i);
   assert.doesNotMatch(text, /The project may reproduce, verify, stress-test, or challenge/i);
@@ -442,10 +434,10 @@ test("server-renders the corrected course content and operational policies", asy
 test("course data preserves the schedule arithmetic, readings, and user-confirmed policies", async () => {
   const data = await loadCourseData();
   const {
-    additionalReadingGroups, additionalReadings, assessment, assessmentSummary,
+    additionalReadingGroups, additionalReadings, assessmentSummary,
     courseDescription, courseFacts, courseModules, courseProject, courseSchedule, courseSummary,
-    generativeAiPolicy, lateWorkPolicy, learningOutcomes, navigationItems, paperPresentationPlan,
-    participationPolicy, pendingLogistics, presentationRequirements, presentationWorkload,
+    generativeAiPolicy, learningOutcomes, navigationItems, paperPresentationPlan,
+    pendingLogistics, presentationRequirements, presentationWorkload,
     projectDeadlines, projectPresentation, projectPresentationPlan, projectPresentationSchedule,
     readingExpectations, universityPolicies,
   } = data;
@@ -648,7 +640,7 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
         weekNumbers: [9, 10],
       },
       {
-        id: "projects-and-synthesis",
+        id: "projects",
         label: "Module IV",
         title: "Projects",
         weekNumbers: [11, 12],
@@ -669,35 +661,12 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     "Exact Algorithmic Learning, Certification, and Hardness",
   );
 
-  assert.match(
-    assessmentSummary,
-    /40% paper-presentation, 40% project, and 20% participation/i,
-  );
-  assert.deepEqual(assessment.map(({ component, weight }) => [component, weight]), [
-    ["Paper presentation", "40%"],
-    ["Final project report and reproducibility materials", "30%"],
-    ["Final project presentation", "10%"],
-    ["Class participation", "20%"],
-  ]);
   assert.equal(
-    assessment.reduce(
-      (total, item) => total + Number.parseInt(item.weight, 10),
-      0,
-    ),
-    100,
+    assessmentSummary,
+    "The final grade consists of one paper presentation (40%), the required course project (40%), and class participation (20%).",
   );
-  assert.match(
-    assessment.find(({ component }) => component === "Paper presentation").standard,
-    /responses to questions/i,
-  );
-  assert.doesNotMatch(JSON.stringify(assessment), /solo paper presentation|shared paper presentation|weekly synthesis|cross-paper synthesis/i);
-  assert.match(participationPolicy.evaluation, /attendance alone is not sufficient/i);
-  assert.match(
-    participationPolicy.evaluation,
-    /Quality, preparation, and intellectual contribution/i,
-  );
-  assert.match(participationPolicy.approvedAbsences, /will not by themselves reduce/i);
-  assert.match(participationPolicy.approvedAbsences, /alternative form of engagement/i);
+  assert.equal("assessment" in data, false);
+  assert.equal("participationPolicy" in data, false);
 
   assert.equal(projectDeadlines.length, 3);
   assert.deepEqual(
@@ -737,30 +706,22 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     courseProject.evaluationCriteria[0],
     /representation, computational complexity, trainability, optimization, learnability, generalization, certification, or reasoning/i,
   );
-  assert.equal(lateWorkPolicy.latePolicyConfirmedByInstructor, true);
-  assert.equal(lateWorkPolicy.gracePeriodHours, 48);
-  assert.equal(lateWorkPolicy.penaltyPercentagePoints, 5);
-  assert.equal(lateWorkPolicy.penaltyPeriodHours, 24);
-  assert.match(lateWorkPolicy.presentationPolicy, /approved missed paper or project presentation/i);
-  assert.match(
-    lateWorkPolicy.presentationPolicy,
-    /unapproved missed presentation normally receives a grade of zero/i,
-  );
-  assert.match(lateWorkPolicy.participationAbsencePolicy, /Approved absences/i);
-  assert.match(lateWorkPolicy.graceScopeStatement, /applies only to the final project report/i);
-  assert.match(lateWorkPolicy.graceScopeStatement, /does not apply to scheduled live/i);
-  assert.match(lateWorkPolicy.scopeStatement, /project-report grade/i);
-  assert.match(courseProject.groupWorkPolicy, /requires written approval from the instructor/i);
-  assert.equal(generativeAiPolicy.length, 5);
-  assert.match(generativeAiPolicy[0], /documented, cited, or acknowledged/i);
+  assert.equal("lateWorkPolicy" in data, false);
+  assert.equal("groupWorkPolicy" in courseProject, false);
+  assert.equal(courseProject.deliverables[1], "For empirical projects, reproducible code and configurations.");
+  assert.doesNotMatch(JSON.stringify(courseProject), /clear account of the experimental protocol/i);
+  assert.equal(generativeAiPolicy.length, 2);
+  assert.equal(generativeAiPolicy[0], "Generative-AI tools may be used for coursework in this class.");
   assert.match(
     generativeAiPolicy[1],
     /fully responsible for the accuracy, originality, and integrity/i,
   );
   assert.match(generativeAiPolicy[1], /graded as errors regardless of whether AI was used/i);
-  assert.match(generativeAiPolicy[2], /retain relevant prompts, notes, sources/i);
-  assert.match(generativeAiPolicy[3], /confidential, private, unpublished/i);
-  assert.match(generativeAiPolicy[4], /Policy 71/i);
+  assert.doesNotMatch(JSON.stringify(generativeAiPolicy), /unless an assignment states otherwise/i);
+  assert.doesNotMatch(JSON.stringify(generativeAiPolicy), /documented, cited, or acknowledged/i);
+  assert.doesNotMatch(JSON.stringify(generativeAiPolicy), /retain relevant prompts, notes, sources/i);
+  assert.doesNotMatch(JSON.stringify(generativeAiPolicy), /confidential, private, unpublished/i);
+  assert.doesNotMatch(JSON.stringify(generativeAiPolicy), /Policy 71/i);
   assert.match(
     universityPolicies.introduction,
     /This website is a companion to the official University of Waterloo course outline/i,
@@ -782,9 +743,8 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     ["Assessment", "#assessment"], ["Additional Readings", "#additional-readings"],
     ["Policies", "#policies"],
   ]);
-  assert.equal(projectPresentationSchedule.title, "Project Presentations and Course Synthesis");
-  assert.match(projectPresentationSchedule.centralQuestion, /across the course's major themes/i);
-  assert.match(projectPresentationSchedule.centralQuestion, /theoretical questions remain open/i);
+  assert.equal(projectPresentationSchedule.title, "Project Presentations");
+  assert.equal("centralQuestion" in projectPresentationSchedule, false);
   assert.equal(courseFacts.meetingCount, 12);
   assert.equal(courseFacts.scheduledPapersPerMeeting, 4);
   assert.equal(courseFacts.meetingTime, "1:30–4:20 p.m.");
@@ -845,15 +805,19 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(projectPresentationPlan.presentationCount, 25);
   assert.equal(projectPresentationPlan.meetingCount, 2);
   assert.deepEqual([...projectPresentationPlan.presentationsByMeeting], [13, 12]);
-  assert.equal(projectPresentationPlan.talkMinutes, 10);
-  assert.equal(projectPresentationPlan.questionMinutes, 2);
-  assert.equal(projectPresentationPlan.transitionMinutes, 1);
-  assert.equal(projectPresentationPlan.minutesPerPresentation, 13);
-  assert.deepEqual(projectPresentationPlan.usedMinutesByMeeting, [169, 156]);
-  assert.equal(projectPresentationPlan.totalPresentationMinutes, 325);
+  assert.deepEqual([...projectPresentationPlan.minutesPerPresentationByMeeting], [13, 14]);
+  assert.deepEqual([...projectPresentationPlan.usedMinutesByMeeting], [169, 168]);
+  assert.deepEqual([...projectPresentationPlan.bufferMinutesByMeeting], [1, 2]);
+  assert.equal(projectPresentationPlan.totalPresentationMinutes, 337);
   assert.equal(projectPresentationPlan.totalAvailableMinutes, 340);
-  assert.equal(projectPresentationPlan.remainingMinutes, 15);
-  assert.equal(projectPresentationPlan.finalSynthesisMinutes, 14);
+  assert.equal(projectPresentationPlan.remainingMinutes, 3);
+  for (const removedField of [
+    "talkMinutes",
+    "questionMinutes",
+    "transitionMinutes",
+    "minutesPerPresentation",
+    "finalSynthesisMinutes",
+  ]) assert.equal(removedField in projectPresentationPlan, false);
   assert.equal(
     projectPresentationPlan.presentationsByMeeting.reduce((total, count) => total + count, 0),
     projectPresentationPlan.presentationCount,
@@ -1239,23 +1203,16 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     "Project Presentations I",
   );
   assert.equal(weekEleven.guidingQuestion, undefined);
-  assert.match(weekEleven.topicFocus, /Thirteen project presentations/i);
-  assert.equal(projectPresentation.weekThemes[0].title, undefined);
-  assert.deepEqual([...projectPresentation.weekThemes[0].themes], [
-    "Exact learning and certification.",
-    "Expressivity and formal limitations.",
-    "Parallel and fine-grained computational complexity.",
-    "Trainability and signal propagation.",
-    "Self-attention learnability and early in-context-learning theory.",
-  ]);
+  assert.equal(weekEleven.topicFocus, undefined);
   assert.equal(
     weekTwelve.title,
     "Project Presentations II",
   );
-  assert.equal(projectPresentation.weekThemes[1].title, undefined);
-  assert.match(weekTwelve.guidingQuestion, /in-context learning and reasoning/i);
-  assert.match(weekTwelve.topicFocus, /Twelve project presentations/i);
-  assert.match(weekTwelve.topicFocus, /final course synthesis/i);
+  assert.equal(weekTwelve.guidingQuestion, undefined);
+  assert.equal(weekTwelve.topicFocus, undefined);
+  assert.equal("weekThemes" in projectPresentation, false);
+  assert.equal("orderingPrinciple" in projectPresentation, false);
+  assert.equal("closingSynthesis" in projectPresentation, false);
   assert.deepEqual(
     courseSchedule.slice(10).map(({ week, date, title }) => [week, date, title]),
     [
@@ -1449,21 +1406,17 @@ test("rendered structure has valid navigation, meaningful paper links, and acces
   assert.ok(tableHeaders.length > 0);
   assert.ok(tableHeaders.every((match) => /\bscope="(?:col|row|rowgroup)"/i.test(match[1])));
   const labelledSections = [...html.matchAll(/<section\b[^>]*aria-labelledby="([^"]+)"[^>]*>/gi)];
-  assert.ok(labelledSections.length >= 10);
+  assert.ok(labelledSections.length >= 9);
   for (const [, headingId] of labelledSections) assert.ok(ids.includes(headingId));
 
-  const assessmentBody = html.match(
-    /<table\b[^>]*class="assessment-table"[^>]*>[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/i,
-  )?.[1];
-  assert.ok(assessmentBody);
-  assert.equal((assessmentBody.match(/<tr\b/gi) ?? []).length, 4);
-  assert.match(html, /<h3>Participation<\/h3>/i);
+  assert.doesNotMatch(html, /<table\b[^>]*class="assessment-table"/i);
+  assert.doesNotMatch(html, /<h3>Participation<\/h3>/i);
 
   const generativeAiSection = html.match(
     /<section\b[^>]*id="generative-ai"[^>]*>([\s\S]*?)<\/section>/i,
   )?.[1];
   assert.ok(generativeAiSection);
-  assert.equal((generativeAiSection.match(/<p\b/gi) ?? []).length, 5);
+  assert.equal((generativeAiSection.match(/<p\b/gi) ?? []).length, 2);
   assert.equal(
     (html.match(/<section\b[^>]*class="additional-reading-group"/gi) ?? []).length,
     5,

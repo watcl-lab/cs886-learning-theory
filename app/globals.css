@@ -559,12 +559,6 @@ table td:first-child {
   width: 180px;
 }
 
-.assessment-table th:nth-child(2),
-.assessment-table td:nth-child(2) {
-  width: 100px;
-  white-space: nowrap;
-}
-
 .annual-note {
   color: var(--muted);
   font-size: 0.94rem;
