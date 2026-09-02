@@ -82,9 +82,17 @@ test("server-renders the corrected course content and operational policies", asy
   );
   assert.match(text, /Recommended preparation/i);
   assert.match(text, /algorithms, asymptotic notation/i);
-  assert.match(text, /Familiarity with reading and writing proofs is expected/i);
-  assert.match(text, /No textbook is required/i);
-  assert.match(text, /Submission and feedback instructions will be announced before the first graded deliverable/i);
+  assert.match(text, /Familiarity with reading proofs is expected/i);
+  assert.match(
+    text,
+    /No textbook is required, and all assigned papers are linked from this website\./i,
+  );
+  assert.doesNotMatch(text, /Familiarity with reading and writing proofs is expected/i);
+  assert.doesNotMatch(text, /at no additional cost/i);
+  assert.doesNotMatch(
+    text,
+    /Submission and feedback instructions will be announced before the first graded deliverable/i,
+  );
   assert.match(text, /Note for non-theory students/i);
   assert.match(
     text,
@@ -520,7 +528,8 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     ],
   );
   assert.match(courseDescription.recommendedBackground, /algorithms, asymptotic notation/i);
-  assert.match(courseDescription.recommendedBackground, /reading and writing proofs is expected/i);
+  assert.match(courseDescription.recommendedBackground, /reading proofs is expected/i);
+  assert.doesNotMatch(courseDescription.recommendedBackground, /reading and writing proofs/i);
   assert.equal(
     courseDescription.nonTheoryStudents,
     "The course is open to students without a theory background. You can still gain substantial insight into how transformers work and use the course project to scrutinize existing theoretical claims through empirical evidence.",
@@ -534,12 +543,20 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.match(pendingLogistics.meetingLocation, /before the first meeting/i);
   assert.match(pendingLogistics.coursePlatform, /before the first graded deliverable/i);
   if (courseFacts.coursePlatform === "TBA") {
-    assert.match(
+    assert.equal(
       courseDescription.requiredMaterials,
-      /Submission and feedback instructions will be announced before the first graded deliverable/i,
+      "No textbook is required, and all assigned papers are linked from this website.",
     );
     assert.doesNotMatch(courseDescription.requiredMaterials, /through TBA/i);
+    assert.doesNotMatch(courseDescription.requiredMaterials, /at no additional cost/i);
+    assert.doesNotMatch(courseDescription.requiredMaterials, /Submission and feedback instructions/i);
   }
+  assert.equal(
+    courseDescription.preparatoryBackground.find(
+      ({ title }) => title === "Algorithms and computational complexity",
+    ).description,
+    "Asymptotic notation, reductions, randomized and conditional lower bounds, circuit classes such as AC0 and TC0, communication or parallel models.",
+  );
 
   assert.equal(learningOutcomes.length, 7);
   assert.match(learningOutcomes[0], /certification claims/i);

@@ -87,11 +87,11 @@ export const courseDescription = {
     "After the opening case study, Module I moves from expressivity and computational complexity to trainability and finite-sample learning of attention. Module II studies statistical targets, optimization, and generalization in in-context learning. Module III studies autoregressive chain-of-thought, curricula, and length generalization. Module IV consists of thematically organized project presentations and course synthesis.",
   ],
   recommendedBackground:
-    "Students should have mathematical maturity and working knowledge of probability, linear algebra, optimization, algorithms, asymptotic notation, and introductory machine learning. Familiarity with reading and writing proofs is expected. Prior coursework in computational complexity, statistical learning theory, or transformers is helpful but not required.",
+    "Students should have mathematical maturity and working knowledge of probability, linear algebra, optimization, algorithms, asymptotic notation, and introductory machine learning. Familiarity with reading proofs is expected. Prior coursework in computational complexity, statistical learning theory, or transformers is helpful but not required.",
   requiredMaterials:
     isPendingCourseFact(courseFacts.coursePlatform)
-      ? "No textbook is required, and all assigned papers are linked from this website at no additional cost. Submission and feedback instructions will be announced before the first graded deliverable."
-      : `No textbook is required, and all assigned papers are linked from this website at no additional cost. Final project reports and reproducibility materials will be submitted through ${courseFacts.coursePlatform}, where marked work and feedback will also be returned.`,
+      ? "No textbook is required, and all assigned papers are linked from this website."
+      : `No textbook is required, and all assigned papers are linked from this website. Final project reports and reproducibility materials will be submitted through ${courseFacts.coursePlatform}, where marked work and feedback will also be returned.`,
   nonTheoryStudents:
     "The course is open to students without a theory background. You can still gain substantial insight into how transformers work and use the course project to scrutinize existing theoretical claims through empirical evidence.",
   preparatoryBackgroundIntroduction:
@@ -105,7 +105,7 @@ export const courseDescription = {
     {
       title: "Algorithms and computational complexity",
       description:
-        "Asymptotic notation, reductions, randomized and conditional lower bounds, circuit classes such as AC0 and TC0, communication or parallel models, and the role of assumptions such as SETH.",
+        "Asymptotic notation, reductions, randomized and conditional lower bounds, circuit classes such as AC0 and TC0, communication or parallel models.",
     },
     {
       title: "Statistical learning theory",
