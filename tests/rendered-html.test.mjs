@@ -48,6 +48,9 @@ test("server-renders the corrected course content and operational policies", asy
   const html = await response.text();
   const text = textContent(html);
 
+  assert.doesNotMatch(html, /class="topic-focus"/i);
+  assert.doesNotMatch(text, /Topic focus\./i);
+
   assert.match(html, /<title>CS 886: Learning Theory for Modern AI (?:--|–|—) Fall 2026<\/title>/i);
   const metadataDescription =
     "Fall 2026 University of Waterloo graduate theory seminar on transformer expressivity, computational complexity, trainability, self-attention learning, in-context learning, and reasoning, with paper presentations and a required research project.";

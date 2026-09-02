@@ -477,13 +477,6 @@ table td:first-child {
   font-size: 1.03rem;
 }
 
-.topic-focus {
-  margin: 18px 0 20px;
-  padding-left: 12px;
-  border-left: 3px solid var(--gold);
-  color: var(--muted);
-}
-
 .subtopics {
   margin: 22px 0 0;
 }

@@ -398,11 +398,6 @@ export default function Home() {
                     <strong>Central question.</strong>{" "}
                     {week.guidingQuestion}
                   </p>
-                  {week.topicFocus ? (
-                    <p className="topic-focus">
-                      <strong>Topic focus.</strong> {week.topicFocus}
-                    </p>
-                  ) : null}
                   <WeekPaperList week={week} />
                   <a className="back-to-schedule" href="#schedule">
                     Back to schedule
