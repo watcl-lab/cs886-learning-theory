@@ -16,7 +16,7 @@ export type CourseModule = {
   id: string;
   label: string;
   title: string;
-  description: string;
+  description?: string;
   weekNumbers: readonly number[];
 };
 
@@ -31,10 +31,9 @@ export type CourseWeek = {
   week: number;
   date: string;
   title: string;
-  guidingQuestion: string;
-  topicFocus: string;
+  guidingQuestion?: string;
+  topicFocus?: string;
   connection?: string;
-  presentationNote?: string;
   papers: readonly CoursePaper[];
   subtopics?: readonly CourseSubtopic[];
 };
@@ -147,7 +146,7 @@ export const learningOutcomes = [
 ] as const;
 
 export const readingExpectations =
-  "For every scheduled paper, all students should read at least the abstract, introduction, formal setup, main theorem or principal result, and discussion or limitations. Before class, students should be able to identify the paper's result type, its decisive assumption, and one connection or tension with another paper assigned that week. The presenter or presenting team is responsible for the proof details and supplementary material needed to explain the result accurately. Students are not expected to read every technical appendix of all four weekly papers.";
+  "For every scheduled paper, all students should read at least the abstract, introduction, formal setup, main theorem or principal result, and discussion or limitations. Before class, students should be able to identify the paper's result type and its decisive assumption. The presenter or presenting team is responsible for the proof details and supplementary material needed to explain the result accurately. Students are not expected to read every technical detail in the appendix.";
 
 const openingFramingMinutes = 5;
 const paperPresentationMinutes = 25;
@@ -417,7 +416,6 @@ export const projectPresentation = {
   weekThemes: [
     {
       week: 11,
-      title: "Foundations, Architecture, and Learning",
       presentationCount: projectPresentationsByMeeting[0],
       themes: [
         "Exact learning and certification.",
@@ -429,7 +427,6 @@ export const projectPresentation = {
     },
     {
       week: 12,
-      title: "In-Context Learning, Reasoning, and Open Problems",
       presentationCount: projectPresentationsByMeeting[1],
       themes: [
         "In-context-learning optimization and generalization.",
@@ -573,9 +570,7 @@ export const courseModules: readonly CourseModule[] = [
   {
     id: "projects-and-synthesis",
     label: "Module IV",
-    title: "Projects and Synthesis",
-    description:
-      "Thematically organized project presentations culminating in a synthesis of results, recurring assumptions, barriers, and open problems.",
+    title: "Projects",
     weekNumbers: [11, 12],
   },
 ] as const;
@@ -589,10 +584,6 @@ export const courseSchedule: readonly CourseWeek[] = [
     title: "Exact Algorithmic Learning, Certification, and Hardness",
     guidingQuestion:
       "When can neural models learn discrete algorithms exactly from small structured samples, and when are exact learning or behavioral certification provably hard?",
-    topicFocus:
-      "NTK-based exact learning of arithmetic and graph algorithms, statistical-query hardness for semiautomata, and certification lower bounds under minimal overparameterization.",
-    presentationNote:
-      "All four papers will be presented by the instructor. The meeting presents a recent research program on exact algorithmic learning, certification, and hardness. Student paper presentations begin in Week 2.",
     subtopics: [
       {
         title: "Part I: Exact execution learned from examples",
@@ -1196,9 +1187,7 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 11,
     date: "November 27, 2026",
-    title: "Project Presentations I: Foundations, Architecture, and Learning",
-    guidingQuestion:
-      "What do the projects establish about exact learning, expressivity, computational complexity, trainability, and self-attention learning?",
+    title: "Project Presentations I",
     topicFocus:
       "Thirteen project presentations grouped around exact learning and certification, expressivity and formal limitations, parallel and fine-grained computational complexity, trainability and signal propagation, self-attention learnability, and early in-context-learning theory.",
     papers: [],
@@ -1206,7 +1195,7 @@ export const courseSchedule: readonly CourseWeek[] = [
   {
     week: 12,
     date: "December 4, 2026",
-    title: "Project Presentations II: In-Context Learning, Reasoning, and Open Problems",
+    title: "Project Presentations II",
     guidingQuestion:
       "What do the projects establish about in-context learning and reasoning, and which theoretical questions remain open?",
     topicFocus:

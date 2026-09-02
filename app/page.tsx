@@ -275,9 +275,11 @@ export default function Home() {
                       <th colSpan={4} scope="rowgroup">
                         <span className="schedule-module-label">{module.label}</span>
                         <span className="schedule-module-title">{module.title}</span>
-                        <span className="schedule-module-description">
-                          {module.description}
-                        </span>
+                        {module.description ? (
+                          <span className="schedule-module-description">
+                            {module.description}
+                          </span>
+                        ) : null}
                       </th>
                     </tr>
                     {module.weeks.map((week) => (
@@ -315,9 +317,11 @@ export default function Home() {
                   >
                     {module.title}
                   </h3>
-                  <p className="mobile-module-description">
-                    {module.description}
-                  </p>
+                  {module.description ? (
+                    <p className="mobile-module-description">
+                      {module.description}
+                    </p>
+                  ) : null}
                 </header>
                 <ol className="mobile-schedule">
                   {module.weeks.map((week) => (
@@ -335,10 +339,12 @@ export default function Home() {
                           week.title
                         )}
                       </p>
-                      <p className="mobile-schedule-question">
-                        <strong>Central question:</strong>{" "}
-                        {week.guidingQuestion}
-                      </p>
+                      {week.guidingQuestion ? (
+                        <p className="mobile-schedule-question">
+                          <strong>Central question:</strong>{" "}
+                          {week.guidingQuestion}
+                        </p>
+                      ) : null}
                     </li>
                   ))}
                 </ol>
@@ -363,9 +369,11 @@ export default function Home() {
               <header className="detailed-module-header">
                 <p className="detailed-module-label">{module.label}</p>
                 <h3 id={`detailed-module-${module.id}`}>{module.title}</h3>
-                <p className="detailed-module-description">
-                  {module.description}
-                </p>
+                {module.description ? (
+                  <p className="detailed-module-description">
+                    {module.description}
+                  </p>
+                ) : null}
               </header>
 
               {module.weeks.map((week) => (
@@ -390,13 +398,9 @@ export default function Home() {
                     <strong>Central question.</strong>{" "}
                     {week.guidingQuestion}
                   </p>
-                  <p className="topic-focus">
-                    <strong>Topic focus.</strong> {week.topicFocus}
-                  </p>
-                  {week.presentationNote ? (
+                  {week.topicFocus ? (
                     <p className="topic-focus">
-                      <strong>Presentation plan.</strong>{" "}
-                      {week.presentationNote}
+                      <strong>Topic focus.</strong> {week.topicFocus}
                     </p>
                   ) : null}
                   <WeekPaperList week={week} />
@@ -527,7 +531,7 @@ export default function Home() {
             {projectPresentation.weekThemes.map((theme) => (
               <li key={theme.week}>
                 <strong>
-                  Week {theme.week}: {theme.title}.
+                  Week {theme.week}.
                 </strong>{" "}
                 {theme.presentationCount} presentations, organized around:
                 <ul>

@@ -145,15 +145,18 @@ test("server-renders the corrected course content and operational policies", asy
     "Transformer Capacity, Computation, and Learning",
     "Theory of In-Context Learning",
     "Theory of Reasoning",
-    "Projects and Synthesis",
+    "Projects",
   ]) assert.match(text, new RegExp(moduleTitle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
   for (const moduleDescription of [
     "A motivating case study contrasting exact learning of discrete algorithms with statistical-query and certification hardness.",
     "From representational power and formal limitations to computational resources, trainability, and finite-sample learning of attention.",
     "Statistical targets and benchmarks, optimization and training dynamics, and finite-sample generalization with optimal rates.",
     "Learning with autoregressive reasoning traces, followed by scratchpads, curricula, self-training, and length extrapolation.",
-    "Thematically organized project presentations culminating in a synthesis of results, recurring assumptions, barriers, and open problems.",
   ]) assert.match(text, new RegExp(moduleDescription.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
+  assert.doesNotMatch(
+    text,
+    /Thematically organized project presentations culminating in a synthesis of results, recurring assumptions, barriers, and open problems/i,
+  );
   assert.equal((html.match(/class="schedule-module-row"/g) ?? []).length, 5);
   assert.equal((html.match(/class="mobile-schedule-module"/g) ?? []).length, 5);
   assert.equal((html.match(/class="detailed-module"/g) ?? []).length, 4);
@@ -204,8 +207,8 @@ test("server-renders the corrected course content and operational policies", asy
     text,
     /Presentations will be ordered thematically rather than alphabetically, randomly, by sign-up time, or by perceived project quality/i,
   );
-  assert.match(text, /Week 11\s*:\s*Foundations, Architecture, and Learning/i);
-  assert.match(text, /Week 12\s*:\s*In-Context Learning, Reasoning, and Open Problems/i);
+  assert.match(text, /Week 11\s*\.\s*13 presentations/i);
+  assert.match(text, /Week 12\s*\.\s*12 presentations/i);
   assert.match(text, /Exact learning and certification/i);
   assert.match(text, /Autoregressive chain-of-thought/i);
   assert.match(text, /The final 14 minutes of Week 12 will synthesize/i);
@@ -240,8 +243,26 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /Projects are individual by default/i);
   assert.match(text, /at least one course paper, theorem, formal model, or module/i);
   assert.match(text, /A project from a previous offering of CS 886 was subsequently developed into a NeurIPS 2024 publication/i);
-  assert.match(text, /Project Presentations I: Foundations, Architecture, and Learning/i);
-  assert.match(text, /Project Presentations II: In-Context Learning, Reasoning, and Open Problems/i);
+  assert.match(text, /Project Presentations I/i);
+  assert.match(text, /Project Presentations II/i);
+  assert.doesNotMatch(text, /Foundations, Architecture, and Learning/i);
+  assert.doesNotMatch(text, /In-Context Learning, Reasoning, and Open Problems/i);
+  assert.doesNotMatch(
+    text,
+    /What do the projects establish about exact learning, expressivity, computational complexity, trainability, and self-attention learning/i,
+  );
+  assert.doesNotMatch(
+    text,
+    /The meeting presents a recent research program on exact algorithmic learning, certification, and hardness/i,
+  );
+  assert.doesNotMatch(
+    text,
+    /NTK-based exact learning of arithmetic and graph algorithms, statistical-query hardness for semiautomata, and certification lower bounds under minimal overparameterization/i,
+  );
+  assert.match(text, /paper's result type and its decisive assumption/i);
+  assert.match(text, /not expected to read every technical detail in the appendix/i);
+  assert.doesNotMatch(text, /one connection or tension with another paper assigned that week/i);
+  assert.doesNotMatch(text, /technical appendix of all four weekly papers/i);
   assert.match(text, /Tight Sample Complexity of Transformers/);
   assert.match(text, /Transformers Provably Learn Chain-of-Thought Reasoning with Length Generalization/);
   assert.match(text, /Bingbin Liu, Jordan T\. Ash, Surbhi Goel, Akshay Krishnamurthy, and Cyril Zhang/i);
@@ -568,8 +589,10 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.match(learningOutcomes[6], /synthesize multiple papers/i);
   assert.match(readingExpectations, /paper's result type/i);
   assert.match(readingExpectations, /decisive assumption/i);
-  assert.match(readingExpectations, /one connection or tension/i);
   assert.match(readingExpectations, /supplementary material/i);
+  assert.match(readingExpectations, /technical detail in the appendix/i);
+  assert.doesNotMatch(readingExpectations, /one connection or tension/i);
+  assert.doesNotMatch(readingExpectations, /technical appendix of all four weekly papers/i);
 
   assert.equal(presentationRequirements.length, 8);
   assert.match(presentationRequirements[0], /formal problem/i);
@@ -620,7 +643,7 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
       {
         id: "projects-and-synthesis",
         label: "Module IV",
-        title: "Projects and Synthesis",
+        title: "Projects",
         weekNumbers: [11, 12],
       },
     ],
@@ -629,7 +652,8 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.deepEqual(moduleWeekNumbers, Array.from({ length: 12 }, (_, index) => index + 1));
   assert.equal(new Set(moduleWeekNumbers).size, 12);
   assert.equal(new Set(courseModules.map(({ id }) => id)).size, courseModules.length);
-  assert.ok(courseModules.every(({ description }) => description.length > 0));
+  assert.ok(courseModules.slice(0, -1).every(({ description }) => description.length > 0));
+  assert.equal(courseModules.at(-1).description, undefined);
   assert.ok(courseSchedule.every((week) => !("module" in week)));
 
   const openingModule = courseModules.find(({ id }) => id === "opening-case-study");
@@ -845,9 +869,8 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(firstWeek.title, "Exact Algorithmic Learning, Certification, and Hardness");
   assert.match(firstWeek.guidingQuestion, /learn discrete algorithms exactly/i);
   assert.match(firstWeek.guidingQuestion, /behavioral certification provably hard/i);
-  assert.match(firstWeek.presentationNote, /All four papers will be presented by the instructor/i);
-  assert.match(firstWeek.presentationNote, /recent research program/i);
-  assert.match(firstWeek.presentationNote, /Student paper presentations begin in Week 2/i);
+  assert.equal(firstWeek.topicFocus, undefined);
+  assert.equal(firstWeek.presentationNote, undefined);
   assert.deepEqual(firstWeek.papers.map((paper) => paper.title), [
     "Learning to Add, Multiply, and Execute Algorithmic Instructions Exactly with Neural Networks",
     "Learning to Execute Graph Algorithms Exactly with Graph Neural Networks",
@@ -1214,10 +1237,11 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   const weekTwelve = courseSchedule.find(({ week }) => week === 12);
   assert.equal(
     weekEleven.title,
-    "Project Presentations I: Foundations, Architecture, and Learning",
+    "Project Presentations I",
   );
-  assert.match(weekEleven.guidingQuestion, /exact learning, expressivity, computational complexity, trainability/i);
+  assert.equal(weekEleven.guidingQuestion, undefined);
   assert.match(weekEleven.topicFocus, /Thirteen project presentations/i);
+  assert.equal(projectPresentation.weekThemes[0].title, undefined);
   assert.deepEqual([...projectPresentation.weekThemes[0].themes], [
     "Exact learning and certification.",
     "Expressivity and formal limitations.",
@@ -1227,8 +1251,9 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   ]);
   assert.equal(
     weekTwelve.title,
-    "Project Presentations II: In-Context Learning, Reasoning, and Open Problems",
+    "Project Presentations II",
   );
+  assert.equal(projectPresentation.weekThemes[1].title, undefined);
   assert.match(weekTwelve.guidingQuestion, /in-context learning and reasoning/i);
   assert.match(weekTwelve.topicFocus, /Twelve project presentations/i);
   assert.match(weekTwelve.topicFocus, /final course synthesis/i);
@@ -1238,12 +1263,12 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
       [
         11,
         "November 27, 2026",
-        "Project Presentations I: Foundations, Architecture, and Learning",
+        "Project Presentations I",
       ],
       [
         12,
         "December 4, 2026",
-        "Project Presentations II: In-Context Learning, Reasoning, and Open Problems",
+        "Project Presentations II",
       ],
     ],
   );
