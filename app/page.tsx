@@ -409,7 +409,7 @@ export default function Home() {
 
         <section id="paper-presentations" aria-labelledby="paper-presentations-heading">
           <h2 id="paper-presentations-heading">
-            Paper Presentations and Weekly Synthesis
+            Paper Presentations
           </h2>
           <p>{presentationGuidance}</p>
           <p>{presentationWorkload}</p>

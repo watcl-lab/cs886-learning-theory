@@ -128,7 +128,7 @@ export const navigationItems = [
   { label: "Overview", href: "#overview" },
   { label: "Outcomes", href: "#learning-outcomes" },
   { label: "Schedule", href: "#schedule" },
-  { label: "Presentations & Synthesis", href: "#paper-presentations" },
+  { label: "Presentations", href: "#paper-presentations" },
   { label: "Project", href: "#project" },
   { label: "Assessment", href: "#assessment" },
   { label: "Additional Readings", href: "#additional-readings" },
@@ -149,10 +149,9 @@ export const readingExpectations =
   "For every scheduled paper, all students should read at least the abstract, introduction, formal setup, main theorem or principal result, and discussion or limitations. Before class, students should be able to identify the paper's result type and its decisive assumption. The presenter or presenting team is responsible for the proof details and supplementary material needed to explain the result accurately. Students are not expected to read every technical detail in the appendix.";
 
 const paperPresentationMinutes = 25;
-const paperDiscussionMinutes = 11;
+const paperDiscussionMinutes = 14;
 const paperTransitionMinutes = 1;
 const midMeetingBreakMinutes = 10;
-const weeklySynthesisMinutes = 12;
 const paperSlotMinutes =
   paperPresentationMinutes + paperDiscussionMinutes + paperTransitionMinutes;
 const papersPerHalf = courseFacts.scheduledPapersPerMeeting / 2;
@@ -160,9 +159,7 @@ const halfMeetingPaperMinutes = papersPerHalf * paperSlotMinutes;
 const scheduledPaperMinutesPerMeeting =
   courseFacts.scheduledPapersPerMeeting * paperSlotMinutes;
 const totalPlannedMeetingMinutes =
-  scheduledPaperMinutesPerMeeting
-  + midMeetingBreakMinutes
-  + weeklySynthesisMinutes;
+  scheduledPaperMinutesPerMeeting + midMeetingBreakMinutes;
 
 export const meetingFormat = [
   {
@@ -179,11 +176,6 @@ export const meetingFormat = [
     activity:
       `Papers 3–4; each paper receives a ${paperPresentationMinutes}-minute presentation, ${paperDiscussionMinutes} minutes of discussion and questions, and a ${paperTransitionMinutes}-minute transition`,
   },
-  {
-    duration: `${weeklySynthesisMinutes} minutes`,
-    activity:
-      "Cross-paper synthesis: compare assumptions and result types, identify the week's main conclusion, and motivate the following week",
-  },
 ] as const;
 
 const instructorLedWeek = 1;
@@ -191,17 +183,9 @@ const firstStudentPresentationWeek = 2;
 const lastStudentPresentationWeek = 10;
 const studentPaperMeetingCount = lastStudentPresentationWeek - firstStudentPresentationWeek + 1;
 const studentPaperPresentationSlots = studentPaperMeetingCount * courseFacts.scheduledPapersPerMeeting;
-const minimumPaperPresentationsPerStudent = 2;
+const paperPresentationsPerStudent = 1;
 const studentPaperPresentationAssignments =
-  courseFacts.plannedEnrollment * minimumPaperPresentationsPerStudent;
-const soloPaperPresentationSlots = courseFacts.plannedEnrollment;
-const sharedPaperPresentationSlots = studentPaperPresentationSlots - soloPaperPresentationSlots;
-const sharedPaperPresentationAssignments =
-  studentPaperPresentationAssignments - soloPaperPresentationSlots;
-const threePersonPaperPresentationSlots =
-  sharedPaperPresentationAssignments - 2 * sharedPaperPresentationSlots;
-const pairedPaperPresentationSlots =
-  sharedPaperPresentationSlots - threePersonPaperPresentationSlots;
+  courseFacts.plannedEnrollment * paperPresentationsPerStudent;
 
 export const paperPresentationPlan = {
   plannedEnrollment: courseFacts.plannedEnrollment,
@@ -211,13 +195,8 @@ export const paperPresentationPlan = {
   studentPaperMeetingCount,
   papersPerMeeting: courseFacts.scheduledPapersPerMeeting,
   studentPaperPresentationSlots,
-  minimumPaperPresentationsPerStudent,
+  paperPresentationsPerStudent,
   studentPaperPresentationAssignments,
-  soloPaperPresentationSlots,
-  sharedPaperPresentationSlots,
-  sharedPaperPresentationAssignments,
-  pairedPaperPresentationSlots,
-  threePersonPaperPresentationSlots,
   paperPresentationMinutes,
   paperDiscussionMinutes,
   paperTransitionMinutes,
@@ -225,16 +204,15 @@ export const paperPresentationPlan = {
   papersPerHalf,
   halfMeetingPaperMinutes,
   midMeetingBreakMinutes,
-  weeklySynthesisMinutes,
   scheduledPaperMinutesPerMeeting,
   totalPlannedMeetingMinutes,
 } as const;
 
 export const presentationGuidance =
-  `Week ${instructorLedWeek} is instructor-led: the instructor will present all four papers, and that week does not count toward students' presentation workload. Student paper presentations run from Week ${firstStudentPresentationWeek} through Week ${lastStudentPresentationWeek}, with ${courseFacts.scheduledPapersPerMeeting} paper presentations each week. Each reading meeting includes four paper presentations and ends with a cross-paper synthesis that connects the week's conclusions to the following week.`;
+  `Week ${instructorLedWeek} is instructor-led: the instructor will present all four papers. Student paper presentations run from Week ${firstStudentPresentationWeek} through Week ${lastStudentPresentationWeek}, with ${courseFacts.scheduledPapersPerMeeting} paper presentations each week.`;
 
 export const presentationWorkload =
-  `Each student will give ${minimumPaperPresentationsPerStudent} paper presentations: one solo presentation worth 25% of the final grade and one shared presentation worth 15%. ${soloPaperPresentationSlots} papers will have a solo presenter, ${pairedPaperPresentationSlots} will be presented by pairs, and ${threePersonPaperPresentationSlots} will be presented by teams of three. Students sharing a paper divide the ${paperPresentationMinutes}-minute presentation and must each make a substantive contribution. The required project presentation is separate and does not count toward these two paper presentations. The solo and shared presentations will be assigned to Fridays between September 18 and November 20, 2026, excluding October 16. Exact paper assignments will be announced after enrollment is confirmed.`;
+  "Each student will give 1 paper presentation. The required project presentation is separate and does not count toward this paper presentation.";
 
 export const presentationRequirements = [
   "State the formal problem, including the data-generating process, architecture or hypothesis class, loss, training rule, and evaluation criterion.",
@@ -243,7 +221,7 @@ export const presentationRequirements = [
   "Explain the principal proof mechanism rather than only restating the theorem.",
   "Identify the assumption that carries the result and explain how closely the formal model corresponds to a modern transformer or large language model.",
   "Distinguish theorem-level conclusions from experimental evidence, conjectures, and informal interpretations.",
-  "Explain how the paper advances, limits, contrasts with, or changes the assumptions of the adjacent papers, using one concise comparison slide prepared for the weekly synthesis.",
+  "Explain how the paper advances, limits, contrasts with, or changes the assumptions of the adjacent papers.",
   "End with one precise limitation and one concrete theorem, counterexample, or experiment that would materially strengthen or challenge the result.",
 ] as const;
 
@@ -252,16 +230,10 @@ export const assessmentSummary =
 
 export const assessment = [
   {
-    component: "Solo paper presentation",
-    weight: "25%",
+    component: "Paper presentation",
+    weight: "40%",
     standard:
-      "Individual command of the formal problem, main theorem, proof mechanism, decisive assumptions, limitations, and relationship to the other papers in the week. Evaluation includes responses to questions, the comparison slide, and contribution to the cross-paper synthesis.",
-  },
-  {
-    component: "Shared paper presentation",
-    weight: "15%",
-    standard:
-      "A coordinated presentation in which each student makes a substantive and identifiable contribution. The presentation is evaluated collectively for coherence and individually for technical understanding, delivery, responses to questions, and contribution to weekly synthesis.",
+      "Command of the formal problem, main theorem, proof mechanism, decisive assumptions, limitations, and relationship to the other papers in the week. Evaluation includes responses to questions.",
   },
   {
     component: "Final project report and reproducibility materials",
@@ -273,26 +245,26 @@ export const assessment = [
     component: "Final project presentation",
     weight: "10%",
     standard:
-      "A concise individual presentation of the research question, theoretical anchor, original contribution, methods, main result, strongest limitation, and most important next step.",
+      "A concise individual presentation of the research question, original contribution, methods, main result, strongest limitation, and most important next step.",
   },
   {
     component: "Class participation",
     weight: "20%",
     standard:
-      "Preparation across all four weekly papers, constructive questions, accurate comparison of assumptions and result types, contributions to cross-paper synthesis, and engagement with project presentations. Quality and intellectual contribution matter more than speaking frequency; attendance alone is not sufficient.",
+      "Preparation across all four weekly papers, constructive questions, accurate comparison of assumptions and result types, and engagement with project presentations. Quality and intellectual contribution matter more than speaking frequency; attendance alone is not sufficient.",
   },
 ] as const;
 
 export const participationPolicy = {
   evaluation:
-    "Participation is assessed through preparation, constructive questions, comparison of assumptions and result types, contributions to the weekly synthesis, and engagement with project presentations. Quality, preparation, and intellectual contribution matter more than speaking frequency; attendance alone is not sufficient.",
+    "Participation is assessed through preparation, constructive questions, comparison of assumptions and result types, and engagement with project presentations. Quality, preparation, and intellectual contribution matter more than speaking frequency; attendance alone is not sufficient.",
   approvedAbsences:
     "Approved absences will not by themselves reduce the participation grade. When appropriate, the instructor may arrange an alternative form of engagement, such as a short written comparison of the week's papers.",
 } as const;
 
 export const courseProject = {
   introduction:
-    "The project accounts for 40% of the course grade. The topic must be discussed with and approved by the instructor. Every project must identify at least one course paper, theorem, formal model, or module that it extends, tests, or challenges.",
+    "The project accounts for 40% of the course grade. The topic must be discussed with and approved by the instructor.",
   acceptableForms: [
     {
       title: "New theoretical contribution",
@@ -302,7 +274,7 @@ export const courseProject = {
     {
       title: "Empirical validation or scrutiny of theory",
       description:
-        "The project may reproduce, verify, stress-test, or challenge an existing theoretical claim.",
+        "The project may stress-test or challenge an existing theoretical claim.",
       examples: [
         "Measuring whether the predicted dependence on sample size, sequence length, depth, width, number of heads, task diversity, or conditioning appears in finite models.",
         "Checking how a theorem behaves when idealized assumptions such as linear attention, Gaussian data, population loss, infinite width, or realizability are relaxed.",
@@ -313,7 +285,7 @@ export const courseProject = {
     },
   ],
   empiricalStandard:
-    "An empirical project must be hypothesis-driven and anchored in a specific theorem, proposition, conjecture, or formal theoretical prediction. A generic model comparison, benchmark leaderboard, prompt-engineering exercise, or systems implementation is not sufficient by itself.",
+    "A generic model comparison, benchmark leaderboard, prompt-engineering exercise, or systems implementation is not sufficient by itself.",
   groupWorkPolicy:
     "Projects are individual by default. A small-group project requires written approval from the instructor in advance. The final report must state the division of work and include an individual contribution statement. Every student must be able to explain the complete project, individual grades may differ, and a group project must have scope commensurate with the number of participants.",
   deliverables: [
@@ -346,7 +318,7 @@ export const projectDeadlines = [
     milestone: "Project topic approval",
     deadline: "October 23, 2026",
     description:
-      "Submit an ungraded three-to-five-sentence description identifying the course paper, theorem, formal model, or module that anchors the project; the proposed contribution; and, for empirical work, the principal experiment. This is an approval checkpoint rather than a separately graded proposal.",
+      "Submit an ungraded three-to-five-sentence description of the proposed contribution and, for empirical work, the principal experiment. This is an approval checkpoint rather than a separately graded proposal.",
   },
   {
     milestone: "Final project report and reproducibility materials",
@@ -394,7 +366,7 @@ export const projectPresentationPlan = {
 
 export const projectPresentation = {
   introduction:
-    `Weeks 11–12 are reserved for ${courseFacts.expectedProjectPresentations} individual project presentations. Week 11 will have ${projectPresentationsByMeeting[0]} presentations, and Week 12 will have ${projectPresentationsByMeeting[1]}. Each presentation has a ${projectPresentationMinutes}-minute slot: a ${projectTalkMinutes}-minute talk, ${projectQuestionMinutes} minutes of questions, and a ${projectTransitionMinutes}-minute transition. Timing will be strict. Project presentations do not count toward the two required paper presentations. The final meeting reserves ${finalProjectSynthesisMinutes} minutes for course synthesis and open problems.`,
+    `Weeks 11–12 are reserved for ${courseFacts.expectedProjectPresentations} individual project presentations. Week 11 will have ${projectPresentationsByMeeting[0]} presentations, and Week 12 will have ${projectPresentationsByMeeting[1]}. Each presentation has a ${projectPresentationMinutes}-minute slot: a ${projectTalkMinutes}-minute talk, ${projectQuestionMinutes} minutes of questions, and a ${projectTransitionMinutes}-minute transition. Timing will be strict. The project presentation does not count toward the required paper presentation. The final meeting reserves ${finalProjectSynthesisMinutes} minutes for course synthesis and open problems.`,
   orderingPrinciple:
     "Presentations will be ordered thematically rather than alphabetically, randomly, by sign-up time, or by perceived project quality.",
   weekThemes: [
