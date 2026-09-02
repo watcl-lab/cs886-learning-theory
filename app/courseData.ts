@@ -292,7 +292,7 @@ export const participationPolicy = {
 
 export const courseProject = {
   introduction:
-    "The project accounts for 40% of the course grade: 30% for the final report and reproducibility materials and 10% for the final presentation. The topic must be discussed with and approved by the instructor. Every project must identify at least one course paper, theorem, formal model, or module that it extends, tests, or challenges, and the report must classify the contribution as primarily representational, computational, trainability-related, optimization-related, statistical, reasoning-related, or empirical.",
+    "The project accounts for 40% of the course grade. The topic must be discussed with and approved by the instructor. Every project must identify at least one course paper, theorem, formal model, or module that it extends, tests, or challenges.",
   acceptableForms: [
     {
       title: "New theoretical contribution",

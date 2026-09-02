@@ -715,8 +715,11 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.match(projectDeadlines[1].description, /worth 30%/i);
   assert.match(projectDeadlines[2].description, /worth 10%/i);
 
-  assert.match(courseProject.introduction, /30% for the final report/i);
-  assert.match(courseProject.introduction, /10% for the final presentation/i);
+  assert.doesNotMatch(
+    courseProject.introduction,
+    /30% for the final report|10% for the final presentation/i,
+  );
+  assert.doesNotMatch(courseProject.introduction, /classify the contribution as primarily/i);
   assert.match(
     courseProject.introduction,
     /at least one course paper, theorem, formal model, or module/i,
