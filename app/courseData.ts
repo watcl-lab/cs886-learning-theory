@@ -150,10 +150,10 @@ export const learningOutcomes = [
 export const readingExpectations =
   "For every scheduled paper, all students should read at least the abstract, introduction, formal setup, main theorem or principal result, and discussion or limitations. Before class, students should be able to identify the paper's result type and its decisive assumption. The presenter or presenting team is responsible for the proof details and supplementary material needed to explain the result accurately. Students are not expected to read every technical detail in the appendix.";
 
-const paperPresentationMinutes = 35;
-const paperDiscussionMinutes = 14;
+const paperPresentationMinutes = 44;
+const paperDiscussionMinutes = 10;
 const paperTransitionMinutes = 1;
-const midMeetingBreakMinutes = 20;
+const midMeetingBreakMinutes = 5;
 const papersBeforeBreak = 2;
 const papersAfterBreak = 1;
 const paperSlotMinutes =
@@ -220,7 +220,7 @@ export const presentationGuidance =
   `Week ${instructorLedWeek} is instructor-led: the instructor will present all four papers. Student paper presentations run from Week ${firstStudentPresentationWeek} through Week ${lastStudentPresentationWeek}, with ${courseFacts.scheduledPapersPerMeeting} individual paper presentations each week. The meeting format below applies to the student-led meetings in Weeks ${firstStudentPresentationWeek}–${lastStudentPresentationWeek}.`;
 
 export const presentationWorkload =
-  `Each of the ${courseFacts.plannedEnrollment} students will give 1 individual paper presentation. The ${studentPaperPresentationSlots} student presentation slots match the enrollment exactly. The required project presentation is separate and does not count toward this paper presentation.`;
+  `Each of the ${courseFacts.plannedEnrollment} students will give 1 individual paper presentation. The required project presentation is separate and does not count toward this paper presentation.`;
 
 export const presentationRequirements = [
   "State the formal problem, including the data-generating process, architecture or hypothesis class, loss, training rule, and evaluation criterion.",
