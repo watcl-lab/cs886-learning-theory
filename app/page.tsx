@@ -23,7 +23,6 @@ import {
   projectPresentation,
   readingExpectations,
   universityPolicies,
-  weeklySynthesisQuestions,
   type CoursePaper,
   type CourseWeek,
 } from "./courseData";
@@ -423,18 +422,6 @@ export default function Home() {
               </li>
             ))}
           </ul>
-
-          <h3>Weekly Cross-Paper Synthesis</h3>
-          <p>
-            Every reading meeting ends with a structured synthesis. The class
-            will use the following questions to connect the four papers and
-            motivate the next week:
-          </p>
-          <ol>
-            {weeklySynthesisQuestions.map((question) => (
-              <li key={question}>{question}</li>
-            ))}
-          </ol>
 
           <h3>Presentation</h3>
           <ol>

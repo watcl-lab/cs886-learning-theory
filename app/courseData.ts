@@ -247,14 +247,6 @@ export const presentationRequirements = [
   "End with one precise limitation and one concrete theorem, counterexample, or experiment that would materially strengthen or challenge the result.",
 ] as const;
 
-export const weeklySynthesisQuestions = [
-  "What result type did each paper establish: representation, computational complexity, trainability, optimization, learnability, or generalization?",
-  "Which assumptions changed from paper to paper, and which assumption carried the strongest conclusion?",
-  "Did a later paper strengthen an earlier result, explain a mechanism behind it, provide a limitation, or study a genuinely different regime?",
-  "What conclusion can be drawn only after considering all four papers together?",
-  "Which unresolved question motivates the following week?",
-] as const;
-
 export const assessmentSummary =
   "The final grade preserves the 40% paper-presentation, 40% project, and 20% participation structure. The internal breakdown is shown below.";
 

@@ -189,8 +189,8 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /1-minute transition/i);
   assert.match(text, /10 minutes\s*:?\s*Break/i);
   assert.match(text, /12 minutes\s*:?\s*Cross-paper synthesis/i);
-  assert.match(text, /Weekly Cross-Paper Synthesis/i);
-  assert.match(text, /What conclusion can be drawn only after considering all four papers together/i);
+  assert.doesNotMatch(text, /Weekly Cross-Paper Synthesis/i);
+  assert.doesNotMatch(text, /What conclusion can be drawn only after considering all four papers together/i);
   assert.match(text, /State the formal problem, including the data-generating process/i);
   assert.match(text, /using one concise comparison slide prepared for the weekly synthesis/i);
   assert.doesNotMatch(text, /30-minute presentation/i);
@@ -444,7 +444,7 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     generativeAiPolicy, lateWorkPolicy, learningOutcomes, navigationItems, paperPresentationPlan,
     participationPolicy, pendingLogistics, presentationRequirements, presentationWorkload,
     projectDeadlines, projectPresentation, projectPresentationPlan, projectPresentationSchedule,
-    readingExpectations, universityPolicies, weeklySynthesisQuestions,
+    readingExpectations, universityPolicies,
   } = data;
   const scheduledPapers = courseSchedule.flatMap((week) => week.papers);
   const allPapers = [...scheduledPapers, ...additionalReadings];
@@ -837,13 +837,6 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
       + paperPresentationPlan.weeklySynthesisMinutes,
   );
   assert.equal(paperPresentationPlan.totalPlannedMeetingMinutes, courseFacts.meetingDurationMinutes);
-
-  assert.equal(weeklySynthesisQuestions.length, 5);
-  assert.match(
-    weeklySynthesisQuestions[0],
-    /representation, computational complexity, trainability, optimization, learnability, or generalization/i,
-  );
-  assert.match(weeklySynthesisQuestions.at(-1), /motivates the following week/i);
 
   assert.equal(projectPresentationPlan.presentationCount, 25);
   assert.equal(projectPresentationPlan.meetingCount, 2);
