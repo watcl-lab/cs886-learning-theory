@@ -49,23 +49,64 @@ test("server-renders the corrected course content and operational policies", asy
   const text = textContent(html);
 
   assert.match(html, /<title>CS 886: Learning Theory for Modern AI (?:--|–|—) Fall 2026<\/title>/i);
-  assert.match(text, /what they can represent and compute, how efficiently they can compute it/i);
+  const metadataDescription =
+    "Fall 2026 University of Waterloo graduate theory seminar on transformer expressivity, computational complexity, trainability, self-attention learning, in-context learning, and reasoning, with paper presentations and a required research project.";
+  const escapedMetadataDescription = metadataDescription.replace(
+    /[.*+?^${}()|[\]\\]/g,
+    "\\$&",
+  );
+  assert.match(
+    html,
+    new RegExp(`<meta name="description" content="${escapedMetadataDescription}"`, "i"),
+  );
+  assert.match(
+    html,
+    new RegExp(`<meta property="og:description" content="${escapedMetadataDescription}"`, "i"),
+  );
+  assert.match(
+    html,
+    new RegExp(`<meta name="twitter:description" content="${escapedMetadataDescription}"`, "i"),
+  );
+  assert.match(
+    text,
+    /graduate research seminar on the theoretical foundations of transformers and large language models/i,
+  );
   assert.match(text, /course begins with an instructor-led case study in exact algorithmic learning, certification, and hardness/i);
-  assert.match(text, /remaining schedule is organized as a cumulative sequence/i);
-  assert.match(text, /Recommended background/i);
+  assert.match(
+    text,
+    /Module I moves from expressivity and computational complexity to trainability and finite-sample learning of attention/i,
+  );
+  assert.match(
+    text,
+    /Module IV consists of thematically organized project presentations and course synthesis/i,
+  );
+  assert.match(text, /Recommended preparation/i);
+  assert.match(text, /algorithms, asymptotic notation/i);
+  assert.match(text, /Familiarity with reading and writing proofs is expected/i);
   assert.match(text, /No textbook is required/i);
+  assert.match(text, /Submission and feedback instructions will be announced before the first graded deliverable/i);
   assert.match(text, /Note for non-theory students/i);
-  assert.match(text, /course is open to students without a theory background/i);
-  assert.match(text, /insight into how transformers work/i);
-  assert.match(text, /scrutinize existing theoretical claims through empirical evidence/i);
+  assert.match(
+    text,
+    /The course is open to students without a theory background\. You can still gain substantial insight into how transformers work and use the course project to scrutinize existing theoretical claims through empirical evidence\./i,
+  );
+  assert.match(text, /Preparatory Background/i);
+  for (const title of [
+    "Transformer architecture",
+    "Algorithms and computational complexity",
+    "Statistical learning theory",
+  ]) assert.match(text, new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
   assert.match(text, /Kimon Fountoulakis/);
   assert.match(text, /DC 3611/);
+  assert.match(text, /Office hours:?\s*To be announced before the first meeting/i);
+  assert.match(text, /Location:?\s*To be announced before the first meeting/i);
+  assert.match(text, /Course platform:?\s*To be announced before the first graded deliverable/i);
   assert.match(text, /Fridays/);
   assert.match(text, /1:30.{0,3}4:20 p\.m\./i);
   assert.match(text, /Scheduled seminar meetings:?\s*September 11.{0,3}December 4, 2026/i);
   assert.match(text, /University class period:?\s*September 9.{0,3}December 8, 2026/i);
   assert.match(text, /No class on October 16, 2026/i);
-  assert.match(text, /Last updated:?\s*September 1, 2026/i);
+  assert.match(text, /Last updated:?\s*September 2, 2026/i);
   assert.match(text, /Exact Algorithmic Learning, Certification, and Hardness/i);
   for (const title of [
     "Certification from Examples is Hard for Circuits and Transformers under Minimal Overparametrization",
@@ -80,7 +121,7 @@ test("server-renders the corrected course content and operational policies", asy
     "Topics at a Glance",
     "Reading Expectations",
     "Detailed Paper Schedule",
-    "Paper Presentation Requirements",
+    "Paper Presentations and Weekly Synthesis",
     "Required Course Project",
     "Project Milestones and Deadlines",
     "Project Presentation Requirements",
@@ -92,7 +133,7 @@ test("server-renders the corrected course content and operational policies", asy
   ]) assert.match(text, new RegExp(heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
 
   for (const moduleTitle of [
-    "Exact Algorithmic Learning and Hardness",
+    "Exact Algorithmic Learning, Certification, and Hardness",
     "Transformer Capacity, Computation, and Learning",
     "Theory of In-Context Learning",
     "Theory of Reasoning",
@@ -114,11 +155,12 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /Student paper presentations run from Week 2 through Week 10/i);
   assert.match(text, /with 4 paper presentations each week/i);
   assert.match(text, /Each reading meeting begins with instructor framing and ends with a cross-paper synthesis/i);
-  assert.match(text, /Each student will give 2 paper presentations: one solo presentation and one shared presentation/i);
+  assert.match(text, /Each student will give 2 paper presentations: one solo presentation worth 25% of the final grade and one shared presentation worth 15%/i);
   assert.match(text, /25 papers will have a solo presenter, 8 will be presented by pairs, and 3 will be presented by teams of three/i);
   assert.match(text, /Students sharing a paper divide the 25-minute presentation/i);
   assert.match(text, /must each make a substantive contribution/i);
   assert.match(text, /project presentation is separate and does not count toward these two paper presentations/i);
+  assert.match(text, /assigned to Fridays between September 18 and November 20, 2026, excluding October 16/i);
   assert.match(text, /Exact paper assignments will be announced after enrollment is confirmed/i);
   assert.doesNotMatch(text, /Depending on enrollment and assignments|two or three of those papers|instructor overview, a structured comparison, or a focused group discussion/i);
   assert.doesNotMatch(text, /A missed presentation with an approved reason/i);
@@ -135,8 +177,8 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /11 minutes\s*:?\s*Cross-paper synthesis/i);
   assert.match(text, /Weekly Cross-Paper Synthesis/i);
   assert.match(text, /What conclusion can be drawn only after considering all four papers together/i);
-  assert.match(text, /How does this paper fit the week's story/i);
-  assert.match(text, /Prepare one concise comparison slide for the weekly synthesis/i);
+  assert.match(text, /State the formal problem, including the data-generating process/i);
+  assert.match(text, /using one concise comparison slide prepared for the weekly synthesis/i);
   assert.doesNotMatch(text, /30-minute presentation/i);
   assert.doesNotMatch(text, /12 minutes\s*:?\s*discussion and questions/i);
   assert.doesNotMatch(text, /designated discussant|lead presentation|lead presenter|complete presentation slot/i);
@@ -160,11 +202,35 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /Autoregressive chain-of-thought/i);
   assert.match(text, /The final 14 minutes of Week 12 will synthesize/i);
   assert.match(text, /November 26, 2026/);
+  assert.match(text, /Project topic approval/i);
+  assert.match(text, /October 23, 2026/);
+  assert.match(text, /ungraded three-to-five-sentence description/i);
+  assert.match(text, /November 27 or December 4, 2026/i);
   assert.match(text, /48-hour grace period/i);
+  assert.match(text, /approved missed paper or project presentation will be rescheduled or replaced/i);
+  assert.match(text, /unapproved missed presentation normally receives a grade of zero/i);
+  assert.match(text, /does not apply to scheduled live paper or project presentations/i);
+  assert.match(text, /project-report grade is reduced/i);
   assert.match(text, /(?:five|5) percentage points for each additional 24-hour period/i);
-  assert.match(text, /Generative-AI tools are allowed throughout the course/i);
-  assert.match(text, /will result in less marks/i);
+  assert.match(text, /documented, cited, or acknowledged/i);
+  assert.match(text, /fully responsible for the accuracy, originality, and integrity/i);
+  assert.match(text, /retain relevant prompts, notes, sources, research records, and intermediate drafts/i);
+  assert.match(text, /confidential, private, unpublished/i);
+  assert.match(text, /may be addressed under Policy 71/i);
+  assert.doesNotMatch(text, /will result in less marks/i);
+  assert.match(text, /40% paper-presentation, 40% project, and 20% participation/i);
+  for (const component of [
+    "Solo paper presentation",
+    "Shared paper presentation",
+    "Final project report and reproducibility materials",
+    "Final project presentation",
+    "Class participation",
+  ]) assert.match(text, new RegExp(component.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
+  assert.match(text, /Participation/i);
+  assert.match(text, /attendance alone is not sufficient/i);
+  assert.match(text, /Approved absences will not by themselves reduce the participation grade/i);
   assert.match(text, /Projects are individual by default/i);
+  assert.match(text, /at least one course paper, theorem, formal model, or module/i);
   assert.match(text, /A project from a previous offering of CS 886 was subsequently developed into a NeurIPS 2024 publication/i);
   assert.match(text, /Project Presentations I: Foundations, Architecture, and Learning/i);
   assert.match(text, /Project Presentations II: In-Context Learning, Reasoning, and Open Problems/i);
@@ -290,6 +356,18 @@ test("server-renders the corrected course content and operational policies", asy
     text,
     /foundational representational, mechanistic, and adjacent theory papers that support the seminar's learning-theory core/i,
   );
+  for (const heading of [
+    "Transformer Architecture, Expressivity, and Computation",
+    "Attention, Memory, and In-Context-Learning Mechanisms",
+    "Reasoning and Autoregressive Limitations",
+    "Fine-Tuning, Preference Learning, and Exploration",
+    "Reliability, Hallucination, and Provenance",
+  ]) assert.match(text, new RegExp(heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
+  assert.match(text, /This website is a companion to the official University of Waterloo course outline/i);
+  assert.match(text, /official University of Waterloo course outline is the authoritative source/i);
+  assert.match(text, /official course-outline link will be added before the first meeting/i);
+  assert.doesNotMatch(text, /Official course outline:\s*TBA/i);
+  assert.doesNotMatch(text, /through TBA/i);
   assert.doesNotMatch(
     text,
     /Memory and Bayesian Theories of In-Context Learning|In-Context Learning as Optimization|Generalization and Algorithm Selection in In-Context Learning|Optimal In-Context Learning and Chain-of-Thought Theory|Reasoning Generalization and Misspecified Next-Token Prediction/i,
@@ -329,10 +407,12 @@ test("server-renders the corrected course content and operational policies", asy
 test("course data preserves the schedule arithmetic, readings, and user-confirmed policies", async () => {
   const data = await loadCourseData();
   const {
-    additionalReadings, assessment, courseFacts, courseModules, courseProject, courseSchedule,
-    generativeAiPolicy, lateWorkPolicy, navigationItems, paperPresentationPlan,
+    additionalReadingGroups, additionalReadings, assessment, assessmentSummary,
+    courseDescription, courseFacts, courseModules, courseProject, courseSchedule, courseSummary,
+    generativeAiPolicy, lateWorkPolicy, learningOutcomes, navigationItems, paperPresentationPlan,
+    participationPolicy, pendingLogistics, presentationRequirements, presentationWorkload,
     projectDeadlines, projectPresentation, projectPresentationPlan, projectPresentationSchedule,
-    universityPolicies, weeklySynthesisQuestions,
+    readingExpectations, universityPolicies, weeklySynthesisQuestions,
   } = data;
   const scheduledPapers = courseSchedule.flatMap((week) => week.papers);
   const allPapers = [...scheduledPapers, ...additionalReadings];
@@ -389,6 +469,105 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(new Set(allPapers.map((paper) => paper.title)).size, 62);
   assert.equal(new Set(allPapers.map((paper) => paper.link)).size, 62);
 
+  assert.equal(additionalReadingGroups.length, 5);
+  assert.deepEqual(
+    additionalReadingGroups.map(({ id, title }) => [id, title]),
+    [
+      [
+        "architecture-expressivity-computation",
+        "Transformer Architecture, Expressivity, and Computation",
+      ],
+      [
+        "attention-memory-icl-mechanisms",
+        "Attention, Memory, and In-Context-Learning Mechanisms",
+      ],
+      [
+        "reasoning-autoregressive-limitations",
+        "Reasoning and Autoregressive Limitations",
+      ],
+      [
+        "fine-tuning-preferences-exploration",
+        "Fine-Tuning, Preference Learning, and Exploration",
+      ],
+      [
+        "reliability-hallucination-provenance",
+        "Reliability, Hallucination, and Provenance",
+      ],
+    ],
+  );
+  const groupedAdditionalTitles = additionalReadingGroups.flatMap(
+    ({ paperTitles }) => paperTitles,
+  );
+  const actualAdditionalTitles = additionalReadings.map(({ title }) => title);
+  assert.equal(groupedAdditionalTitles.length, 22);
+  assert.equal(new Set(groupedAdditionalTitles).size, 22);
+  assert.deepEqual(
+    [...groupedAdditionalTitles].sort(),
+    [...actualAdditionalTitles].sort(),
+  );
+
+  assert.match(
+    courseSummary,
+    /transformer representation, computation, trainability, self-attention learning, in-context learning, and reasoning/i,
+  );
+  assert.equal(courseDescription.preparatoryBackground.length, 3);
+  assert.deepEqual(
+    courseDescription.preparatoryBackground.map(({ title }) => title),
+    [
+      "Transformer architecture",
+      "Algorithms and computational complexity",
+      "Statistical learning theory",
+    ],
+  );
+  assert.match(courseDescription.recommendedBackground, /algorithms, asymptotic notation/i);
+  assert.match(courseDescription.recommendedBackground, /reading and writing proofs is expected/i);
+  assert.equal(
+    courseDescription.nonTheoryStudents,
+    "The course is open to students without a theory background. You can still gain substantial insight into how transformers work and use the course project to scrutinize existing theoretical claims through empirical evidence.",
+  );
+  assert.match(
+    courseDescription.officialOutlineNotice,
+    /official University of Waterloo course outline is the authoritative source/i,
+  );
+  assert.match(courseDescription.pendingOfficialOutlineNotice, /added before the first meeting/i);
+  assert.match(pendingLogistics.officeHours, /before the first meeting/i);
+  assert.match(pendingLogistics.meetingLocation, /before the first meeting/i);
+  assert.match(pendingLogistics.coursePlatform, /before the first graded deliverable/i);
+  if (courseFacts.coursePlatform === "TBA") {
+    assert.match(
+      courseDescription.requiredMaterials,
+      /Submission and feedback instructions will be announced before the first graded deliverable/i,
+    );
+    assert.doesNotMatch(courseDescription.requiredMaterials, /through TBA/i);
+  }
+
+  assert.equal(learningOutcomes.length, 7);
+  assert.match(learningOutcomes[0], /certification claims/i);
+  assert.match(learningOutcomes[1], /precision, conditioning, and task complexity/i);
+  assert.match(learningOutcomes[2], /apparently conflicting theoretical conclusions/i);
+  assert.match(learningOutcomes[3], /circuit and communication reductions/i);
+  assert.match(learningOutcomes[4], /omitted features/i);
+  assert.match(learningOutcomes[5], /reproducible empirical investigation/i);
+  assert.match(learningOutcomes[6], /synthesize multiple papers/i);
+  assert.match(readingExpectations, /paper's result type/i);
+  assert.match(readingExpectations, /decisive assumption/i);
+  assert.match(readingExpectations, /one connection or tension/i);
+  assert.match(readingExpectations, /supplementary material/i);
+
+  assert.equal(presentationRequirements.length, 8);
+  assert.match(presentationRequirements[0], /formal problem/i);
+  assert.match(presentationRequirements[1], /certification/i);
+  assert.match(presentationRequirements[2], /quantifiers/i);
+  assert.match(presentationRequirements[3], /proof mechanism/i);
+  assert.match(presentationRequirements[4], /modern transformer or large language model/i);
+  assert.match(presentationRequirements[5], /experimental evidence, conjectures/i);
+  assert.match(presentationRequirements[6], /comparison slide/i);
+  assert.match(presentationRequirements[7], /one precise limitation/i);
+  assert.match(
+    presentationWorkload,
+    /Fridays between September 18 and November 20, 2026, excluding October 16/i,
+  );
+
   assert.deepEqual(
     courseModules.map(({ id, label, title, weekNumbers }) => ({
       id,
@@ -400,7 +579,7 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
       {
         id: "opening-case-study",
         label: "Instructor-led opening case study",
-        title: "Exact Algorithmic Learning and Hardness",
+        title: "Exact Algorithmic Learning, Certification, and Hardness",
         weekNumbers: [1],
       },
       {
@@ -436,21 +615,101 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.ok(courseModules.every(({ description }) => description.length > 0));
   assert.ok(courseSchedule.every((week) => !("module" in week)));
 
+  const openingModule = courseModules.find(({ id }) => id === "opening-case-study");
+  assert.equal(
+    openingModule.title,
+    "Exact Algorithmic Learning, Certification, and Hardness",
+  );
+
+  assert.match(
+    assessmentSummary,
+    /40% paper-presentation, 40% project, and 20% participation/i,
+  );
   assert.deepEqual(assessment.map(({ component, weight }) => [component, weight]), [
-    ["Course project", "40%"], ["Paper-presentation work", "40%"], ["Class participation", "20%"],
+    ["Solo paper presentation", "25%"],
+    ["Shared paper presentation", "15%"],
+    ["Final project report and reproducibility materials", "30%"],
+    ["Final project presentation", "10%"],
+    ["Class participation", "20%"],
   ]);
-  assert.equal(projectDeadlines.length, 1);
-  assert.deepEqual(projectDeadlines[0], {
-    milestone: "Final project report and materials",
-    deadline: "November 26, 2026",
-    description: "The final project report and any required reproducibility materials are due before project presentations begin.",
-  });
+  assert.equal(
+    assessment.reduce(
+      (total, item) => total + Number.parseInt(item.weight, 10),
+      0,
+    ),
+    100,
+  );
+  assert.match(
+    assessment.find(({ component }) => component === "Solo paper presentation").standard,
+    /cross-paper synthesis/i,
+  );
+  assert.match(
+    assessment.find(({ component }) => component === "Shared paper presentation").standard,
+    /individually/i,
+  );
+  assert.match(participationPolicy.evaluation, /attendance alone is not sufficient/i);
+  assert.match(
+    participationPolicy.evaluation,
+    /Quality, preparation, and intellectual contribution/i,
+  );
+  assert.match(participationPolicy.approvedAbsences, /will not by themselves reduce/i);
+  assert.match(participationPolicy.approvedAbsences, /alternative form of engagement/i);
+
+  assert.equal(projectDeadlines.length, 3);
+  assert.deepEqual(
+    projectDeadlines.map(({ milestone, deadline }) => [milestone, deadline]),
+    [
+      ["Project topic approval", "October 23, 2026"],
+      [
+        "Final project report and reproducibility materials",
+        "November 26, 2026",
+      ],
+      ["Final project presentation", "November 27 or December 4, 2026"],
+    ],
+  );
+  assert.match(projectDeadlines[0].description, /ungraded three-to-five-sentence description/i);
+  assert.match(projectDeadlines[1].description, /worth 30%/i);
+  assert.match(projectDeadlines[2].description, /worth 10%/i);
+
+  assert.match(courseProject.introduction, /30% for the final report/i);
+  assert.match(courseProject.introduction, /10% for the final presentation/i);
+  assert.match(
+    courseProject.introduction,
+    /at least one course paper, theorem, formal model, or module/i,
+  );
+  assert.match(
+    courseProject.evaluationCriteria[0],
+    /representation, computational complexity, trainability, optimization, learnability, generalization, certification, or reasoning/i,
+  );
   assert.equal(lateWorkPolicy.latePolicyConfirmedByInstructor, true);
   assert.equal(lateWorkPolicy.gracePeriodHours, 48);
   assert.equal(lateWorkPolicy.penaltyPercentagePoints, 5);
   assert.equal(lateWorkPolicy.penaltyPeriodHours, 24);
+  assert.match(lateWorkPolicy.presentationPolicy, /approved missed paper or project presentation/i);
+  assert.match(
+    lateWorkPolicy.presentationPolicy,
+    /unapproved missed presentation normally receives a grade of zero/i,
+  );
+  assert.match(lateWorkPolicy.participationAbsencePolicy, /Approved absences/i);
+  assert.match(lateWorkPolicy.graceScopeStatement, /applies only to the final project report/i);
+  assert.match(lateWorkPolicy.graceScopeStatement, /does not apply to scheduled live/i);
+  assert.match(lateWorkPolicy.scopeStatement, /project-report grade/i);
   assert.match(courseProject.groupWorkPolicy, /requires written approval from the instructor/i);
-  assert.match(generativeAiPolicy, /allowed throughout the course/i);
+  assert.equal(generativeAiPolicy.length, 5);
+  assert.match(generativeAiPolicy[0], /documented, cited, or acknowledged/i);
+  assert.match(
+    generativeAiPolicy[1],
+    /fully responsible for the accuracy, originality, and integrity/i,
+  );
+  assert.match(generativeAiPolicy[1], /graded as errors regardless of whether AI was used/i);
+  assert.match(generativeAiPolicy[2], /retain relevant prompts, notes, sources/i);
+  assert.match(generativeAiPolicy[3], /confidential, private, unpublished/i);
+  assert.match(generativeAiPolicy[4], /Policy 71/i);
+  assert.match(
+    universityPolicies.introduction,
+    /This website is a companion to the official University of Waterloo course outline/i,
+  );
+  assert.match(universityPolicies.pendingOfficialOutlineText, /added before the first meeting/i);
   assert.deepEqual(universityPolicies.resources.map(({ label }) => label), [
     "Academic integrity",
     "Policy 70: Student Petitions and Grievances",
@@ -462,8 +721,8 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.ok(universityPolicies.resources.every(({ url }) => url.startsWith("https://")));
 
   assert.deepEqual(navigationItems.map(({ label, href }) => [label, href]), [
-    ["Overview", "#overview"], ["Schedule", "#schedule"],
-    ["Paper Presentations", "#paper-presentations"], ["Project", "#project"],
+    ["Overview", "#overview"], ["Outcomes", "#learning-outcomes"], ["Schedule", "#schedule"],
+    ["Presentations & Synthesis", "#paper-presentations"], ["Project", "#project"],
     ["Assessment", "#assessment"], ["Additional Readings", "#additional-readings"],
     ["Policies", "#policies"],
   ]);
@@ -476,7 +735,7 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(courseFacts.meetingDurationMinutes, 170);
   assert.equal(courseFacts.plannedEnrollment, 25);
   assert.equal(courseFacts.expectedProjectPresentations, 25);
-  assert.equal(courseFacts.lastUpdated, "September 1, 2026");
+  assert.equal(courseFacts.lastUpdated, "September 2, 2026");
   for (const key of ["officeHours", "meetingLocation", "coursePlatform", "officialOutlineUrl"]) assert.equal(courseFacts[key], "TBA");
 
   assert.equal(paperPresentationPlan.instructorLedWeek, 1);
@@ -1152,6 +1411,23 @@ test("rendered structure has valid navigation, meaningful paper links, and acces
   assert.ok(labelledSections.length >= 10);
   for (const [, headingId] of labelledSections) assert.ok(ids.includes(headingId));
 
+  const assessmentBody = html.match(
+    /<table\b[^>]*class="assessment-table"[^>]*>[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/i,
+  )?.[1];
+  assert.ok(assessmentBody);
+  assert.equal((assessmentBody.match(/<tr\b/gi) ?? []).length, 5);
+  assert.match(html, /<h3>Participation<\/h3>/i);
+
+  const generativeAiSection = html.match(
+    /<section\b[^>]*id="generative-ai"[^>]*>([\s\S]*?)<\/section>/i,
+  )?.[1];
+  assert.ok(generativeAiSection);
+  assert.equal((generativeAiSection.match(/<p\b/gi) ?? []).length, 5);
+  assert.equal(
+    (html.match(/<section\b[^>]*class="additional-reading-group"/gi) ?? []).length,
+    5,
+  );
+
   assert.match(html, /class="[^"]*schedule-desktop[^"]*"/i);
   assert.match(html, /<ol\b[^>]*class="[^"]*(?:mobile-schedule|schedule-mobile)[^"]*"/i);
   assert.match(html, /class="[^"]*back-to-schedule[^"]*"[^>]*href="#schedule"/i);
@@ -1220,7 +1496,13 @@ test("rendered structure has valid navigation, meaningful paper links, and acces
   const anchors = [...html.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi)].map(([, href, content]) => ({ href: decodeHtml(href), text: textContent(content) }));
   const allPapers = [...courseSchedule.flatMap((week) => week.papers), ...additionalReadings];
   for (const paper of allPapers) {
-    assert.ok(anchors.some((anchor) => anchor.href === paper.link && anchor.text === paper.title), `Paper title must be the link text: ${paper.title}`);
+    assert.equal(
+      anchors.filter(
+        (anchor) => anchor.href === paper.link && anchor.text === paper.title,
+      ).length,
+      1,
+      `Paper title must be linked exactly once: ${paper.title}`,
+    );
   }
 });
 
@@ -1244,11 +1526,18 @@ test("source preserves the restrained responsive style and required metadata", a
   assert.match(css, /schedule-module-row/i);
   assert.match(css, /mobile-schedule-module/i);
   assert.match(css, /detailed-module/i);
+  assert.match(css, /preparatory-background/i);
+  assert.match(css, /additional-reading-groups/i);
+  assert.match(css, /additional-reading-group-description/i);
   assert.match(css, /h4,\s*\n?h5\s*\{/i);
   assert.match(css, /scroll-margin-top/i);
   assert.match(css, /@media\s+print/i);
   assert.match(css, /prefers-reduced-motion/i);
   assert.match(layout, /CS 886: Learning Theory for Modern AI (?:--|–|—) Fall 2026/);
+  assert.match(
+    layout,
+    /transformer expressivity, computational complexity, trainability, self-attention learning, in-context learning, and reasoning/i,
+  );
   assert.match(layout, /icons:\s*\{[\s\S]*?icon:\s*["']\/favicon\.svg["']/);
   assert.match(packageJson, /"check:links"\s*:\s*"node scripts\/check-links\.mjs"/);
   assert.match(exporter, /public["'],\s*["']favicon\.svg/);

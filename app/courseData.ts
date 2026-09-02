@@ -20,6 +20,13 @@ export type CourseModule = {
   weekNumbers: readonly number[];
 };
 
+export type AdditionalReadingGroup = {
+  id: string;
+  title: string;
+  description: string;
+  paperTitles: readonly string[];
+};
+
 export type CourseWeek = {
   week: number;
   date: string;
@@ -64,28 +71,65 @@ export const courseFacts = {
   projectMeetings: "Weeks 11–12",
   plannedEnrollment: 25,
   expectedProjectPresentations: 25,
-  lastUpdated: "September 1, 2026",
+  lastUpdated: "September 2, 2026",
 } as const;
 
 export const courseSummary =
-  "A graduate research seminar on learning theory for transformers and large language models, culminating in a required course project.";
+  "A graduate theory seminar on transformer representation, computation, trainability, self-attention learning, in-context learning, and reasoning, culminating in a required research project.";
+
+export function isPendingCourseFact(value: string) {
+  return value === "TBA";
+}
 
 export const courseDescription = {
   paragraphs: [
-    "Learning Theory for Modern AI is a graduate research seminar about how transformers and large language models learn, what they can represent and compute, how efficiently they can compute it, how they generalize, and why they sometimes fail. The course begins with an instructor-led case study in exact algorithmic learning, certification, and hardness.",
-    "The remaining schedule is organized as a cumulative sequence: transformer expressivity and formal limitations; parallel and fine-grained computational complexity; trainability and signal propagation; finite-sample learning of self-attention; statistical, optimization, and generalization theories of in-context learning; and the learning theory of autoregressive reasoning, curricula, and length extrapolation. The course culminates in an individual research project that may develop a new theoretical result or rigorously test an existing theoretical prediction.",
+    "Learning Theory for Modern AI is a graduate research seminar on the theoretical foundations of transformers and large language models. We study what these models can represent and compute, what computational resources they require, when their training dynamics are stable, how they learn and generalize from finite data, and why they fail. The course begins with an instructor-led case study in exact algorithmic learning, certification, and hardness.",
+    "After the opening case study, Module I moves from expressivity and computational complexity to trainability and finite-sample learning of attention. Module II studies statistical targets, optimization, and generalization in in-context learning. Module III studies autoregressive chain-of-thought, curricula, and length generalization. Module IV consists of thematically organized project presentations and course synthesis.",
   ],
   recommendedBackground:
-    "Students should have mathematical maturity and working knowledge of probability, linear algebra, optimization, and introductory machine learning. Prior familiarity with transformers is helpful but not required.",
-  requiredMaterials: `No textbook is required. All assigned papers are linked from this website. Final project reports and reproducibility materials will be submitted through ${courseFacts.coursePlatform}, where marked work and feedback will also be returned.`,
+    "Students should have mathematical maturity and working knowledge of probability, linear algebra, optimization, algorithms, asymptotic notation, and introductory machine learning. Familiarity with reading and writing proofs is expected. Prior coursework in computational complexity, statistical learning theory, or transformers is helpful but not required.",
+  requiredMaterials:
+    isPendingCourseFact(courseFacts.coursePlatform)
+      ? "No textbook is required, and all assigned papers are linked from this website at no additional cost. Submission and feedback instructions will be announced before the first graded deliverable."
+      : `No textbook is required, and all assigned papers are linked from this website at no additional cost. Final project reports and reproducibility materials will be submitted through ${courseFacts.coursePlatform}, where marked work and feedback will also be returned.`,
   nonTheoryStudents:
     "The course is open to students without a theory background. You can still gain substantial insight into how transformers work and use the course project to scrutinize existing theoretical claims through empirical evidence.",
+  preparatoryBackgroundIntroduction:
+    "Students who need a refresher should review the following concepts before the corresponding modules. Short course notes or references will be posted before they are needed.",
+  preparatoryBackground: [
+    {
+      title: "Transformer architecture",
+      description:
+        "Scaled dot-product attention, multi-head attention, residual pathways, layer normalization, feed-forward blocks, positional information, causal masking, and autoregressive generation.",
+    },
+    {
+      title: "Algorithms and computational complexity",
+      description:
+        "Asymptotic notation, reductions, randomized and conditional lower bounds, circuit classes such as AC0 and TC0, communication or parallel models, and the role of assumptions such as SETH.",
+    },
+    {
+      title: "Statistical learning theory",
+      description:
+        "PAC learning, VC dimension, algorithmic stability, statistical-query learning, concentration, minimax rates, population versus empirical risk, and distribution shift.",
+    },
+  ],
+  officialOutlineNotice:
+    "This website provides the detailed reading schedule, seminar format, and project guidance. The official University of Waterloo course outline is the authoritative source for assessment, deadlines, accommodations, academic integrity, and institutional policies.",
+  pendingOfficialOutlineNotice:
+    "The official course-outline link will be added before the first meeting.",
+} as const;
+
+export const pendingLogistics = {
+  officeHours: "To be announced before the first meeting",
+  meetingLocation: "To be announced before the first meeting",
+  coursePlatform: "To be announced before the first graded deliverable",
 } as const;
 
 export const navigationItems = [
   { label: "Overview", href: "#overview" },
+  { label: "Outcomes", href: "#learning-outcomes" },
   { label: "Schedule", href: "#schedule" },
-  { label: "Paper Presentations", href: "#paper-presentations" },
+  { label: "Presentations & Synthesis", href: "#paper-presentations" },
   { label: "Project", href: "#project" },
   { label: "Assessment", href: "#assessment" },
   { label: "Additional Readings", href: "#additional-readings" },
@@ -93,16 +137,17 @@ export const navigationItems = [
 ] as const;
 
 export const learningOutcomes = [
-  "Distinguish representation, optimization, learnability, generalization, and computational-complexity results for transformers.",
-  "State and interpret theoretical results with their assumptions, quantifiers, and parameter dependence.",
-  "Explain the principal proof mechanisms used in modern learning-theory papers.",
-  "Evaluate how closely an idealized theoretical model corresponds to a modern transformer or large language model.",
-  "Develop a theoretical extension or rigorously test a formal theoretical prediction through reproducible empirical work.",
-  "Communicate technical research clearly in written and oral form.",
+  "Distinguish representation, computational-complexity, trainability, optimization, learnability, generalization, and certification claims for transformers and related neural models.",
+  "State and interpret principal theorems with their assumptions, quantifiers, and dependence on sample size, dimension, sequence length, width, depth, precision, conditioning, and task complexity.",
+  "Explain how differences in architecture, attention mechanism, precision, depth, recurrence, data-generating process, training rule, and evaluation criterion can produce apparently conflicting theoretical conclusions.",
+  "Explain and compare principal techniques used in modern transformer theory, including circuit and communication reductions, statistical-query lower bounds, kernel and mean-field limits, stability, concentration, margin arguments, and minimax analysis.",
+  "Assess how closely an idealized theoretical model corresponds to a modern transformer or large language model and identify which omitted features may materially affect the conclusion.",
+  "Develop a theoretical extension or design a reproducible empirical investigation that tests, verifies, stress-tests, or challenges a formal theoretical prediction.",
+  "Present technical research clearly in written and oral form and synthesize multiple papers into a coherent account of what is known, which assumptions matter, and which questions remain open.",
 ] as const;
 
 export const readingExpectations =
-  "For every scheduled paper, all students should read at least the abstract, introduction, formal setup, main theorem or principal result, and discussion or limitations. The presenter or presenting team is responsible for the proof details and appendices needed to explain the result accurately. Students are not expected to read every technical appendix of all four weekly papers.";
+  "For every scheduled paper, all students should read at least the abstract, introduction, formal setup, main theorem or principal result, and discussion or limitations. Before class, students should be able to identify the paper's result type, its decisive assumption, and one connection or tension with another paper assigned that week. The presenter or presenting team is responsible for the proof details and supplementary material needed to explain the result accurately. Students are not expected to read every technical appendix of all four weekly papers.";
 
 const openingFramingMinutes = 5;
 const paperPresentationMinutes = 25;
@@ -198,20 +243,17 @@ export const presentationGuidance =
   `Week ${instructorLedWeek} is instructor-led: the instructor will present all four papers, and that week does not count toward students' presentation workload. Student paper presentations run from Week ${firstStudentPresentationWeek} through Week ${lastStudentPresentationWeek}, with ${courseFacts.scheduledPapersPerMeeting} paper presentations each week. Each reading meeting begins with instructor framing and ends with a cross-paper synthesis that connects the week's conclusions to the following week.`;
 
 export const presentationWorkload =
-  `Each student will give ${minimumPaperPresentationsPerStudent} paper presentations: one solo presentation and one shared presentation. ${soloPaperPresentationSlots} papers will have a solo presenter, ${pairedPaperPresentationSlots} will be presented by pairs, and ${threePersonPaperPresentationSlots} will be presented by teams of three. Students sharing a paper divide the ${paperPresentationMinutes}-minute presentation and must each make a substantive contribution. The required project presentation is separate and does not count toward these two paper presentations. Exact paper assignments will be announced after enrollment is confirmed.`;
+  `Each student will give ${minimumPaperPresentationsPerStudent} paper presentations: one solo presentation worth 25% of the final grade and one shared presentation worth 15%. ${soloPaperPresentationSlots} papers will have a solo presenter, ${pairedPaperPresentationSlots} will be presented by pairs, and ${threePersonPaperPresentationSlots} will be presented by teams of three. Students sharing a paper divide the ${paperPresentationMinutes}-minute presentation and must each make a substantive contribution. The required project presentation is separate and does not count toward these two paper presentations. The solo and shared presentations will be assigned to Fridays between September 18 and November 20, 2026, excluding October 16. Exact paper assignments will be announced after enrollment is confirmed.`;
 
 export const presentationRequirements = [
-  "What is the formal problem? State the data-generating process, hypothesis or architecture class, loss, training rule, and test criterion.",
-  "What kind of result is obtained? Distinguish representation, optimization, learnability, generalization, and computational-complexity claims.",
-  "What is the main theorem? State it precisely enough that the dependence on dimension, sample size, sequence length, width, depth, and conditioning is visible.",
-  "How does this paper fit the week's story? Coordinate with the other presenters, use common notation where practical, avoid repeating shared background, and state explicitly whether the paper strengthens, limits, contrasts with, or changes assumptions from the preceding paper.",
-  "What is the proof mechanism? Is the main tool stability, concentration, kernelization, mean-field dynamics, margin maximization, circuit complexity, communication complexity, or an explicit transformer construction?",
-  "Which assumption carries the result? Examples include Gaussian tasks, linear attention, population loss, infinite width, bounded precision, realizability, or synthetic data.",
-  "How close is the theorem to a modern LLM? Identify exactly which architectural or statistical features are omitted.",
-  "What would falsify or materially strengthen the claim? End with a concrete lower bound, counterexample, experiment, or theorem.",
-  "Distinguish carefully between what the paper proves, what its experiments suggest, and what the authors conjecture or claim informally.",
-  "Prepare one concise comparison slide for the weekly synthesis, listing the paper's result type, decisive assumptions, principal guarantee or lower bound, and relationship to the adjacent papers.",
-  "End with one precise limitation and one concrete theorem, counterexample, or experiment that would materially strengthen or challenge the paper.",
+  "State the formal problem, including the data-generating process, architecture or hypothesis class, loss, training rule, and evaluation criterion.",
+  "Classify the result as representation, computational complexity, trainability, optimization, learnability, generalization, or certification.",
+  "State the main theorem with its assumptions, quantifiers, and important dependence on sample size, dimension, sequence length, width, depth, precision, conditioning, or task complexity.",
+  "Explain the principal proof mechanism rather than only restating the theorem.",
+  "Identify the assumption that carries the result and explain how closely the formal model corresponds to a modern transformer or large language model.",
+  "Distinguish theorem-level conclusions from experimental evidence, conjectures, and informal interpretations.",
+  "Explain how the paper advances, limits, contrasts with, or changes the assumptions of the adjacent papers, using one concise comparison slide prepared for the weekly synthesis.",
+  "End with one precise limitation and one concrete theorem, counterexample, or experiment that would materially strengthen or challenge the result.",
 ] as const;
 
 export const weeklySynthesisQuestions = [
@@ -222,30 +264,52 @@ export const weeklySynthesisQuestions = [
   "Which unresolved question motivates the following week?",
 ] as const;
 
+export const assessmentSummary =
+  "The final grade preserves the 40% paper-presentation, 40% project, and 20% participation structure. The internal breakdown is shown below.";
+
 export const assessment = [
   {
-    component: "Course project",
-    weight: "40%",
+    component: "Solo paper presentation",
+    weight: "25%",
     standard:
-      "A technically substantive project that either develops a new theoretical contribution or rigorously validates, verifies, reproduces, stress-tests, or scrutinizes an existing theoretical result. The grade includes the written report and final project presentation.",
+      "Individual command of the formal problem, main theorem, proof mechanism, decisive assumptions, limitations, and relationship to the other papers in the week. Evaluation includes responses to questions, the comparison slide, and contribution to the cross-paper synthesis.",
   },
   {
-    component: "Paper-presentation work",
-    weight: "40%",
+    component: "Shared paper presentation",
+    weight: "15%",
     standard:
-      "Accurate and insightful presentation of assigned papers, including a precise account of the formal problem, theorem, proof mechanism, assumptions, limitations, and responses to questions.",
+      "A coordinated presentation in which each student makes a substantive and identifiable contribution. The presentation is evaluated collectively for coherence and individually for technical understanding, delivery, responses to questions, and contribution to weekly synthesis.",
+  },
+  {
+    component: "Final project report and reproducibility materials",
+    weight: "30%",
+    standard:
+      "A technically substantive written contribution that develops new theory or rigorously tests a formal theoretical prediction, clearly separates known results from the student's contribution, and provides reproducible materials where applicable.",
+  },
+  {
+    component: "Final project presentation",
+    weight: "10%",
+    standard:
+      "A concise individual presentation of the research question, theoretical anchor, original contribution, methods, main result, strongest limitation, and most important next step.",
   },
   {
     component: "Class participation",
     weight: "20%",
     standard:
-      "Consistent and substantive participation in weekly paper discussions and project presentations, including preparation, constructive questions, and engagement with other students' work.",
+      "Preparation across all four weekly papers, constructive questions, accurate comparison of assumptions and result types, contributions to cross-paper synthesis, and engagement with project presentations. Quality and intellectual contribution matter more than speaking frequency; attendance alone is not sufficient.",
   },
 ] as const;
 
+export const participationPolicy = {
+  evaluation:
+    "Participation is assessed through preparation, constructive questions, comparison of assumptions and result types, contributions to the weekly synthesis, and engagement with project presentations. Quality, preparation, and intellectual contribution matter more than speaking frequency; attendance alone is not sufficient.",
+  approvedAbsences:
+    "Approved absences will not by themselves reduce the participation grade. When appropriate, the instructor may arrange an alternative form of engagement, such as a short written comparison of the week's papers.",
+} as const;
+
 export const courseProject = {
   introduction:
-    "The project accounts for 40% of the course grade. The topic must be discussed with and approved by the instructor.",
+    "The project accounts for 40% of the course grade: 30% for the final report and reproducibility materials and 10% for the final presentation. The topic must be discussed with and approved by the instructor. Every project must identify at least one course paper, theorem, formal model, or module that it extends, tests, or challenges, and the report must classify the contribution as primarily representational, computational, trainability-related, optimization-related, statistical, reasoning-related, or empirical.",
   acceptableForms: [
     {
       title: "New theoretical contribution",
@@ -275,7 +339,7 @@ export const courseProject = {
     "An individual final presentation during Week 11 or Week 12. The project presentation is assessed as part of the project grade, not as a paper presentation.",
   ],
   evaluationCriteria: [
-    "Relevance to learning theory for transformers or large language models.",
+    "Relevance to the theoretical study of transformers or large language models, including representation, computational complexity, trainability, optimization, learnability, generalization, certification, or reasoning.",
     "Precision and importance of the research question.",
     "Technical correctness and depth.",
     "Originality of a theoretical contribution, or rigor and informativeness of an empirical validation or scrutiny.",
@@ -296,10 +360,22 @@ export const courseProject = {
 
 export const projectDeadlines = [
   {
-    milestone: "Final project report and materials",
+    milestone: "Project topic approval",
+    deadline: "October 23, 2026",
+    description:
+      "Submit an ungraded three-to-five-sentence description identifying the course paper, theorem, formal model, or module that anchors the project; the proposed contribution; and, for empirical work, the principal experiment. This is an approval checkpoint rather than a separately graded proposal.",
+  },
+  {
+    milestone: "Final project report and reproducibility materials",
     deadline: "November 26, 2026",
     description:
-      "The final project report and any required reproducibility materials are due before project presentations begin.",
+      "The final report and any required code, configurations, data instructions, or other reproducibility materials are due before project presentations begin. This component is worth 30% of the final grade.",
+  },
+  {
+    milestone: "Final project presentation",
+    deadline: "November 27 or December 4, 2026",
+    description:
+      "Each student gives an individual presentation during the assigned project-presentation meeting. The assigned date will be announced after project topics are confirmed. This component is worth 10% of the final grade.",
   },
 ] as const;
 
@@ -389,16 +465,30 @@ export const lateWorkPolicy = {
   penaltyPeriodHours: latePenaltyPeriodHours,
   contactStatement:
     "Students should contact the instructor as soon as reasonably possible when illness, emergency, or another serious circumstance affects coursework.",
-  scopeStatement: `The final project report and required reproducibility materials have a ${lateGracePeriodHours}-hour grace period. After that grace period, and in the absence of an approved extension, the project grade is reduced by ${latePenaltyPercentagePoints} percentage points for each additional ${latePenaltyPeriodHours}-hour period or part thereof.`,
+  presentationPolicy:
+    "An approved missed paper or project presentation will be rescheduled or replaced with an equivalent oral or written task, depending on the remaining course schedule. An unapproved missed presentation normally receives a grade of zero.",
+  participationAbsencePolicy:
+    "Approved absences will not by themselves reduce the participation grade. When appropriate, an alternative form of engagement may be arranged.",
+  graceScopeStatement:
+    "The 48-hour grace period applies only to the final project report and required reproducibility materials. It does not apply to scheduled live paper or project presentations.",
+  scopeStatement: `The final project report and required reproducibility materials have a ${lateGracePeriodHours}-hour grace period. After that grace period, and in the absence of an approved extension, the project-report grade is reduced by ${latePenaltyPercentagePoints} percentage points for each additional ${latePenaltyPeriodHours}-hour period or part thereof.`,
 } as const;
 
-export const generativeAiPolicy =
-  "Generative-AI tools are allowed throughout the course. Students remain responsible for verifying every mathematical statement, citation, proof step, experimental result, and piece of submitted code. Fabricated references, unverifiable claims, or generated mathematical content submitted without careful verification will result in less marks.";
+export const generativeAiPolicy = [
+  "Generative-AI tools may be used for coursework in this class unless an assignment states otherwise. Their use must be documented, cited, or acknowledged as appropriate, with enough detail to make the student's own contribution clear.",
+  "Students remain fully responsible for the accuracy, originality, and integrity of all submitted work and must be able to explain every mathematical statement, proof step, citation, experimental result, and piece of code. Factual, mathematical, citation, experimental, or coding errors will be graded as errors regardless of whether AI was used.",
+  "Students should retain relevant prompts, notes, sources, research records, and intermediate drafts and may be asked to provide them to demonstrate the development of their work.",
+  "Do not upload confidential, private, unpublished, personal, or third-party-restricted information to external AI systems. University-provided tools should be used where feasible for work involving institutional information.",
+  "Undisclosed use, use outside the conditions stated for an assignment, fabricated references, or submission of generated content that the student cannot explain may be addressed under Policy 71.",
+] as const;
 
 // Official University policy and support links checked against Waterloo source pages on August 21, 2026.
 export const universityPolicies = {
   introduction:
-    "The official University of Waterloo course outline contains the current institutional policies and support information governing this course, including academic integrity, grievances, discipline, appeals, accessibility, and mental-health resources. Students should consult the official outline and the linked University resources for the current wording.",
+    "This website is a companion to the official University of Waterloo course outline. The official outline is the authoritative source for assessment, deadlines, accommodations, academic integrity, and institutional policies. The links below provide direct access to the principal University resources.",
+  officialOutlineLinkText: "View the official Waterloo course outline",
+  pendingOfficialOutlineText:
+    "The official course-outline link will be added before the first meeting.",
   outlineGuidanceUrl:
     "https://uwaterloo.ca/associate-vice-president-academic/course-outlines-waterloo",
   resources: [
@@ -451,7 +541,7 @@ export const courseModules: readonly CourseModule[] = [
   {
     id: "opening-case-study",
     label: "Instructor-led opening case study",
-    title: "Exact Algorithmic Learning and Hardness",
+    title: "Exact Algorithmic Learning, Certification, and Hardness",
     description:
       "A motivating case study contrasting exact learning of discrete algorithms with statistical-query and certification hardness.",
     weekNumbers: [1],
@@ -1281,3 +1371,68 @@ export const additionalReadings: readonly CoursePaper[] = [
     "https://proceedings.mlr.press/v202/li23p.html",
   ),
 ];
+
+export const additionalReadingGroups: readonly AdditionalReadingGroup[] = [
+  {
+    id: "architecture-expressivity-computation",
+    title: "Transformer Architecture, Expressivity, and Computation",
+    description:
+      "Foundational or complementary papers on initialization, signal propagation, formal-language limitations, automata shortcuts, and explicitly programmed transformer computation.",
+    paperTitles: [
+      "Improving Transformer Optimization Through Better Initialization",
+      "Transformers Get Stable: An End-to-End Signal Propagation Theory for Language Models",
+      "Theoretical Limitations of Self-Attention in Neural Sequence Models",
+      "Transformers Learn Shortcuts to Automata",
+      "Looped Transformers as Programmable Computers",
+    ],
+  },
+  {
+    id: "attention-memory-icl-mechanisms",
+    title: "Attention, Memory, and In-Context-Learning Mechanisms",
+    description:
+      "Generative self-attention models, associative-memory interpretations, induction mechanisms, learned regression procedures, and reusable representations.",
+    paperTitles: [
+      "From Self-Attention to Markov Models: Unveiling the Dynamics of Generative Transformers",
+      "Hopfield Networks Is All You Need",
+      "Birth of a Transformer: A Memory Viewpoint",
+      "What Learning Algorithm Is In-Context Learning? Investigations with Linear Models",
+      "Transformers Learn In-Context by Gradient Descent",
+      "How Do Transformers Learn In-Context Beyond Simple Functions? A Case Study on Learning with Representations",
+      "How Do Transformers Learn Topic Structure: Towards a Mechanistic Understanding",
+    ],
+  },
+  {
+    id: "reasoning-autoregressive-limitations",
+    title: "Reasoning and Autoregressive Limitations",
+    description:
+      "Computational expressivity of chain-of-thought and statistical-computational barriers created by autoregressive learning under misspecification.",
+    paperTitles: [
+      "Chain of Thought Empowers Transformers to Solve Inherently Serial Problems",
+      "Computational-Statistical Tradeoffs at the Next-Token Prediction Barrier: Autoregressive and Imitation Learning under Misspecification",
+    ],
+  },
+  {
+    id: "fine-tuning-preferences-exploration",
+    title: "Fine-Tuning, Preference Learning, and Exploration",
+    description:
+      "Theory of parameter-efficient adaptation, preference optimization, online data, coverage, and exploration with language-model policies.",
+    paperTitles: [
+      "A Kernel-Based View of Language Model Fine-Tuning",
+      "Universality and Limitations of Prompt Tuning",
+      "Iterative Preference Learning from Human Feedback: Bridging Theory and Practice for RLHF under KL-Constraint",
+      "Exploratory Preference Optimization: Harnessing Implicit Q*-Approximation for Sample-Efficient RLHF",
+      "Is a Good Foundation Necessary for Efficient Reinforcement Learning? The Computational Role of the Base Model in Exploration",
+      "The Importance of Online Data: Understanding Preference Fine-Tuning via Coverage",
+    ],
+  },
+  {
+    id: "reliability-hallucination-provenance",
+    title: "Reliability, Hallucination, and Provenance",
+    description:
+      "Formal limitations on factual prediction and cryptographic methods for identifying generated text.",
+    paperTitles: [
+      "Calibrated Language Models Must Hallucinate",
+      "Undetectable Watermarks for Language Models",
+    ],
+  },
+] as const;

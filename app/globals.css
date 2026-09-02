@@ -173,6 +173,14 @@ li + li {
   margin-top: 7px;
 }
 
+.preparatory-background {
+  margin-bottom: 24px;
+}
+
+.preparatory-background li {
+  margin-bottom: 8px;
+}
+
 a {
   color: var(--gold-dark);
   text-decoration: underline;
@@ -511,6 +519,31 @@ table td:first-child {
 
 .paper-list p {
   margin-bottom: 0;
+}
+
+.additional-reading-groups {
+  margin-top: 24px;
+}
+
+.additional-reading-group {
+  margin-top: 34px;
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+}
+
+.additional-reading-group:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.additional-reading-group h3 {
+  margin-bottom: 7px;
+}
+
+.additional-reading-group-description {
+  margin-bottom: 18px;
+  color: var(--muted);
 }
 
 .back-to-schedule {

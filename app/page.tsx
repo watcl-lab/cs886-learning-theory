@@ -1,16 +1,21 @@
 import {
+  additionalReadingGroups,
   additionalReadings,
   assessment,
+  assessmentSummary,
   courseDescription,
   courseFacts,
   courseModules,
   courseProject,
   courseSchedule,
   generativeAiPolicy,
+  isPendingCourseFact,
   lateWorkPolicy,
   learningOutcomes,
   meetingFormat,
   navigationItems,
+  participationPolicy,
+  pendingLogistics,
   presentationGuidance,
   presentationRequirements,
   presentationWorkload,
@@ -94,6 +99,25 @@ export default function Home() {
     }))
     .filter((module) => module.weeks.length > 0);
 
+  const additionalReadingByTitle = new Map(
+    additionalReadings.map((paper) => [paper.title, paper] as const),
+  );
+
+  const groupedAdditionalReadings = additionalReadingGroups.map((group) => ({
+    ...group,
+    papers: group.paperTitles.map((paperTitle) => {
+      const paper = additionalReadingByTitle.get(paperTitle);
+
+      if (!paper) {
+        throw new Error(
+          `Additional-reading group ${group.id} references missing paper: ${paperTitle}`,
+        );
+      }
+
+      return paper;
+    }),
+  }));
+
   return (
     <>
       <a className="skip-link" href="#main-content">
@@ -127,7 +151,7 @@ export default function Home() {
             <p key={paragraph}>{paragraph}</p>
           ))}
           <p>
-            <strong>Recommended background.</strong> {courseDescription.recommendedBackground}
+            <strong>Recommended preparation.</strong> {courseDescription.recommendedBackground}
           </p>
           <p>
             <strong>Required materials.</strong> {courseDescription.requiredMaterials}
@@ -135,6 +159,16 @@ export default function Home() {
           <p>
             <strong>Note for non-theory students.</strong> {courseDescription.nonTheoryStudents}
           </p>
+
+          <h3>Preparatory Background</h3>
+          <p>{courseDescription.preparatoryBackgroundIntroduction}</p>
+          <ul className="preparatory-background">
+            {courseDescription.preparatoryBackground.map((item) => (
+              <li key={item.title}>
+                <strong>{item.title}.</strong> {item.description}
+              </li>
+            ))}
+          </ul>
 
           <dl className="course-logistics">
             <div className="logistics-item">
@@ -154,7 +188,11 @@ export default function Home() {
             </div>
             <div className="logistics-item">
               <dt>Office hours</dt>
-              <dd>{courseFacts.officeHours}</dd>
+              <dd>
+                {isPendingCourseFact(courseFacts.officeHours)
+                  ? pendingLogistics.officeHours
+                  : courseFacts.officeHours}
+              </dd>
             </div>
             <div className="logistics-item">
               <dt>Meeting time</dt>
@@ -164,7 +202,11 @@ export default function Home() {
             </div>
             <div className="logistics-item">
               <dt>Location</dt>
-              <dd>{courseFacts.meetingLocation}</dd>
+              <dd>
+                {isPendingCourseFact(courseFacts.meetingLocation)
+                  ? pendingLogistics.meetingLocation
+                  : courseFacts.meetingLocation}
+              </dd>
             </div>
             <div className="logistics-item">
               <dt>Delivery mode</dt>
@@ -172,7 +214,11 @@ export default function Home() {
             </div>
             <div className="logistics-item">
               <dt>Course platform</dt>
-              <dd>{courseFacts.coursePlatform}</dd>
+              <dd>
+                {isPendingCourseFact(courseFacts.coursePlatform)
+                  ? pendingLogistics.coursePlatform
+                  : courseFacts.coursePlatform}
+              </dd>
             </div>
             <div className="logistics-item">
               <dt>Scheduled seminar meetings</dt>
@@ -364,7 +410,9 @@ export default function Home() {
         </section>
 
         <section id="paper-presentations" aria-labelledby="paper-presentations-heading">
-          <h2 id="paper-presentations-heading">Paper Presentation Requirements</h2>
+          <h2 id="paper-presentations-heading">
+            Paper Presentations and Weekly Synthesis
+          </h2>
           <p>{presentationGuidance}</p>
           <p>{presentationWorkload}</p>
 
@@ -444,7 +492,7 @@ export default function Home() {
 
         <section id="project-deadlines" aria-labelledby="project-deadlines-heading">
           <h2 id="project-deadlines-heading">Project Milestones and Deadlines</h2>
-          <div className="table-wrap" role="region" aria-label="Project deadline" tabIndex={0}>
+          <div className="table-wrap" role="region" aria-label="Project deadlines" tabIndex={0}>
             <table className="deadline-table">
               <thead>
                 <tr>
@@ -503,6 +551,7 @@ export default function Home() {
 
         <section id="assessment" aria-labelledby="assessment-heading">
           <h2 id="assessment-heading">Assessment</h2>
+          <p>{assessmentSummary}</p>
           <div className="table-wrap" role="region" aria-label="Assessment" tabIndex={0}>
             <table className="assessment-table">
               <thead>
@@ -523,17 +572,26 @@ export default function Home() {
               </tbody>
             </table>
           </div>
+
+          <h3>Participation</h3>
+          <p>{participationPolicy.evaluation}</p>
+          <p>{participationPolicy.approvedAbsences}</p>
         </section>
 
         <section id="late-work" aria-labelledby="late-work-heading">
           <h2 id="late-work-heading">Late Work, Missed Work, and Extensions</h2>
           <p>{lateWorkPolicy.contactStatement}</p>
+          <p>{lateWorkPolicy.presentationPolicy}</p>
+          <p>{lateWorkPolicy.participationAbsencePolicy}</p>
+          <p>{lateWorkPolicy.graceScopeStatement}</p>
           <p>{lateWorkPolicy.scopeStatement}</p>
         </section>
 
         <section id="generative-ai" aria-labelledby="generative-ai-heading">
           <h2 id="generative-ai-heading">Use of Generative AI</h2>
-          <p>{generativeAiPolicy}</p>
+          {generativeAiPolicy.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
         </section>
 
         <section id="additional-readings" aria-labelledby="additional-readings-heading">
@@ -543,18 +601,31 @@ export default function Home() {
             the seminar&apos;s learning-theory core, as well as possible project starting points. They are not scheduled
             paper presentations.
           </p>
-          <PaperList papers={additionalReadings} />
+          <div className="additional-reading-groups">
+            {groupedAdditionalReadings.map((group) => (
+              <section className="additional-reading-group" key={group.id}>
+                <h3>{group.title}</h3>
+                <p className="additional-reading-group-description">
+                  {group.description}
+                </p>
+                <PaperList papers={group.papers} />
+              </section>
+            ))}
+          </div>
         </section>
 
         <section className="academic-policy" id="policies" aria-labelledby="policies-heading">
           <h2 id="policies-heading">University Policies and Supports</h2>
           <p>{universityPolicies.introduction}</p>
+          <p>{courseDescription.officialOutlineNotice}</p>
           <p>
             <strong>Official course outline:</strong>{" "}
-            {courseFacts.officialOutlineUrl === "TBA" ? (
-              "TBA"
+            {isPendingCourseFact(courseFacts.officialOutlineUrl) ? (
+              universityPolicies.pendingOfficialOutlineText
             ) : (
-              <a href={courseFacts.officialOutlineUrl}>View the official Waterloo course outline</a>
+              <a href={courseFacts.officialOutlineUrl}>
+                {universityPolicies.officialOutlineLinkText}
+              </a>
             )}
           </p>
           <p>
