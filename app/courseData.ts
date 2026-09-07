@@ -49,13 +49,11 @@ export const courseFacts = {
   instructorTitle: "Associate Professor",
   instructorEmail: "kimon.fountoulakis@uwaterloo.ca",
   instructorOffice: "DC 3611",
-  officeHours: "TBA",
+  officeHoursEmail: "kfountou@uwaterloo.ca",
   deliveryMode: "In person",
   meetingDay: "Fridays",
   meetingTime: "1:30–4:20 p.m.",
   meetingDurationMinutes: 170,
-  meetingLocation: "TBA",
-  coursePlatform: "TBA",
   officialOutlineUrl: "TBA",
   scheduledMeetingRange: "September 11–December 4, 2026",
   universityClassPeriod: "September 9–December 8, 2026",
@@ -90,9 +88,7 @@ export const courseDescription = {
   recommendedBackground:
     "Students should have mathematical maturity and working knowledge of probability, linear algebra, optimization, algorithms, asymptotic notation, and introductory machine learning. Familiarity with reading proofs is expected. Prior coursework in computational complexity, statistical learning theory, or transformers is helpful but not required.",
   requiredMaterials:
-    isPendingCourseFact(courseFacts.coursePlatform)
-      ? "No textbook is required, and all assigned papers are linked from this website."
-      : `No textbook is required, and all assigned papers are linked from this website. Final project reports and reproducibility materials will be submitted through ${courseFacts.coursePlatform}, where marked work and feedback will also be returned.`,
+    "No textbook is required, and all assigned papers are linked from this website.",
   nonTheoryStudents:
     "The course is open to students without a theory background. You can still gain substantial insight into how transformers work and use the course project to scrutinize existing theoretical claims through empirical evidence.",
   preparatoryBackgroundIntroduction:
@@ -118,12 +114,6 @@ export const courseDescription = {
     "This website provides the detailed reading schedule, seminar format, and project guidance. The official University of Waterloo course outline is the authoritative source for assessment, deadlines, accommodations, academic integrity, and institutional policies.",
   pendingOfficialOutlineNotice:
     "The official course-outline link will be added before the first meeting.",
-} as const;
-
-export const pendingLogistics = {
-  officeHours: "To be announced before the first meeting",
-  meetingLocation: "To be announced before the first meeting",
-  coursePlatform: "To be announced before the first graded deliverable",
 } as const;
 
 export const navigationItems = [

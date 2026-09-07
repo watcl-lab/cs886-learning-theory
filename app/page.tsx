@@ -13,7 +13,6 @@ import {
   meetingFormat,
   navigationItems,
   pairedPresentationExpectations,
-  pendingLogistics,
   presentationGuidance,
   presentationRequirements,
   presentationWorkload,
@@ -186,9 +185,11 @@ export default function Home() {
             <div className="logistics-item">
               <dt>Office hours</dt>
               <dd>
-                {isPendingCourseFact(courseFacts.officeHours)
-                  ? pendingLogistics.officeHours
-                  : courseFacts.officeHours}
+                Email the instructor at{" "}
+                <a href={`mailto:${courseFacts.officeHoursEmail}`}>
+                  {courseFacts.officeHoursEmail}
+                </a>
+                .
               </dd>
             </div>
             <div className="logistics-item">
@@ -198,24 +199,8 @@ export default function Home() {
               </dd>
             </div>
             <div className="logistics-item">
-              <dt>Location</dt>
-              <dd>
-                {isPendingCourseFact(courseFacts.meetingLocation)
-                  ? pendingLogistics.meetingLocation
-                  : courseFacts.meetingLocation}
-              </dd>
-            </div>
-            <div className="logistics-item">
               <dt>Delivery mode</dt>
               <dd>{courseFacts.deliveryMode}</dd>
-            </div>
-            <div className="logistics-item">
-              <dt>Course platform</dt>
-              <dd>
-                {isPendingCourseFact(courseFacts.coursePlatform)
-                  ? pendingLogistics.coursePlatform
-                  : courseFacts.coursePlatform}
-              </dd>
             </div>
             <div className="logistics-item">
               <dt>Scheduled seminar meetings</dt>

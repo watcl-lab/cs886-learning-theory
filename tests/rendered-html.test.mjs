@@ -109,9 +109,10 @@ test("server-renders the corrected course content and operational policies", asy
   ]) assert.match(text, new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
   assert.match(text, /Kimon Fountoulakis/);
   assert.match(text, /DC 3611/);
-  assert.match(text, /Office hours:?\s*To be announced before the first meeting/i);
-  assert.match(text, /Location:?\s*To be announced before the first meeting/i);
-  assert.match(text, /Course platform:?\s*To be announced before the first graded deliverable/i);
+  assert.match(text, /Office hours:?\s*Email the instructor at\s*kfountou@uwaterloo\.ca/i);
+  assert.match(html, /href="mailto:kfountou@uwaterloo\.ca"/i);
+  assert.doesNotMatch(html, /<dt>Location<\/dt>/i);
+  assert.doesNotMatch(html, /<dt>Course platform<\/dt>/i);
   assert.match(text, /Fridays/);
   assert.match(text, /1:30.{0,3}4:20 p\.m\./i);
   assert.match(text, /Scheduled seminar meetings:?\s*September 11.{0,3}December 4, 2026/i);
@@ -479,7 +480,7 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     additionalReadingGroups, additionalReadings, assessmentSummary,
     courseDescription, courseFacts, courseModules, courseProject, courseSchedule, courseSummary,
     generativeAiPolicy, learningOutcomes, navigationItems, paperPresentationPlan,
-    pairedPresentationExpectations, pendingLogistics, presentationRequirements, presentationWorkload,
+    pairedPresentationExpectations, presentationRequirements, presentationWorkload,
     projectDeadlines, projectPresentation, projectPresentationPlan, projectPresentationSchedule,
     readingExpectations, universityPolicies,
   } = data;
@@ -609,18 +610,14 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     /official University of Waterloo course outline is the authoritative source/i,
   );
   assert.match(courseDescription.pendingOfficialOutlineNotice, /added before the first meeting/i);
-  assert.match(pendingLogistics.officeHours, /before the first meeting/i);
-  assert.match(pendingLogistics.meetingLocation, /before the first meeting/i);
-  assert.match(pendingLogistics.coursePlatform, /before the first graded deliverable/i);
-  if (courseFacts.coursePlatform === "TBA") {
-    assert.equal(
-      courseDescription.requiredMaterials,
-      "No textbook is required, and all assigned papers are linked from this website.",
-    );
-    assert.doesNotMatch(courseDescription.requiredMaterials, /through TBA/i);
-    assert.doesNotMatch(courseDescription.requiredMaterials, /at no additional cost/i);
-    assert.doesNotMatch(courseDescription.requiredMaterials, /Submission and feedback instructions/i);
-  }
+  assert.equal("pendingLogistics" in data, false);
+  assert.equal(
+    courseDescription.requiredMaterials,
+    "No textbook is required, and all assigned papers are linked from this website.",
+  );
+  assert.doesNotMatch(courseDescription.requiredMaterials, /through TBA/i);
+  assert.doesNotMatch(courseDescription.requiredMaterials, /at no additional cost/i);
+  assert.doesNotMatch(courseDescription.requiredMaterials, /Submission and feedback instructions/i);
   assert.equal(
     courseDescription.preparatoryBackground.find(
       ({ title }) => title === "Algorithms and computational complexity",
@@ -817,7 +814,9 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(courseFacts.plannedEnrollment, 27);
   assert.equal(courseFacts.expectedProjectPresentations, 27);
   assert.equal(courseFacts.lastUpdated, "September 7, 2026");
-  for (const key of ["officeHours", "meetingLocation", "coursePlatform", "officialOutlineUrl"]) assert.equal(courseFacts[key], "TBA");
+  assert.equal(courseFacts.officeHoursEmail, "kfountou@uwaterloo.ca");
+  assert.equal(courseFacts.officialOutlineUrl, "TBA");
+  for (const key of ["officeHours", "meetingLocation", "coursePlatform"]) assert.equal(key in courseFacts, false);
 
   assert.equal(paperPresentationPlan.plannedEnrollment, 27);
   assert.equal(paperPresentationPlan.instructorLedWeek, 1);
