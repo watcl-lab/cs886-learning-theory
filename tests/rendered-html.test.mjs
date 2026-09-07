@@ -109,8 +109,8 @@ test("server-renders the corrected course content and operational policies", asy
   ]) assert.match(text, new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
   assert.match(text, /Kimon Fountoulakis/);
   assert.match(text, /DC 3611/);
-  assert.match(text, /Office hours:?\s*Email the instructor at\s*kfountou@uwaterloo\.ca/i);
-  assert.match(html, /href="mailto:kfountou@uwaterloo\.ca"/i);
+  assert.match(text, /Office hours:?\s*Email the instructor at\s*kimon\.fountoulakis@uwaterloo\.ca/i);
+  assert.match(html, /href="mailto:kimon\.fountoulakis@uwaterloo\.ca"/i);
   assert.doesNotMatch(html, /<dt>Location<\/dt>/i);
   assert.doesNotMatch(html, /<dt>Course platform<\/dt>/i);
   assert.match(text, /Fridays/);
@@ -814,7 +814,7 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(courseFacts.plannedEnrollment, 27);
   assert.equal(courseFacts.expectedProjectPresentations, 27);
   assert.equal(courseFacts.lastUpdated, "September 7, 2026");
-  assert.equal(courseFacts.officeHoursEmail, "kfountou@uwaterloo.ca");
+  assert.equal(courseFacts.officeHoursEmail, "kimon.fountoulakis@uwaterloo.ca");
   assert.equal(courseFacts.officialOutlineUrl, "TBA");
   for (const key of ["officeHours", "meetingLocation", "coursePlatform"]) assert.equal(key in courseFacts, false);
 

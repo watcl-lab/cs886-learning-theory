@@ -49,7 +49,7 @@ export const courseFacts = {
   instructorTitle: "Associate Professor",
   instructorEmail: "kimon.fountoulakis@uwaterloo.ca",
   instructorOffice: "DC 3611",
-  officeHoursEmail: "kfountou@uwaterloo.ca",
+  officeHoursEmail: "kimon.fountoulakis@uwaterloo.ca",
   deliveryMode: "In person",
   meetingDay: "Fridays",
   meetingTime: "1:30–4:20 p.m.",
