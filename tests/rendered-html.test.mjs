@@ -117,7 +117,7 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /Scheduled seminar meetings:?\s*September 11.{0,3}December 4, 2026/i);
   assert.match(text, /University class period:?\s*September 9.{0,3}December 8, 2026/i);
   assert.match(text, /No class on October 16, 2026/i);
-  assert.match(text, /Last updated:?\s*September 2, 2026/i);
+  assert.match(text, /Last updated:?\s*September 7, 2026/i);
   assert.match(text, /Exact Algorithmic Learning, Certification, and Hardness/i);
   for (const title of [
     "Certification from Examples is Hard for Circuits and Transformers under Minimal Overparametrization",
@@ -166,17 +166,26 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /Week 1 is instructor-led: the instructor will present all four papers/i);
   assert.doesNotMatch(text, /does not count toward students' presentation workload/i);
   assert.match(text, /Student paper presentations run from Week 2 through Week 10/i);
-  assert.match(text, /with 3 individual paper presentations each week/i);
+  assert.match(text, /with 3 papers each week/i);
+  assert.match(text, /Every paper is presented jointly by 2 students/i);
   assert.match(text, /meeting format below applies to the student-led meetings in Weeks 2.{0,3}10/i);
   assert.doesNotMatch(text, /Each reading meeting includes four paper presentations and ends with a cross-paper synthesis/i);
   assert.match(
     text,
-    /Each of the 27 students will give 1 individual paper presentation/i,
+    /Each of the 27 students will give 2 paired paper presentations on two different papers/i,
+  );
+  assert.match(
+    text,
+    /normally work with a different partner for the two presentations/i,
+  );
+  assert.match(
+    text,
+    /two paper presentations are worth 20% each, for 40% of the final grade in total/i,
   );
   assert.doesNotMatch(text, /The 27 student presentation slots match the enrollment exactly/i);
   assert.doesNotMatch(
     text,
-    /one solo presentation|one shared presentation|25 papers will have a solo presenter|presented by pairs|teams of three|Students sharing a paper divide|these two paper presentations|solo and shared presentations|Exact paper assignments will be announced/i,
+    /one solo presentation|one shared presentation|25 papers will have a solo presenter|teams of three|solo and shared presentations/i,
   );
   assert.doesNotMatch(text, /Depending on enrollment and assignments|two or three of those papers|instructor overview, a structured comparison, or a focused group discussion/i);
   assert.doesNotMatch(text, /A missed presentation with an approved reason/i);
@@ -186,9 +195,36 @@ test("server-renders the corrected course content and operational policies", asy
     /Biases and Optimization of Self-Attention|The Lipschitz Constant of Self-Attention|The Implicit Bias of Gradient Descent on Separable Data/i,
   );
   assert.match(text, /Student-Presentation Meeting Format/i);
+  assert.match(text, /Paired Presentation Expectations/i);
+  assert.match(
+    text,
+    /prepare one coherent 44-minute presentation rather than two separate mini-presentations/i,
+  );
+  assert.match(
+    text,
+    /divide the speaking time and technical content approximately equally/i,
+  );
+  assert.match(text, /normally speak for about 22 minutes/i);
+  assert.match(
+    text,
+    /Both presenters are responsible for understanding the complete paper/i,
+  );
+  assert.match(
+    text,
+    /Dividing the speaking roles does not divide responsibility for the paper/i,
+  );
+  assert.match(
+    text,
+    /Both presenters should be prepared to answer general questions about any part of the paper/i,
+  );
+  assert.match(
+    text,
+    /Each student receives an individual grade for each presentation/i,
+  );
   assert.doesNotMatch(text, /Instructor framing/i);
   assert.doesNotMatch(text, /Cross-paper conclusion/i);
   assert.match(text, /44-minute presentation/i);
+  assert.match(text, /44-minute joint presentation by 2 students/i);
   assert.match(text, /10 minutes of discussion and questions/i);
   assert.match(text, /1-minute transition/i);
   assert.match(text, /5 minutes\s*:?\s*Break/i);
@@ -205,7 +241,7 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /Week 11 will have 14 presentations, and Week 12 will have 13/i);
   assert.match(text, /Presentations will be approximately 12.{0,3}13 minutes, including questions/i);
   assert.doesNotMatch(text, /Timing will be strict/i);
-  assert.match(text, /The project presentation does not count toward the required paper presentation/i);
+  assert.match(text, /The project presentation is separate from the two required paired paper presentations/i);
   assert.doesNotMatch(text, /The final meeting reserves 14 minutes for course synthesis and open problems/i);
   assert.doesNotMatch(text, /Presentation Order and Themes/i);
   assert.doesNotMatch(
@@ -233,13 +269,17 @@ test("server-renders the corrected course content and operational policies", asy
   assert.doesNotMatch(text, /confidential, private, unpublished/i);
   assert.doesNotMatch(text, /may be addressed under Policy 71/i);
   assert.doesNotMatch(text, /will result in less marks/i);
-  assert.match(text, /one paper presentation \(40%\), the required course project \(40%\), and class participation \(20%\)/i);
+  assert.match(text, /two paired paper presentations \(20% each; 40% in total\), the required course project \(40%\), and class participation \(20%\)/i);
   assert.doesNotMatch(html, /<table\b[^>]*class="assessment-table"/i);
   assert.doesNotMatch(html, /<h3>Participation<\/h3>/i);
   assert.doesNotMatch(text, /attendance alone is not sufficient/i);
   assert.doesNotMatch(text, /Approved absences will not by themselves reduce the participation grade/i);
   assert.doesNotMatch(text, /Projects are individual by default/i);
   assert.match(text, /For empirical projects, reproducible code and configurations\./i);
+  assert.match(
+    text,
+    /The project presentation is assessed as part of the project grade and is separate from the paired paper presentations/i,
+  );
   assert.doesNotMatch(text, /clear account of the experimental protocol/i);
   assert.doesNotMatch(text, /Every project must identify at least one course paper, theorem, formal model, or module/i);
   assert.match(text, /The project may stress-test or challenge an existing theoretical claim/i);
@@ -439,7 +479,7 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
     additionalReadingGroups, additionalReadings, assessmentSummary,
     courseDescription, courseFacts, courseModules, courseProject, courseSchedule, courseSummary,
     generativeAiPolicy, learningOutcomes, navigationItems, paperPresentationPlan,
-    pendingLogistics, presentationRequirements, presentationWorkload,
+    pairedPresentationExpectations, pendingLogistics, presentationRequirements, presentationWorkload,
     projectDeadlines, projectPresentation, projectPresentationPlan, projectPresentationSchedule,
     readingExpectations, universityPolicies,
   } = data;
@@ -599,6 +639,9 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.match(readingExpectations, /paper's result type/i);
   assert.match(readingExpectations, /decisive assumption/i);
   assert.match(readingExpectations, /supplementary material/i);
+  assert.match(readingExpectations, /The two assigned presenters are jointly responsible/i);
+  assert.match(readingExpectations, /Both presenters must understand the complete paper/i);
+  assert.match(readingExpectations, /division of speaking roles does not divide responsibility/i);
   assert.match(readingExpectations, /technical detail in the appendix/i);
   assert.doesNotMatch(readingExpectations, /one connection or tension/i);
   assert.doesNotMatch(readingExpectations, /technical appendix of all four weekly papers/i);
@@ -613,9 +656,16 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.match(presentationRequirements[6], /assumptions of the adjacent papers/i);
   assert.doesNotMatch(presentationRequirements[6], /weekly synthesis|comparison slide/i);
   assert.match(presentationRequirements[7], /one precise limitation/i);
+  assert.equal(pairedPresentationExpectations.length, 5);
+  assert.match(pairedPresentationExpectations[0], /one coherent 44-minute presentation/i);
+  assert.match(pairedPresentationExpectations[1], /approximately equally/i);
+  assert.match(pairedPresentationExpectations[1], /about 22 minutes/i);
+  assert.match(pairedPresentationExpectations[2], /understanding the complete paper/i);
+  assert.match(pairedPresentationExpectations[3], /answer general questions about any part/i);
+  assert.match(pairedPresentationExpectations[4], /individual grade for each presentation/i);
   assert.equal(
     presentationWorkload,
-    "Each of the 27 students will give 1 individual paper presentation. The required project presentation is separate and does not count toward this paper presentation.",
+    "Each of the 27 students will give 2 paired paper presentations on two different papers. Each student will normally work with a different partner for the two presentations. The two paper presentations are worth 20% each, for 40% of the final grade in total. The required project presentation is separate and does not count toward these paper presentations.",
   );
 
   assert.deepEqual(
@@ -674,7 +724,7 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
 
   assert.equal(
     assessmentSummary,
-    "The final grade consists of one paper presentation (40%), the required course project (40%), and class participation (20%).",
+    "The final grade consists of two paired paper presentations (20% each; 40% in total), the required course project (40%), and class participation (20%).",
   );
   assert.equal("assessment" in data, false);
   assert.equal("participationPolicy" in data, false);
@@ -720,6 +770,10 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal("lateWorkPolicy" in data, false);
   assert.equal("groupWorkPolicy" in courseProject, false);
   assert.equal(courseProject.deliverables[1], "For empirical projects, reproducible code and configurations.");
+  assert.equal(
+    courseProject.deliverables[2],
+    "An individual final presentation during Week 11 or Week 12. The project presentation is assessed as part of the project grade and is separate from the paired paper presentations.",
+  );
   assert.doesNotMatch(JSON.stringify(courseProject), /clear account of the experimental protocol/i);
   assert.equal(generativeAiPolicy.length, 2);
   assert.equal(generativeAiPolicy[0], "Generative-AI tools may be used for coursework in this class.");
@@ -762,7 +816,7 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(courseFacts.meetingDurationMinutes, 170);
   assert.equal(courseFacts.plannedEnrollment, 27);
   assert.equal(courseFacts.expectedProjectPresentations, 27);
-  assert.equal(courseFacts.lastUpdated, "September 2, 2026");
+  assert.equal(courseFacts.lastUpdated, "September 7, 2026");
   for (const key of ["officeHours", "meetingLocation", "coursePlatform", "officialOutlineUrl"]) assert.equal(courseFacts[key], "TBA");
 
   assert.equal(paperPresentationPlan.plannedEnrollment, 27);
@@ -772,12 +826,33 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(paperPresentationPlan.studentPaperMeetingCount, 9);
   assert.equal(paperPresentationPlan.papersPerMeeting, 3);
   assert.equal(paperPresentationPlan.studentPaperPresentationSlots, 27);
-  assert.equal(paperPresentationPlan.paperPresentationsPerStudent, 1);
-  assert.equal(paperPresentationPlan.studentPaperPresentationAssignments, 27);
+  assert.equal(paperPresentationPlan.presentersPerPaper, 2);
+  assert.equal(paperPresentationPlan.presenterAssignmentsPerMeeting, 6);
+  assert.equal(paperPresentationPlan.paperPresentationsPerStudent, 2);
   assert.equal(
-    paperPresentationPlan.studentPaperPresentationSlots,
-    paperPresentationPlan.studentPaperPresentationAssignments,
+    paperPresentationPlan.availableStudentPresenterAssignments,
+    54,
   );
+  assert.equal(
+    paperPresentationPlan.requiredStudentPresenterAssignments,
+    54,
+  );
+  assert.equal(
+    paperPresentationPlan.availableStudentPresenterAssignments,
+    paperPresentationPlan.requiredStudentPresenterAssignments,
+  );
+  assert.equal(
+    paperPresentationPlan.availableStudentPresenterAssignments,
+    paperPresentationPlan.studentPaperPresentationSlots
+      * paperPresentationPlan.presentersPerPaper,
+  );
+  assert.equal(
+    paperPresentationPlan.requiredStudentPresenterAssignments,
+    paperPresentationPlan.plannedEnrollment
+      * paperPresentationPlan.paperPresentationsPerStudent,
+  );
+  assert.equal(paperPresentationPlan.approximateSpeakingMinutesPerPresenter, 22);
+  assert.equal("studentPaperPresentationAssignments" in paperPresentationPlan, false);
   for (const removedField of [
     "minimumPaperPresentationsPerStudent",
     "soloPaperPresentationSlots",

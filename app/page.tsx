@@ -12,6 +12,7 @@ import {
   learningOutcomes,
   meetingFormat,
   navigationItems,
+  pairedPresentationExpectations,
   pendingLogistics,
   presentationGuidance,
   presentationRequirements,
@@ -410,6 +411,13 @@ export default function Home() {
           </h2>
           <p>{presentationGuidance}</p>
           <p>{presentationWorkload}</p>
+
+          <h3>Paired Presentation Expectations</h3>
+          <ul>
+            {pairedPresentationExpectations.map((expectation) => (
+              <li key={expectation}>{expectation}</li>
+            ))}
+          </ul>
 
           <h3>Student-Presentation Meeting Format</h3>
           <ul className="meeting-format">

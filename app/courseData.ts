@@ -72,7 +72,7 @@ export const courseFacts = {
   projectMeetings: "Weeks 11–12",
   plannedEnrollment: 27,
   expectedProjectPresentations: 27,
-  lastUpdated: "September 2, 2026",
+  lastUpdated: "September 7, 2026",
 } as const;
 
 export const courseSummary =
@@ -148,8 +148,9 @@ export const learningOutcomes = [
 ] as const;
 
 export const readingExpectations =
-  "For every scheduled paper, all students should read at least the abstract, introduction, formal setup, main theorem or principal result, and discussion or limitations. Before class, students should be able to identify the paper's result type and its decisive assumption. The presenter or presenting team is responsible for the proof details and supplementary material needed to explain the result accurately. Students are not expected to read every technical detail in the appendix.";
+  "For every scheduled paper, all students should read at least the abstract, introduction, formal setup, main theorem or principal result, and discussion or limitations. Before class, students should be able to identify the paper's result type and its decisive assumption. The two assigned presenters are jointly responsible for the proof details and supplementary material needed to explain the result accurately. Both presenters must understand the complete paper; their division of speaking roles does not divide responsibility for the paper. Other students are not expected to read every technical detail in the appendix.";
 
+const presentersPerPaper = 2;
 const paperPresentationMinutes = 44;
 const paperDiscussionMinutes = 10;
 const paperTransitionMinutes = 1;
@@ -158,6 +159,8 @@ const papersBeforeBreak = 2;
 const papersAfterBreak = 1;
 const paperSlotMinutes =
   paperPresentationMinutes + paperDiscussionMinutes + paperTransitionMinutes;
+const approximateSpeakingMinutesPerPresenter =
+  paperPresentationMinutes / presentersPerPaper;
 const firstPaperBlockMinutes = papersBeforeBreak * paperSlotMinutes;
 const secondPaperBlockMinutes = papersAfterBreak * paperSlotMinutes;
 const scheduledPaperMinutesPerMeeting =
@@ -171,7 +174,7 @@ export const meetingFormat = [
   {
     duration: `${firstPaperBlockMinutes} minutes`,
     activity:
-      `Papers 1–2; each paper receives a ${paperPresentationMinutes}-minute presentation, ${paperDiscussionMinutes} minutes of discussion and questions, and a ${paperTransitionMinutes}-minute transition`,
+      `Papers 1–2; each paper receives a ${paperPresentationMinutes}-minute joint presentation by ${presentersPerPaper} students, ${paperDiscussionMinutes} minutes of discussion and questions, and a ${paperTransitionMinutes}-minute transition`,
   },
   {
     duration: `${midMeetingBreakMinutes} minutes`,
@@ -180,7 +183,7 @@ export const meetingFormat = [
   {
     duration: `${secondPaperBlockMinutes} minutes`,
     activity:
-      `Paper 3; the paper receives a ${paperPresentationMinutes}-minute presentation, ${paperDiscussionMinutes} minutes of discussion and questions, and a ${paperTransitionMinutes}-minute transition`,
+      `Paper 3; the paper receives a ${paperPresentationMinutes}-minute joint presentation by ${presentersPerPaper} students, ${paperDiscussionMinutes} minutes of discussion and questions, and a ${paperTransitionMinutes}-minute transition`,
   },
 ] as const;
 
@@ -189,8 +192,12 @@ const firstStudentPresentationWeek = 2;
 const lastStudentPresentationWeek = 10;
 const studentPaperMeetingCount = lastStudentPresentationWeek - firstStudentPresentationWeek + 1;
 const studentPaperPresentationSlots = studentPaperMeetingCount * courseFacts.scheduledPapersPerMeeting;
-const paperPresentationsPerStudent = 1;
-const studentPaperPresentationAssignments =
+const paperPresentationsPerStudent = 2;
+const presenterAssignmentsPerMeeting =
+  courseFacts.scheduledPapersPerMeeting * presentersPerPaper;
+const availableStudentPresenterAssignments =
+  studentPaperPresentationSlots * presentersPerPaper;
+const requiredStudentPresenterAssignments =
   courseFacts.plannedEnrollment * paperPresentationsPerStudent;
 
 export const paperPresentationPlan = {
@@ -201,8 +208,12 @@ export const paperPresentationPlan = {
   studentPaperMeetingCount,
   papersPerMeeting: courseFacts.scheduledPapersPerMeeting,
   studentPaperPresentationSlots,
+  presentersPerPaper,
+  presenterAssignmentsPerMeeting,
   paperPresentationsPerStudent,
-  studentPaperPresentationAssignments,
+  availableStudentPresenterAssignments,
+  requiredStudentPresenterAssignments,
+  approximateSpeakingMinutesPerPresenter,
   paperPresentationMinutes,
   paperDiscussionMinutes,
   paperTransitionMinutes,
@@ -217,10 +228,18 @@ export const paperPresentationPlan = {
 } as const;
 
 export const presentationGuidance =
-  `Week ${instructorLedWeek} is instructor-led: the instructor will present all four papers. Student paper presentations run from Week ${firstStudentPresentationWeek} through Week ${lastStudentPresentationWeek}, with ${courseFacts.scheduledPapersPerMeeting} individual paper presentations each week. The meeting format below applies to the student-led meetings in Weeks ${firstStudentPresentationWeek}–${lastStudentPresentationWeek}.`;
+  `Week ${instructorLedWeek} is instructor-led: the instructor will present all four papers. Student paper presentations run from Week ${firstStudentPresentationWeek} through Week ${lastStudentPresentationWeek}, with ${courseFacts.scheduledPapersPerMeeting} papers each week. Every paper is presented jointly by ${presentersPerPaper} students. The meeting format below applies to the student-led meetings in Weeks ${firstStudentPresentationWeek}–${lastStudentPresentationWeek}.`;
 
 export const presentationWorkload =
-  `Each of the ${courseFacts.plannedEnrollment} students will give 1 individual paper presentation. The required project presentation is separate and does not count toward this paper presentation.`;
+  `Each of the ${courseFacts.plannedEnrollment} students will give ${paperPresentationsPerStudent} paired paper presentations on two different papers. Each student will normally work with a different partner for the two presentations. The two paper presentations are worth 20% each, for 40% of the final grade in total. The required project presentation is separate and does not count toward these paper presentations.`;
+
+export const pairedPresentationExpectations = [
+  `Each pair will prepare one coherent ${paperPresentationMinutes}-minute presentation rather than two separate mini-presentations.`,
+  `The pair should divide the speaking time and technical content approximately equally; each student will normally speak for about ${approximateSpeakingMinutesPerPresenter} minutes and must present a substantive technical part of the paper.`,
+  "Both presenters are responsible for understanding the complete paper, including the formal problem, main theorem, assumptions, proof strategy, and limitations. Dividing the speaking roles does not divide responsibility for the paper.",
+  "Both presenters should be prepared to answer general questions about any part of the paper. One presenter may take the lead on a specialized question about the portion they studied most closely.",
+  "Each student receives an individual grade for each presentation. Organization and coherence may be assessed jointly, while technical understanding, delivery, contribution, and responses to questions are assessed individually.",
+] as const;
 
 export const presentationRequirements = [
   "State the formal problem, including the data-generating process, architecture or hypothesis class, loss, training rule, and evaluation criterion.",
@@ -234,7 +253,7 @@ export const presentationRequirements = [
 ] as const;
 
 export const assessmentSummary =
-  "The final grade consists of one paper presentation (40%), the required course project (40%), and class participation (20%).";
+  "The final grade consists of two paired paper presentations (20% each; 40% in total), the required course project (40%), and class participation (20%).";
 
 export const courseProject = {
   introduction:
@@ -263,7 +282,7 @@ export const courseProject = {
   deliverables: [
     "A final written report that clearly separates known results from the student's contribution and provides sufficient technical detail to evaluate correctness.",
     "For empirical projects, reproducible code and configurations.",
-    "An individual final presentation during Week 11 or Week 12. The project presentation is assessed as part of the project grade, not as a paper presentation.",
+    "An individual final presentation during Week 11 or Week 12. The project presentation is assessed as part of the project grade and is separate from the paired paper presentations.",
   ],
   evaluationCriteria: [
     "Relevance to the theoretical study of transformers or large language models, including representation, computational complexity, trainability, optimization, learnability, generalization, certification, or reasoning.",
@@ -335,7 +354,7 @@ export const projectPresentationPlan = {
 
 export const projectPresentation = {
   introduction:
-    `Weeks 11–12 are reserved for ${courseFacts.expectedProjectPresentations} individual project presentations. Week 11 will have ${projectPresentationsByMeeting[0]} presentations, and Week 12 will have ${projectPresentationsByMeeting[1]}. Presentations will be approximately ${projectPresentationMinutesByMeeting[0]}–${projectPresentationMinutesByMeeting[1]} minutes, including questions. The project presentation does not count toward the required paper presentation.`,
+    `Weeks 11–12 are reserved for ${courseFacts.expectedProjectPresentations} individual project presentations. Week 11 will have ${projectPresentationsByMeeting[0]} presentations, and Week 12 will have ${projectPresentationsByMeeting[1]}. Presentations will be approximately ${projectPresentationMinutesByMeeting[0]}–${projectPresentationMinutesByMeeting[1]} minutes, including questions. The project presentation is separate from the two required paired paper presentations.`,
   requirements: [
     "The precise research question and its connection to the course.",
     "The existing theoretical result, conjecture, or limitation being extended or examined.",
