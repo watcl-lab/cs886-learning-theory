@@ -16,8 +16,8 @@ npm run dev
 
 Public course facts, meeting logistics, paper records, policies, and the project
 deadline are maintained in `app/courseData.ts`. The site uses `TBA` only for the
-official course-outline URL until it is available. Do not publish a
-`TODO_INSTRUCTOR_*` placeholder.
+official course-outline URL until it is available. Do not
+publish a `TODO_INSTRUCTOR_*` placeholder.
 
 ## Validation
 
