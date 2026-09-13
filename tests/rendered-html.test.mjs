@@ -118,7 +118,11 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /Scheduled seminar meetings:?\s*September 11.{0,3}December 4, 2026/i);
   assert.match(text, /University class period:?\s*September 9.{0,3}December 8, 2026/i);
   assert.match(text, /No class on October 16, 2026/i);
-  assert.match(text, /Last updated:?\s*September 7, 2026/i);
+  assert.match(text, /Last updated:?\s*September 13, 2026/i);
+  assert.match(text, /Course Materials/i);
+  assert.match(html, /href="slides\/course-information\.pdf"/i);
+  assert.match(html, /href="slides\/week-01\/learnability-of-algorithms\.pdf"/i);
+  assert.match(html, /href="slides\/week-01\/ntk-analysis\.pdf"/i);
   assert.match(text, /Exact Algorithmic Learning, Certification, and Hardness/i);
   for (const title of [
     "Certification from Examples is Hard for Circuits and Transformers under Minimal Overparametrization",
@@ -478,7 +482,8 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   const data = await loadCourseData();
   const {
     additionalReadingGroups, additionalReadings, assessmentSummary,
-    courseDescription, courseFacts, courseModules, courseProject, courseSchedule, courseSummary,
+    courseDescription, courseFacts, courseInformationMaterial, courseModules, courseProject,
+    courseSchedule, courseSummary,
     generativeAiPolicy, learningOutcomes, navigationItems, paperPresentationPlan,
     pairedPresentationExpectations, presentationRequirements, presentationWorkload,
     projectDeadlines, projectPresentation, projectPresentationPlan, projectPresentationSchedule,
@@ -813,10 +818,14 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(courseFacts.meetingDurationMinutes, 170);
   assert.equal(courseFacts.plannedEnrollment, 27);
   assert.equal(courseFacts.expectedProjectPresentations, 27);
-  assert.equal(courseFacts.lastUpdated, "September 7, 2026");
+  assert.equal(courseFacts.lastUpdated, "September 13, 2026");
   assert.equal(courseFacts.officeHoursEmail, "kimon.fountoulakis@uwaterloo.ca");
   assert.equal(courseFacts.officialOutlineUrl, "TBA");
   for (const key of ["officeHours", "meetingLocation", "coursePlatform"]) assert.equal(key in courseFacts, false);
+  assert.deepEqual(courseInformationMaterial, {
+    label: "Course overview and logistics (PDF)",
+    href: "slides/course-information.pdf",
+  });
 
   assert.equal(paperPresentationPlan.plannedEnrollment, 27);
   assert.equal(paperPresentationPlan.instructorLedWeek, 1);
@@ -933,6 +942,17 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.match(firstWeek.guidingQuestion, /behavioral certification provably hard/i);
   assert.equal(firstWeek.topicFocus, undefined);
   assert.equal(firstWeek.presentationNote, undefined);
+  assert.deepEqual(firstWeek.materials, [
+    {
+      label: "Lecture 1 slides: Learnability of Algorithms — Hardness and Positive Results (PDF)",
+      href: "slides/week-01/learnability-of-algorithms.pdf",
+    },
+    {
+      label: "Technical supplement: NTK analysis for learned addition (PDF)",
+      href: "slides/week-01/ntk-analysis.pdf",
+    },
+  ]);
+  assert.ok(courseSchedule.slice(1).every((week) => week.materials === undefined));
   assert.deepEqual(firstWeek.papers.map((paper) => paper.title), [
     "Learning to Add, Multiply, and Execute Algorithmic Instructions Exactly with Neural Networks",
     "Learning to Execute Graph Algorithms Exactly with Graph Neural Networks",
@@ -1470,7 +1490,7 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
 });
 
 test("rendered structure has valid navigation, meaningful paper links, and accessible schedule views", async () => {
-  const [{ courseSchedule, additionalReadings, navigationItems }, response] = await Promise.all([loadCourseData(), render()]);
+  const [{ courseInformationMaterial, courseSchedule, additionalReadings, navigationItems }, response] = await Promise.all([loadCourseData(), render()]);
   const html = await response.text();
   const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);
   assert.equal(new Set(ids).size, ids.length, "Every rendered id must be unique.");
@@ -1575,6 +1595,15 @@ test("rendered structure has valid navigation, meaningful paper links, and acces
   assert.doesNotMatch(html, /href="#week-(?:11|12)"|id="week-(?:11|12)"/i);
 
   const anchors = [...html.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi)].map(([, href, content]) => ({ href: decodeHtml(href), text: textContent(content) }));
+  const courseMaterials = [courseInformationMaterial, ...(courseSchedule[0].materials ?? [])];
+  for (const material of courseMaterials) {
+    assert.equal(
+      anchors.filter((anchor) => anchor.href === material.href && anchor.text === material.label).length,
+      1,
+      `Course material must be linked exactly once: ${material.label}`,
+    );
+  }
+  assert.equal((html.match(/class="week-materials"/g) ?? []).length, 1);
   const allPapers = [...courseSchedule.flatMap((week) => week.papers), ...additionalReadings];
   for (const paper of allPapers) {
     assert.equal(
@@ -1622,11 +1651,12 @@ test("source preserves the restrained responsive style and required metadata", a
   assert.match(layout, /icons:\s*\{[\s\S]*?icon:\s*["']\/favicon\.svg["']/);
   assert.match(packageJson, /"check:links"\s*:\s*"node scripts\/check-links\.mjs"/);
   assert.match(exporter, /public["'],\s*["']favicon\.svg/);
+  assert.match(exporter, /public["'],\s*["']slides["']/);
   assert.match(readme, /Do not\s+publish a `TODO_INSTRUCTOR_\*` placeholder/i);
   assert.match(workflow, /npm run lint[\s\S]*npm test[\s\S]*npm run check:links[\s\S]*npm run build[\s\S]*export-static\.mjs/i);
 });
 
-test("static export keeps canonical, Open Graph, and favicon URLs under the Pages project path", async () => {
+test("static export keeps canonical, Open Graph, favicon, and course files under the Pages project path", async () => {
   const siteUrl = "https://watcl-lab.github.io/cs886-learning-theory/";
   await execFileAsync(process.execPath, ["scripts/export-static.mjs"], {
     cwd: projectRoot,
@@ -1642,6 +1672,20 @@ test("static export keeps canonical, Open Graph, and favicon URLs under the Page
   assert.match(html, /content="https:\/\/watcl-lab\.github\.io\/cs886-learning-theory\/og\.png"/i);
   assert.match(html, /href="https:\/\/watcl-lab\.github\.io\/cs886-learning-theory\/favicon\.svg"/i);
   assert.doesNotMatch(html, /https:\/\/watcl-lab\.github\.io\/(?:og\.png|favicon\.svg)/i);
+  const slidePaths = [
+    "slides/course-information.pdf",
+    "slides/week-01/learnability-of-algorithms.pdf",
+    "slides/week-01/ntk-analysis.pdf",
+  ];
+  for (const slidePath of slidePaths) {
+    assert.match(html, new RegExp(`href="${slidePath.replaceAll(".", "\\.")}"`, "i"));
+    const [exportedSlide, sourceSlide] = await Promise.all([
+      readFile(resolve(projectRoot, "_site", slidePath)),
+      readFile(resolve(projectRoot, "public", slidePath)),
+    ]);
+    assert.deepEqual(exportedSlide, sourceSlide);
+  }
+  assert.doesNotMatch(html, /href="\/slides\//i);
   assert.doesNotMatch(html, /TODO_INSTRUCTOR_|2020\.conll-1\.25|v235\/huang24l\.html|\[paper\]/i);
   assert.equal(exportedFavicon, sourceFavicon);
   const ids = new Set([...html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]));

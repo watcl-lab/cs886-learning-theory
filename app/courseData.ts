@@ -12,6 +12,11 @@ export type CourseSubtopic = {
   paperTitles: readonly string[];
 };
 
+export type CourseMaterial = {
+  label: string;
+  href: string;
+};
+
 export type CourseModule = {
   id: string;
   label: string;
@@ -34,6 +39,7 @@ export type CourseWeek = {
   guidingQuestion?: string;
   topicFocus?: string;
   connection?: string;
+  materials?: readonly CourseMaterial[];
   papers: readonly CoursePaper[];
   subtopics?: readonly CourseSubtopic[];
 };
@@ -70,7 +76,7 @@ export const courseFacts = {
   projectMeetings: "Weeks 11–12",
   plannedEnrollment: 27,
   expectedProjectPresentations: 27,
-  lastUpdated: "September 7, 2026",
+  lastUpdated: "September 13, 2026",
 } as const;
 
 export const courseSummary =
@@ -115,6 +121,11 @@ export const courseDescription = {
   pendingOfficialOutlineNotice:
     "The official course-outline link will be added before the first meeting.",
 } as const;
+
+export const courseInformationMaterial: CourseMaterial = {
+  label: "Course overview and logistics (PDF)",
+  href: "slides/course-information.pdf",
+};
 
 export const navigationItems = [
   { label: "Overview", href: "#overview" },
@@ -465,6 +476,16 @@ export const courseSchedule: readonly CourseWeek[] = [
     title: "Exact Algorithmic Learning, Certification, and Hardness",
     guidingQuestion:
       "When can neural models learn discrete algorithms exactly from small structured samples, and when are exact learning or behavioral certification provably hard?",
+    materials: [
+      {
+        label: "Lecture 1 slides: Learnability of Algorithms — Hardness and Positive Results (PDF)",
+        href: "slides/week-01/learnability-of-algorithms.pdf",
+      },
+      {
+        label: "Technical supplement: NTK analysis for learned addition (PDF)",
+        href: "slides/week-01/ntk-analysis.pdf",
+      },
+    ],
     subtopics: [
       {
         title: "Part I: Exact execution learned from examples",

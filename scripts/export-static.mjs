@@ -57,6 +57,9 @@ await mkdir(outputDirectory, { recursive: true });
 await cp(join(projectRoot, "dist", "client", "assets"), join(outputDirectory, "assets"), {
   recursive: true,
 });
+await cp(join(projectRoot, "public", "slides"), join(outputDirectory, "slides"), {
+  recursive: true,
+});
 await cp(join(projectRoot, "public", "og.png"), join(outputDirectory, "og.png"));
 await cp(join(projectRoot, "public", "favicon.svg"), join(outputDirectory, "favicon.svg"));
 await writeFile(join(outputDirectory, "index.html"), html, "utf8");

@@ -4,6 +4,7 @@ import {
   assessmentSummary,
   courseDescription,
   courseFacts,
+  courseInformationMaterial,
   courseModules,
   courseProject,
   courseSchedule,
@@ -222,6 +223,17 @@ export default function Home() {
               <dd>{courseFacts.lastUpdated}</dd>
             </div>
           </dl>
+
+          <div className="course-materials">
+            <h3>Course Materials</h3>
+            <ul className="material-list">
+              <li>
+                <a href={courseInformationMaterial.href}>
+                  {courseInformationMaterial.label}
+                </a>
+              </li>
+            </ul>
+          </div>
         </section>
 
         <section id="learning-outcomes" aria-labelledby="learning-outcomes-heading">
@@ -380,6 +392,18 @@ export default function Home() {
                     <strong>Central question.</strong>{" "}
                     {week.guidingQuestion}
                   </p>
+                  {week.materials?.length ? (
+                    <div className="week-materials">
+                      <h5 className="week-materials-heading">Lecture Materials</h5>
+                      <ul className="material-list">
+                        {week.materials.map((material) => (
+                          <li key={material.href}>
+                            <a href={material.href}>{material.label}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
                   <WeekPaperList week={week} />
                   <a className="back-to-schedule" href="#schedule">
                     Back to schedule
