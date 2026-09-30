@@ -118,7 +118,7 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /Scheduled seminar meetings:?\s*September 11.{0,3}December 4, 2026/i);
   assert.match(text, /University class period:?\s*September 9.{0,3}December 8, 2026/i);
   assert.match(text, /No class on October 16, 2026/i);
-  assert.match(text, /Last updated:?\s*September 13, 2026/i);
+  assert.match(text, /Last updated:?\s*September 29, 2026/i);
   assert.match(text, /Course Materials/i);
   assert.match(html, /href="slides\/course-information\.pdf"/i);
   assert.match(html, /href="slides\/week-01\/learnability-of-algorithms\.pdf"/i);
@@ -242,9 +242,11 @@ test("server-renders the corrected course content and operational policies", asy
   assert.doesNotMatch(text, /30-minute presentation/i);
   assert.doesNotMatch(text, /12 minutes\s*:?\s*discussion and questions/i);
   assert.doesNotMatch(text, /designated discussant|lead presentation|lead presenter|complete presentation slot/i);
-  assert.match(text, /27 individual project presentations/i);
-  assert.match(text, /Week 11 will have 14 presentations, and Week 12 will have 13/i);
-  assert.match(text, /Presentations will be approximately 12.{0,3}13 minutes, including questions/i);
+  assert.match(text, /14 individual project presentations/i);
+  assert.match(text, /Week 11 will have 7 presentations on November 27, and Week 12 will have 7 presentations on December 4/i);
+  assert.match(text, /Each student has a 23-minute slot/i);
+  assert.match(text, /18 minutes for the presentation, 4 minutes for questions, and 1 minute for the transition/i);
+  assert.match(text, /seven slots use 161 minutes and leave a 9-minute buffer in each meeting/i);
   assert.doesNotMatch(text, /Timing will be strict/i);
   assert.match(text, /The project presentation is separate from the two required paired paper presentations/i);
   assert.doesNotMatch(text, /The final meeting reserves 14 minutes for course synthesis and open problems/i);
@@ -817,8 +819,8 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(courseFacts.meetingTime, "1:30–4:20 p.m.");
   assert.equal(courseFacts.meetingDurationMinutes, 170);
   assert.equal(courseFacts.plannedEnrollment, 27);
-  assert.equal(courseFacts.expectedProjectPresentations, 27);
-  assert.equal(courseFacts.lastUpdated, "September 13, 2026");
+  assert.equal(courseFacts.expectedProjectPresentations, 14);
+  assert.equal(courseFacts.lastUpdated, "September 29, 2026");
   assert.equal(courseFacts.officeHoursEmail, "kimon.fountoulakis@uwaterloo.ca");
   assert.equal(courseFacts.officialOutlineUrl, "TBA");
   for (const key of ["officeHours", "meetingLocation", "coursePlatform"]) assert.equal(key in courseFacts, false);
@@ -910,22 +912,20 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   );
   assert.equal(paperPresentationPlan.totalPlannedMeetingMinutes, courseFacts.meetingDurationMinutes);
 
-  assert.equal(projectPresentationPlan.presentationCount, 27);
+  assert.equal(projectPresentationPlan.presentationCount, 14);
   assert.equal(projectPresentationPlan.meetingCount, 2);
-  assert.deepEqual([...projectPresentationPlan.presentationsByMeeting], [14, 13]);
-  assert.deepEqual([...projectPresentationPlan.minutesPerPresentationByMeeting], [12, 13]);
-  assert.deepEqual([...projectPresentationPlan.usedMinutesByMeeting], [168, 169]);
-  assert.deepEqual([...projectPresentationPlan.bufferMinutesByMeeting], [2, 1]);
-  assert.equal(projectPresentationPlan.totalPresentationMinutes, 337);
+  assert.deepEqual([...projectPresentationPlan.presentationsByMeeting], [7, 7]);
+  assert.equal(projectPresentationPlan.talkMinutes, 18);
+  assert.equal(projectPresentationPlan.questionMinutes, 4);
+  assert.equal(projectPresentationPlan.transitionMinutes, 1);
+  assert.equal(projectPresentationPlan.minutesPerPresentation, 23);
+  assert.deepEqual([...projectPresentationPlan.minutesPerPresentationByMeeting], [23, 23]);
+  assert.deepEqual([...projectPresentationPlan.usedMinutesByMeeting], [161, 161]);
+  assert.deepEqual([...projectPresentationPlan.bufferMinutesByMeeting], [9, 9]);
+  assert.equal(projectPresentationPlan.totalPresentationMinutes, 322);
   assert.equal(projectPresentationPlan.totalAvailableMinutes, 340);
-  assert.equal(projectPresentationPlan.remainingMinutes, 3);
-  for (const removedField of [
-    "talkMinutes",
-    "questionMinutes",
-    "transitionMinutes",
-    "minutesPerPresentation",
-    "finalSynthesisMinutes",
-  ]) assert.equal(removedField in projectPresentationPlan, false);
+  assert.equal(projectPresentationPlan.remainingMinutes, 18);
+  assert.equal("finalSynthesisMinutes" in projectPresentationPlan, false);
   assert.equal(
     projectPresentationPlan.presentationsByMeeting.reduce((total, count) => total + count, 0),
     projectPresentationPlan.presentationCount,

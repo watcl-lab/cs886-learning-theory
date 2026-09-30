@@ -75,8 +75,8 @@ export const courseFacts = {
   paperMeetings: "Weeks 1–10",
   projectMeetings: "Weeks 11–12",
   plannedEnrollment: 27,
-  expectedProjectPresentations: 27,
-  lastUpdated: "September 13, 2026",
+  expectedProjectPresentations: 14,
+  lastUpdated: "September 29, 2026",
 } as const;
 
 export const courseSummary =
@@ -326,8 +326,16 @@ export const projectDeadlines = [
   },
 ] as const;
 
-const projectPresentationsByMeeting = [14, 13] as const;
-const projectPresentationMinutesByMeeting = [12, 13] as const;
+const projectPresentationsByMeeting = [7, 7] as const;
+const projectTalkMinutes = 18;
+const projectQuestionMinutes = 4;
+const projectTransitionMinutes = 1;
+const projectPresentationMinutes =
+  projectTalkMinutes + projectQuestionMinutes + projectTransitionMinutes;
+const projectPresentationMinutesByMeeting = [
+  projectPresentationMinutes,
+  projectPresentationMinutes,
+] as const;
 const projectPresentationUsedMinutesByMeeting = [
   projectPresentationsByMeeting[0] * projectPresentationMinutesByMeeting[0],
   projectPresentationsByMeeting[1] * projectPresentationMinutesByMeeting[1],
@@ -345,6 +353,10 @@ export const projectPresentationPlan = {
   presentationCount: courseFacts.expectedProjectPresentations,
   meetingCount: projectPresentationMeetingCount,
   presentationsByMeeting: projectPresentationsByMeeting,
+  talkMinutes: projectTalkMinutes,
+  questionMinutes: projectQuestionMinutes,
+  transitionMinutes: projectTransitionMinutes,
+  minutesPerPresentation: projectPresentationMinutes,
   minutesPerPresentationByMeeting: projectPresentationMinutesByMeeting,
   usedMinutesByMeeting: projectPresentationUsedMinutesByMeeting,
   bufferMinutesByMeeting: projectPresentationBufferMinutesByMeeting,
@@ -355,7 +367,7 @@ export const projectPresentationPlan = {
 
 export const projectPresentation = {
   introduction:
-    `Weeks 11–12 are reserved for ${courseFacts.expectedProjectPresentations} individual project presentations. Week 11 will have ${projectPresentationsByMeeting[0]} presentations, and Week 12 will have ${projectPresentationsByMeeting[1]}. Presentations will be approximately ${projectPresentationMinutesByMeeting[0]}–${projectPresentationMinutesByMeeting[1]} minutes, including questions. The project presentation is separate from the two required paired paper presentations.`,
+    `Weeks 11–12 are reserved for ${courseFacts.expectedProjectPresentations} individual project presentations. Week 11 will have ${projectPresentationsByMeeting[0]} presentations on November 27, and Week 12 will have ${projectPresentationsByMeeting[1]} presentations on December 4. Each student has a ${projectPresentationMinutes}-minute slot: ${projectTalkMinutes} minutes for the presentation, ${projectQuestionMinutes} minutes for questions, and ${projectTransitionMinutes} minute for the transition to the next speaker. The seven slots use ${projectPresentationUsedMinutesByMeeting[0]} minutes and leave a ${projectPresentationBufferMinutesByMeeting[0]}-minute buffer in each meeting. The project presentation is separate from the two required paired paper presentations.`,
   requirements: [
     "The precise research question and its connection to the course.",
     "The existing theoretical result, conjecture, or limitation being extended or examined.",
@@ -381,7 +393,7 @@ export const universityPolicies = {
   pendingOfficialOutlineText:
     "The official course-outline link will be added before the first meeting.",
   outlineGuidanceUrl:
-    "https://uwaterloo.ca/associate-vice-president-academic/course-outlines-waterloo",
+    "https://uwaterloo.ca/associate-vice-president-academic/course-outline-requirements-and-recommendations",
   resources: [
     {
       label: "Academic integrity",
