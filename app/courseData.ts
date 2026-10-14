@@ -76,7 +76,7 @@ export const courseFacts = {
   projectMeetings: "Weeks 11–12",
   plannedEnrollment: 27,
   expectedProjectPresentations: 14,
-  lastUpdated: "September 29, 2026",
+  lastUpdated: "October 14, 2026",
 } as const;
 
 export const courseSummary =
@@ -612,6 +612,16 @@ export const courseSchedule: readonly CourseWeek[] = [
       "How do depth, parallel communication, entry magnitudes, and approximation error determine what transformers and self-attention can compute efficiently?",
     topicFocus:
       "Massively Parallel Computation, logarithmic depth, SETH-based lower bounds, and the bounded-entry transition for approximate attention.",
+    materials: [
+      {
+        label: "Student presentation: Transformers, Parallel Computation, and Logarithmic Depth (PDF)",
+        href: "slides/week-03/transformers-parallel-computation-logarithmic-depth.pdf",
+      },
+      {
+        label: "Student presentation: Fast Attention Requires Bounded Entries (PDF)",
+        href: "slides/week-03/fast-attention-requires-bounded-entries.pdf",
+      },
+    ],
     subtopics: [
       {
         title: "Part I: Parallel depth and communication",
@@ -665,6 +675,24 @@ export const courseSchedule: readonly CourseWeek[] = [
       "How do layer normalization, residual structure, and depth determine whether transformer representations and gradients remain stable at initialization and during early training?",
     topicFocus:
       "Pre-LN versus Post-LN, initialization-time gradient scaling, depth-induced token uniformity, vanishing query and key gradients, and residual scaling.",
+    materials: [
+      {
+        label: "Student presentation: On Layer Normalization in the Transformer Architecture (PDF)",
+        href: "slides/week-04/layer-normalization-transformer-architecture.pdf",
+      },
+      {
+        label: "Student presentation: Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth (PDF)",
+        href: "slides/week-04/attention-is-not-all-you-need.pdf",
+      },
+      {
+        label: "Student presentation: Attention Is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth (PPTX)",
+        href: "slides/week-04/attention-is-not-all-you-need.pptx",
+      },
+      {
+        label: "Student presentation: Signal Propagation in Transformers: Theoretical Perspectives and the Role of Rank Collapse (PPTX)",
+        href: "slides/week-04/signal-propagation-in-transformers.pptx",
+      },
+    ],
     subtopics: [
       {
         title: "Part I: Normalization and depth-induced rank collapse",

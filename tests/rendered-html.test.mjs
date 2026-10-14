@@ -118,7 +118,7 @@ test("server-renders the corrected course content and operational policies", asy
   assert.match(text, /Scheduled seminar meetings:?\s*September 11.{0,3}December 4, 2026/i);
   assert.match(text, /University class period:?\s*September 9.{0,3}December 8, 2026/i);
   assert.match(text, /No class on October 16, 2026/i);
-  assert.match(text, /Last updated:?\s*September 29, 2026/i);
+  assert.match(text, /Last updated:?\s*October 14, 2026/i);
   assert.match(text, /Course Materials/i);
   assert.match(html, /href="slides\/course-information\.pdf"/i);
   assert.match(html, /href="slides\/week-01\/learnability-of-algorithms\.pdf"/i);
@@ -820,7 +820,7 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   assert.equal(courseFacts.meetingDurationMinutes, 170);
   assert.equal(courseFacts.plannedEnrollment, 27);
   assert.equal(courseFacts.expectedProjectPresentations, 14);
-  assert.equal(courseFacts.lastUpdated, "September 29, 2026");
+  assert.equal(courseFacts.lastUpdated, "October 14, 2026");
   assert.equal(courseFacts.officeHoursEmail, "kimon.fountoulakis@uwaterloo.ca");
   assert.equal(courseFacts.officialOutlineUrl, "TBA");
   for (const key of ["officeHours", "meetingLocation", "coursePlatform"]) assert.equal(key in courseFacts, false);
@@ -952,7 +952,10 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
       href: "slides/week-01/ntk-analysis.pdf",
     },
   ]);
-  assert.ok(courseSchedule.slice(1).every((week) => week.materials === undefined));
+  assert.deepEqual(
+    courseSchedule.filter((week) => week.materials?.length).map((week) => [week.week, week.materials.length]),
+    [[1, 2], [3, 2], [4, 4]],
+  );
   assert.deepEqual(firstWeek.papers.map((paper) => paper.title), [
     "Learning to Add, Multiply, and Execute Algorithmic Instructions Exactly with Neural Networks",
     "Learning to Execute Graph Algorithms Exactly with Graph Neural Networks",
@@ -1595,7 +1598,7 @@ test("rendered structure has valid navigation, meaningful paper links, and acces
   assert.doesNotMatch(html, /href="#week-(?:11|12)"|id="week-(?:11|12)"/i);
 
   const anchors = [...html.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi)].map(([, href, content]) => ({ href: decodeHtml(href), text: textContent(content) }));
-  const courseMaterials = [courseInformationMaterial, ...(courseSchedule[0].materials ?? [])];
+  const courseMaterials = [courseInformationMaterial, ...courseSchedule.flatMap((week) => week.materials ?? [])];
   for (const material of courseMaterials) {
     assert.equal(
       anchors.filter((anchor) => anchor.href === material.href && anchor.text === material.label).length,
@@ -1603,7 +1606,7 @@ test("rendered structure has valid navigation, meaningful paper links, and acces
       `Course material must be linked exactly once: ${material.label}`,
     );
   }
-  assert.equal((html.match(/class="week-materials"/g) ?? []).length, 1);
+  assert.equal((html.match(/class="week-materials"/g) ?? []).length, 3);
   const allPapers = [...courseSchedule.flatMap((week) => week.papers), ...additionalReadings];
   for (const paper of allPapers) {
     assert.equal(
@@ -1676,6 +1679,12 @@ test("static export keeps canonical, Open Graph, favicon, and course files under
     "slides/course-information.pdf",
     "slides/week-01/learnability-of-algorithms.pdf",
     "slides/week-01/ntk-analysis.pdf",
+    "slides/week-03/transformers-parallel-computation-logarithmic-depth.pdf",
+    "slides/week-03/fast-attention-requires-bounded-entries.pdf",
+    "slides/week-04/layer-normalization-transformer-architecture.pdf",
+    "slides/week-04/attention-is-not-all-you-need.pdf",
+    "slides/week-04/attention-is-not-all-you-need.pptx",
+    "slides/week-04/signal-propagation-in-transformers.pptx",
   ];
   for (const slidePath of slidePaths) {
     assert.match(html, new RegExp(`href="${slidePath.replaceAll(".", "\\.")}"`, "i"));
