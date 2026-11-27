@@ -954,7 +954,7 @@ test("course data preserves the schedule arithmetic, readings, and user-confirme
   ]);
   assert.deepEqual(
     courseSchedule.filter((week) => week.materials?.length).map((week) => [week.week, week.materials.length]),
-    [[1, 2], [3, 2], [4, 4]],
+    [[1, 2], [3, 2], [4, 4], [7, 3], [9, 1]],
   );
   assert.deepEqual(firstWeek.papers.map((paper) => paper.title), [
     "Learning to Add, Multiply, and Execute Algorithmic Instructions Exactly with Neural Networks",
@@ -1606,7 +1606,7 @@ test("rendered structure has valid navigation, meaningful paper links, and acces
       `Course material must be linked exactly once: ${material.label}`,
     );
   }
-  assert.equal((html.match(/class="week-materials"/g) ?? []).length, 3);
+  assert.equal((html.match(/class="week-materials"/g) ?? []).length, 5);
   const allPapers = [...courseSchedule.flatMap((week) => week.papers), ...additionalReadings];
   for (const paper of allPapers) {
     assert.equal(
@@ -1685,6 +1685,10 @@ test("static export keeps canonical, Open Graph, favicon, and course files under
     "slides/week-04/attention-is-not-all-you-need.pdf",
     "slides/week-04/attention-is-not-all-you-need.pptx",
     "slides/week-04/signal-propagation-in-transformers.pptx",
+    "slides/week-07/optimal-in-context-learner.pdf",
+    "slides/week-07/looped-transformers-multi-step-gradient-descent.pdf",
+    "slides/week-07/looped-transformers-multi-step-gradient-descent.pptx",
+    "slides/week-09/tight-sample-complexity-of-transformers.pdf",
   ];
   for (const slidePath of slidePaths) {
     assert.match(html, new RegExp(`href="${slidePath.replaceAll(".", "\\.")}"`, "i"));
