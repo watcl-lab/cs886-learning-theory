@@ -852,6 +852,20 @@ export const courseSchedule: readonly CourseWeek[] = [
       "Which in-context algorithms minimize the pretraining objective, and under what assumptions does gradient-based pretraining converge to one-step or multi-step learned optimization rules?",
     topicFocus:
       "Population-risk optima, gradient-flow convergence, one-step in-context learning, and multi-step looped optimization.",
+    materials: [
+      {
+        label: "Student presentation: One Step of Gradient Descent Is Provably the Optimal In-Context Learner with One Layer of Linear Self-Attention (PDF)",
+        href: "slides/week-07/optimal-in-context-learner.pdf",
+      },
+      {
+        label: "Student presentation: Can Looped Transformers Learn to Implement Multi-step Gradient Descent for In-context Learning? (PDF)",
+        href: "slides/week-07/looped-transformers-multi-step-gradient-descent.pdf",
+      },
+      {
+        label: "Student presentation: Can Looped Transformers Learn to Implement Multi-step Gradient Descent for In-context Learning? (PPTX)",
+        href: "slides/week-07/looped-transformers-multi-step-gradient-descent.pptx",
+      },
+    ],
     subtopics: [
       {
         title: "Part I: One-step population optima and training",
@@ -958,6 +972,12 @@ export const courseSchedule: readonly CourseWeek[] = [
       "How do observed or latent reasoning traces change the sample and computational complexity of learning, and when can they yield provable sample-efficiency gains?",
     topicFocus:
       "Observed and latent chains of thought, transformer capacity, teacher-forced sample complexity, sparse sequential dependence, and polynomial-versus-exponential learning separations.",
+    materials: [
+      {
+        label: "Student presentation: Tight Sample Complexity of Transformers (PDF)",
+        href: "slides/week-09/tight-sample-complexity-of-transformers.pdf",
+      },
+    ],
     subtopics: [
       {
         title: "Part I: General framework and tight capacity bounds",
